@@ -32,7 +32,7 @@ const Dashboard = () => {
     useEffect(() => {
         const getToken = async () => {
           try {
-            const data = await fetchUserToken('7b6abf23ba7e400fe9f46c86572038d8f8ddf47d962a39fc6458d3ed6e16549f4b3842f3115c4267caaca77388a298b74d494bd61fbe24b35194f7c69c3e7b72063efec09f305974c7e1cf219151436743d0af7d3b61913afb8a7517caf09fd0aa9af12f29558a600ab890eaacf9923c91874acfb8f0b45fae71fb08af55dc14');
+            const data = await ;
             dispatch(setRequestToken(data?.requestToken));
             console.log('log', data);
             if (data && !appKey) {
@@ -70,7 +70,7 @@ const Dashboard = () => {
         { id: 2, label: 'Banknifty', value: 26009 },
         { id: 3, label: 'Niftynxt50', value: 26013 },
         { id: 4, label: 'Finnifty', value: 26037 },
-        { id: 5, label: 'NiftyMind Select', value: 26074 },
+        { id: 5, label: 'NiftyMind Select', value: 26014 },
     ];
 
     const handleSelect = (selectedOptions: { id: number; label: string; value: string }[]) => {
