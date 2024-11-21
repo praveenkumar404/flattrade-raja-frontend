@@ -40,10 +40,7 @@ const OrderPages = () => {
       try {
         const response = await fetch('https://rajaapp.in//api/orders', {
           headers: {
-            Authorization: 'Bearer 7b6abf23ba7e400fe9f46c86572038d8f8ddf47d962a39fc6458d3ed6e16549f4b3842f3115c4267caaca77388a298b74d494bd61fbe24b35194f7c69c3e7b72063efec09f305974c7e1cf219151436743d0af7d3b61913afb8a7517caf09fd0aa9af12f29558a600ab890eaacf9923c91874acfb8f0b45fae71fb08af55dc14', // Replace with your token
-          },
-        });
-        const result = await response.json();
+            Authorization: 'Bearer  response.json();
         const ordersData: Order[] = result.data;
         
         // Duplicate the orders data
