@@ -1,0 +1,23 @@
+.backgrounddash {
+    position: relative;
+    background-attachment: initial;
+    background-origin: initial;
+    background-position-x: initial;
+    background-position: center;
+    text-align: center;
+    height: fit-content;
+    width: auto;
+    z-index: 1;
+    background-size: cover; /* Ensure the background covers the entire element */
+    background-color: initial;
+    /* background-image: url('../images/wave-haikei_dark.svg');
+    background: url('../images/wave-haikei_dark.svg') center center / cover no-repeat fixed; */
+    background-color: #fff;
+    background-repeat: no-repeat;
+    border-radius: 5px !important;
+}
+
+.customdesign{
+    padding: 3px;
+    margin: 5px;
+}

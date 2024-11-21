@@ -1,0 +1,112 @@
+.backgrounddash {
+    position: relative;
+    background-attachment: initial;
+    background-origin: initial;
+    background-position-x: initial;
+    background-position: center;
+    text-align: center;
+    height: 800px;
+    width: auto;
+    z-index: 1;
+    background-size: cover; /* Ensure the background covers the entire element */
+    background-color: initial;
+    /* background-image: url('../images/wave-haikei_dark.svg');
+    background: url('../images/wave-haikei_dark.svg') center center / cover no-repeat fixed; */
+    background-repeat: no-repeat;
+    border-radius: 5px !important;
+
+      /* filter: drop-shadow(5px 3px 3px rgb(89, 167, 244))
+      drop-shadow(-5px -3px 3px rgb(76, 161, 245))
+      drop-shadow(3px 3px 3px rgb(47, 147, 248)); */
+}
+
+.backgrounddashoverlay {
+    background: rgba(0, 0, 0, 0.0);
+    z-index: 2;
+    height: 800px;
+    width: 100%; /* Make sure the overlay covers full width */
+    border-radius: 5px !important;
+}
+
+.backgrounddashtexthanle{
+    box-sizing: border-box;
+    display: block;
+    unicode-bidi: isolate;
+    padding-top: 10px;
+    box-sizing: border-box;
+    -webkit-text-size-adjust: 100%;
+    z-index: 3;
+}
+
+
+.selctedoptiondesign{
+        font-size: 44px;
+        text-transform: uppercase;
+        font-family: 'Gambetta', serif;
+        letter-spacing: -3px;
+        transition: 700ms ease;
+        font-variation-settings: "wght" 311;
+        margin-bottom: 10px;
+        color: PaleGoldenRod;
+        outline: none;
+        text-align: center;
+}
+
+.selctedoptiondesign:hover {
+    font-variation-settings: "wght" 68; 
+    letter-spacing: 1px;
+  }
+
+
+
+
+.bgdashcontenttext{
+    letter-spacing: 2.4px;
+    font-size: 30px;
+    color: #fff;
+    font-weight: 700;
+    animation-fill-mode: both;
+    animation-name: fadeInUp;
+    text-align: center;
+    box-sizing: border-box;
+    line-height: 1.4;
+    text-transform: uppercase;
+    z-index: 3;
+}
+
+
+.box {
+  background-color: transparent;
+  margin:0;
+ padding:20px
+}
+
+.patterns {
+ height: fit-content;
+}
+
+.titlecontent text {
+  font-family: Lora;
+  letter-spacing: 10px;
+  stroke: #fff;
+  font-size: clamp(18px, 5vw, 40px); /* Responsive text size */
+  font-weight: 700;
+  stroke-width: 3;
+  animation: textAnimate 5s infinite alternate;
+  text-shadow: 0 0 10px #FF0000, 0 0 5px #0000FF;
+  /* font-style: italic; */
+}
+
+@keyframes textAnimate {
+  0% {
+    stroke-dasharray: 0 50%;
+    stroke-dashoffset: 20%;
+    fill: #fff;
+  }
+  100% {
+    stroke-dasharray: 50% 0;
+    stroke-dashoffset: -20%;
+    fill: hsla(316, 68%, 59%, 0);
+  }
+}
+
