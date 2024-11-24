@@ -2,37 +2,6 @@ import React from 'react';
 import { Card, CardContent, Typography, Grid, styled } from '@mui/material';
 
 
-// const subscriptionData: DataObject = {
-//     t: 'tk',
-//     e: 'NSE',
-//     tk: '26009',
-//     lp: '51526.10',
-//     pc: '0.56',
-//     ts: 'Nifty Bank',
-//     c: '51239.00',
-//     h: '51781.55',
-//     l: '51201.85',
-//   };
-  
-//   const receivedMessageData: DataObject = {
-//     t: 'tf',
-//     e: 'NSE',
-//     tk: '26013',
-//     lp: '70807.35',
-//     pc: '-0.11',
-//   };
-  
-//   const touchlineFeedData: DataObject = {
-//     t: 'tf',
-//     e: 'NSE',
-//     tk: '26013',
-//     lp: '70807.35',
-//     pc: '-0.11',
-//   };
-
-
-
-
 // TypeScript interface to define the data structure
 export interface DataObject {
   t: string;

@@ -7,14 +7,22 @@ import VerticalAlignTopIcon from '@mui/icons-material/VerticalAlignTop';
 import VerticalAlignBottomIcon from '@mui/icons-material/VerticalAlignBottom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
+import { useWebSocketMessages } from '../Webhooktypeprocess';
 
-const MarketScoreCard: React.FC<any> = ({subscriptmessage,myoption,SelectedOptions}:any) => {
-    console.log("subm : ",subscriptmessage)
+const MarketScoredDatas: React.FC<any> = ({myoption}:any) => {
 
     const selectedDropdownValues = useSelector((state: RootState) => state.auth.selectedDropdownValues);
     const selectedValue = selectedDropdownValues.map(option => option.value).join(', ');
 
-    const subscriptmessageincdec = subscriptmessage < 0 ? false : true;
+    const webhookdatas = useWebSocketMessages();
+  const webhookcontrol = webhookdatas.flat()
+  const isType = webhookcontrol.find(
+    (item: any) => item?.type === 'index'
+  )?.data;
+  const webookindexdata = webhookcontrol.map((res: any, index) =>res)
+
+
+    const subscriptmessageincdec = isType?.pc && Number(isType.pc) < 0 ? false : true;;
    const Selectoption = {
     mylabel : selectedDropdownValues?.length > 0 ? `${selectedDropdownValues?.map((item: any) => item?.label?.toString())}` :'',
     myvalue : selectedDropdownValues?.length > 0 ? `${selectedDropdownValues?.map((item: any) => item?.value?.toString())}` :''
@@ -54,7 +62,7 @@ const MarketScoreCard: React.FC<any> = ({subscriptmessage,myoption,SelectedOptio
               /> */}
 
               {subscriptmessageincdec == true ? <VerticalAlignTopIcon sx={{color:'#00ff00',fontSize:'24px'}}/>:<VerticalAlignBottomIcon sx={{color:'#ff0000',fontSize:'24px'}}/>}
-              <Typography sx={{ color: subscriptmessageincdec == true ? '#00ff00' :'#ff0000', fontWeight: 'bold' }}>{myoption?.some((item:any) => item.value === Number(selectedValue)) ? `${subscriptmessage?.pc} %`:'Index Not Selected'}</Typography>
+              <Typography sx={{ color: subscriptmessageincdec == true ? '#00ff00' :'#ff0000', fontWeight: 'bold' }}>{myoption?.some((item:any) => item.value === Number(selectedValue)) ? `${isType?.pc && Number(isType.pc)} %`:'Index Not Selected'}</Typography>
             </Box>
             </Box>
             
@@ -65,4 +73,4 @@ const MarketScoreCard: React.FC<any> = ({subscriptmessage,myoption,SelectedOptio
   );
 };
 
-export default MarketScoreCard;
+export default MarketScoredDatas;

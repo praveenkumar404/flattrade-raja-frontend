@@ -1,25 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AppBar, Toolbar, IconButton, Badge, Popover, Typography, List, ListItem, ListItemText, Button, ListItemSecondaryAction, Box } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CircularIntegration from './ReusabelCompoents/CircularIntegration';
 import CheckIcon from '@mui/icons-material/Check';
+import { useWebSocketMessages } from '../Webhooktypeprocess';
 
 interface Notification {
   id: number;
   message: string;
 }
 
-const notificationsData: Notification[] = [
-  { id: 1, message: "New message from John" },
-  { id: 2, message: "Server downtime alert" },
-  { id: 3, message: "New task assigned to you" },
-  { id: 4, message: "New task assigned to me" },
-];
+
 
 const NotificationComponent: React.FC = () => {
+  const webhookdatas = useWebSocketMessages();
+  const webhookcontrol = webhookdatas.flat()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [notifications, setNotifications] = useState<Notification[]>(notificationsData);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const audioRef = useRef<HTMLAudioElement | null>(null); 
 
   const handleNotificationClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -47,6 +46,27 @@ const NotificationComponent: React.FC = () => {
     },2000)
   };
 
+  useEffect(() => {
+    const uniqueNotifications = new Set(notifications.map((notif) => notif.message));
+    
+    webhookcontrol.forEach((item: any) => {
+      if (item?.type === 'action' && !uniqueNotifications.has(item?.message)) {
+        setNotifications((prevNotifications) => [
+          ...prevNotifications,
+          {
+            id: prevNotifications.length > 0 ? prevNotifications[prevNotifications.length - 1].id + 1 : 1,
+            message: item?.message,
+          },
+        ]);
+
+        if (audioRef.current) {
+          audioRef.current.play();
+        }
+      }
+    });
+  }, [webhookcontrol]);
+  
+
   return (
     <>
       {/* AppBar with Notification Icon */}
@@ -61,6 +81,7 @@ const NotificationComponent: React.FC = () => {
       </Box>
 
       {/* Notification Popover */}
+      <audio ref={audioRef} src={require('../assets/audiofile/soundEffects/mixkit-bell-notification-933.wav')} preload="auto" />
       <Popover
         id={id}
         open={open}
@@ -80,12 +101,12 @@ const NotificationComponent: React.FC = () => {
         </Typography>
         
         {/* List of Notifications */}
-        <List sx={{ width: '300px' }}>
+        <List sx={{ width: '350px' }}>
           {notifications.length > 0 ? (
             <>
               {notifications.map((notification) => (
                 <ListItem key={notification.id}>
-                  <ListItemText primary={notification.message} />
+                  <ListItemText sx={{fontSize:'4px'}} primary={notification.message} />
                   {/* Delete Icon */}
                   <ListItemSecondaryAction>
                     <IconButton edge="end">
@@ -93,7 +114,7 @@ const NotificationComponent: React.FC = () => {
                       <CircularIntegration
                             loadingDuration={3000}
                             fabColor="secondary"
-                            fabIcon={<DeleteIcon sx={{color:'#ff00ff'}}/>}
+                            fabIcon={<DeleteIcon sx={{color:'dodgerblue'}}/>}
                             successIcon={<CheckIcon sx={{color:'#e690ca'}}/>}
                             buttonText="Agree to Terms"
                             onAccept={() => handleDeleteNotification(notification.id)}

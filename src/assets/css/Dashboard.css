@@ -5,7 +5,7 @@
     background-position-x: initial;
     background-position: center;
     text-align: center;
-    height: 800px;
+    height: 1000px;
     width: auto;
     z-index: 1;
     background-size: cover; /* Ensure the background covers the entire element */
@@ -23,7 +23,7 @@
 .backgrounddashoverlay {
     background: rgba(0, 0, 0, 0.0);
     z-index: 2;
-    height: 800px;
+    height: 1000px;
     width: 100%; /* Make sure the overlay covers full width */
     border-radius: 5px !important;
 }

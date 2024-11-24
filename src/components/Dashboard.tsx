@@ -1,11 +1,11 @@
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import MultipleSelectWithSearch from '../comman/MultipleSelectPlaceholder';
 import '../assets/css/Dashboard.css'
-import waveBackground_dark from '../assets/images/wave-haikei_dark.svg';
-import waveBackground_light from '../assets/images/wave-haikei_light.svg';
+import waveBackground_dark from '../assets/images/backgroundsvgs/bg-dark.svg';
+import waveBackground_light from '../assets/images/backgroundsvgs/bg-light.svg';
 import waveBackground_default from '../assets/images/wave-haikei_light.svg';
 import { useNavigate } from 'react-router-dom';
 import { fetchUserToken } from '../api/authapi';
@@ -16,6 +16,8 @@ import { LineBarWidgetchats } from './Pages/WidgetCharts/LineBarCharts/LineBarWi
 import { LineBardata1 } from './Pages/WidgetCharts/LineBarCharts/datas/LineBardata1';
 import { ResponsiveLine } from '@nivo/line';
 import MarketScoreCard from '../comman/MarketScoreCard';
+import UseColorScheme from '../comman/ReusabelCompoents/UseColorScheme';
+import MarketScoredDatas from '../comman/MarketScoredDatas';
 // import { bgwaveidentify } from '../comman/mythems';
 
 const Dashboard = () => {
@@ -32,7 +34,7 @@ const Dashboard = () => {
     useEffect(() => {
         const getToken = async () => {
           try {
-            const data = await ;
+            const data = await fetchUserToken(`${process.env.REACT_APP_USER_TOKEN}`);
             dispatch(setRequestToken(data?.requestToken));
             console.log('log', data);
             if (data && !appKey) {
@@ -47,23 +49,15 @@ const Dashboard = () => {
       }, [dispatch, appKey]);
       
 
-    useEffect(() => {
-        // Initial retrieval of the 'toolpad-mode' value from localStorage
-        const mode = localStorage.getItem('toolpad-mode');
-        if (mode) {
-          setbgwaveidentify(mode);
-        } else {
-          setbgwaveidentify('default');
-        }
+      const colorScheme = UseColorScheme();
+      console.log('wave :',colorScheme)
+  
+      const backgroundLayoutWave = colorScheme === 'dark'
+      ? waveBackground_dark
+      : colorScheme === 'light'
+      ? waveBackground_light
+      : waveBackground_default;
 
-      }, []);
-
-  const backgroundLayoutWave = bgwaveidentify === 'dark'
-    ? waveBackground_dark
-    : bgwaveidentify === 'light'
-    ? waveBackground_light
-    : waveBackground_default;
-    
     console.log('wave :',bgwaveidentify)
     const options = [
         { id: 1, label: 'Nifty', value: 26000 },
@@ -106,7 +100,7 @@ const Dashboard = () => {
     };
   
     const ws = SelectedOptions?.length > 0
-      ? connectFlattradeWebSocket('FT048819', requestToken, 'FT048819', `NSE|${getselctedvalues}`, handleLpValue)
+      ? connectFlattradeWebSocket(`${process.env.REACT_APP_USER_ID}`, requestToken, `${process.env.REACT_APP_ACCOUNT_ID}`, `NSE|${getselctedvalues}`, handleLpValue)
       : null;
   
     return () => {
@@ -161,7 +155,7 @@ const Dashboard = () => {
 //     };
 
 //     // Connect to WebSocket
-//     const ws = SelectedOptions?.length > 0 ? connectFlattradeWebSocket('FT048819', requestToken, 'FT048819', `NSE|${getselctedvalues}`, handleLpValue) : null;
+//     const ws = SelectedOptions?.length > 0 ? connectFlattradeWebSocket(`${process.env.REACT_APP_USER_ID}`, requestToken, `${process.env.REACT_APP_ACCOUNT_ID}`, `NSE|${getselctedvalues}`, handleLpValue) : null;
 
 //     return () => {
 //       if (ws) {
@@ -237,8 +231,25 @@ const Dashboard = () => {
                     </Box>
 
                     <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
+                    <Box
+                      sx={{
+                        color: '#FFFFFF', // White text color
+                        minHeight: 'fit-content',
+                        padding: '20px',
+                      }}
+                    >
+                      {/* Dashboard Header */}
+                      <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'dodgerblue' }}>
+                        DASHBOARD
+                      </Typography>
+                      <Typography variant="subtitle1" sx={{ color: 'gray' }}>
+                        Welcome to your dashboard
+                      </Typography>
+                        
+                        {/* <MarketScoreCard subscriptmessage={subscriptmessage} myoption={options} SelectedOptions={SelectedOptions}/> */}
+                        <MarketScoredDatas myoption={options}/>
 
-                        <MarketScoreCard subscriptmessage={subscriptmessage} myoption={options} SelectedOptions={SelectedOptions}/>
+                        </Box>
                     </div>
                 <Box>
                 </Box>
@@ -252,99 +263,3 @@ const Dashboard = () => {
 }
 
 export default Dashboard
-
-
-
-
-
-
-
-
-
-// import React, { useEffect, useState } from 'react';
-// import { useSelector } from 'react-redux';
-// import { RootState } from '../redux/store';
-
-// const Dashboard: React.FC = () => {
-//   // State to store the API responses
-//   const [authResponse, setAuthResponse] = useState<any>(null);
-//   const [userDetails, setUserDetails] = useState<any>(null);
-//   const [loading, setLoading] = useState<boolean>(true);
-//   const [error, setError] = useState<string | null>(null);
-//   const requestToken = useSelector((state: RootState) => state.auth.requestToken);
-//   useEffect(() => {
-//     // Fetching authentication data from API
-//     const fetchAuthData = async () => {
-//       try {
-//         const response = await fetch('http://localhost:1337/api/authentications', {
-//           method: 'GET',
-//           headers: {
-//             'Authorization': 'Bearer 647dc15d56e4a5bcea8526841aa5bb505299e3235270e8d43650c293504473728899e74eaa814cf42439eb5b1f9d4e29b22322c741c42441fa37bcebf44f3e85a2b7b34f310e4b7476b9005cc044862a5388571e1cc7e93426c1e7bf43308dfbe93fab05fe8beb7fa3bf04a6c2141fb78b219a3906a656d3a64a1425b809b36c',
-//           },
-//         });
-
-//         // Check if response is OK
-//         if (!response.ok) {
-//           throw new Error(`HTTP error! status: ${response.status}`);
-//         }
-
-//         const data = await response.json(); // Parse JSON response
-//         setAuthResponse(data); // Store response data in state
-
-//         // Extract `documentId` (assumed as `uid`) and `requestToken` (assumed as `jKey`)
-//         const documentId = data?.data[0]?.documentId;
-//         const requestToken = data?.data[0]?.requestToken;
-
-//         if (documentId && requestToken) {
-//           // Now, fetch user details using documentId and requestToken
-//           const userDetailResponse = await fetch('https://piconnect.flattrade.in/PiConnectTP/UserDetails', {
-//             method: 'POST',
-//             headers: {
-//               'Content-Type': 'application/json',
-//             },
-//             body: `jData={"uid":"${`FT048819`}"}&jKey=${requestToken}`
-//           });
-
-//           // Check if user detail response is OK
-//           if (!userDetailResponse.ok) {
-//             throw new Error(`User Details error! status: ${userDetailResponse.status}`);
-//           }
-
-//           const userDetailsData = await userDetailResponse.json();
-//           setUserDetails(userDetailsData); // Store user details response in state
-//         } else {
-//           throw new Error('Missing documentId or requestToken from authentication response');
-//         }
-
-//         setLoading(false); // Set loading to false
-//       } catch (error: any) {
-//         setError(error.message);
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchAuthData(); // Call the async function when the component mounts
-//   }, []); // Empty dependency array means this runs once when the component mounts
-
-//   // Loading and error handling
-//   if (loading) return <div>Loading...</div>;
-//   if (error) return <div>Error: {error}</div>;
-
-//   // Display the API responses in JSX
-//   return (
-//     <div>
-//         <div style={{color:'green'}}>{requestToken}</div>
-//       <h2>Authentication Response:</h2>
-//       <pre>{JSON.stringify(authResponse, null, 2)}</pre>
-
-//       <h2>User Details:</h2>
-//       {userDetails ? (
-//         <pre>{JSON.stringify(userDetails, null, 2)}</pre>
-//       ) : (
-//         <p>No user details available</p>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Dashboard;

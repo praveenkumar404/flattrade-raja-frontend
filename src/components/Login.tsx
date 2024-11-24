@@ -17,7 +17,7 @@ const Login: React.FC = () => {
     
     const getToken = async () => {
         try {
-          const data = await ;
+          const data = await fetchUserToken(`${process.env.REACT_APP_USER_TOKEN}`);
           dispatch(setRequestToken(data?.requestToken));
           console.log('log', data);
           if (data && !appKey) {
@@ -196,7 +196,7 @@ export default Login;
 //     const urlParams = new URLSearchParams(window.location.search);
 //     const code = urlParams.get('code');
 //     if (code) {
-//       dispatch(fetchToken({ code, client: 'FT048819' }));
+//       dispatch(fetchToken({ code, client: `${process.env.REACT_APP_USER_ID}` }));
 //     }
 //   }, [dispatch]);
 

@@ -1,11 +1,10 @@
 import axios from "axios";
 
-const API_BASE_URL = 'https://rajaapp.in/api';
 const AUTH_ENDPOINT = '/authentications';
 
 export const fetchUserToken = async (authToken: string) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}${AUTH_ENDPOINT}`, {
+    const response = await axios.get(`${process.env.REACT_APP_API_URL}${AUTH_ENDPOINT}`, {
       headers: {
         Authorization: `Bearer ${authToken}`,
       },

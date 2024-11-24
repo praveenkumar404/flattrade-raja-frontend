@@ -22,7 +22,7 @@ const Profilepage: React.FC = () => {
 useEffect(() => {
     const getToken = async () => {
       try {
-        const data = await l;
+        const data = await fetchUserToken(`${process.env.REACT_APP_USER_TOKEN}`);
         dispatch(setRequestToken(data?.requestToken));
         console.log('log', data);
         if (data && !appKey) {
@@ -45,7 +45,7 @@ useEffect(() => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: `jData={"uid":"FT048819"}&jKey=${requestToken}`,
+          body: `jData={"uid":"${process.env.REACT_APP_USER_ID}"}&jKey=${requestToken}`,
         });
 
         if (!response.ok) {
