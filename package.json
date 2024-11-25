@@ -6,7 +6,7 @@
     "@date-io/date-fns": "^2.17.0",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@mui/icons-material": "^6.1.4",
+    "@mui/icons-material": "^5.14.3",
     "@mui/material": "^5.14.3",
     "@mui/x-date-pickers": "^6.20.2",
     "@nivo/line": "^0.87.0",
