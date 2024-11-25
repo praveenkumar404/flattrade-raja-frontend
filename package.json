@@ -6,7 +6,7 @@
     "@date-io/date-fns": "^1.3.13",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@material-ui/core": "^4.11.0",
+    "@material-ui/core": "^5.0.0",
     "@material-ui/pickers": "^3.2.10",
     "@mobiscroll/cli": "^1.15.0",
     "@mobiscroll/react-lite": "^4.10.9",
