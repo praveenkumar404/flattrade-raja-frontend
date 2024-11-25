@@ -33,7 +33,8 @@
     "react-scripts": "5.0.1",
     "react-toastify": "^10.0.6",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "@babel/plugin-proposal-private-property-in-object": "^7.18.6"
   },
   "scripts": {
     "start": "react-scripts start",
