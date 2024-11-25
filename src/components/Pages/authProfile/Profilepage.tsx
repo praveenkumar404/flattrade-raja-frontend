@@ -24,7 +24,6 @@ useEffect(() => {
       try {
         const data = await fetchUserToken(`${process.env.REACT_APP_USER_TOKEN}`);
         dispatch(setRequestToken(data?.requestToken));
-        console.log('log', data);
         if (data && !appKey) {
           console.error('App key is not defined');
         }

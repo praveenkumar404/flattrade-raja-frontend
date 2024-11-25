@@ -4,15 +4,18 @@ import PrivateRoute from './PrivateRoute';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import DashboardLayoutPages from './components/DashboardLayoutPages';
+import './assets/css/style.css'
 
 const App: React.FC = () => {
   return (
+    <>
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/*" element={<PrivateRoute component={DashboardLayoutPages} />} />
       </Routes>
     </Router>
+    </>
   );
 };
 

@@ -3,3 +3,10 @@
         max-width: 1368px !important;
     }
 }
+
+.mydatepickermodify{
+    border: 2px solid rgb(128, 175, 233) !important;
+    padding: 5px !important;
+    border-radius: 5px !important;
+    font-weight:700 ;
+}

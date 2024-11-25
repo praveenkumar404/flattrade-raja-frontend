@@ -36,7 +36,6 @@ const Dashboard = () => {
           try {
             const data = await fetchUserToken(`${process.env.REACT_APP_USER_TOKEN}`);
             dispatch(setRequestToken(data?.requestToken));
-            console.log('log', data);
             if (data && !appKey) {
               console.error('App key is not defined');
             }
@@ -50,7 +49,6 @@ const Dashboard = () => {
       
 
       const colorScheme = UseColorScheme();
-      console.log('wave :',colorScheme)
   
       const backgroundLayoutWave = colorScheme === 'dark'
       ? waveBackground_dark
@@ -58,7 +56,6 @@ const Dashboard = () => {
       ? waveBackground_light
       : waveBackground_default;
 
-    console.log('wave :',bgwaveidentify)
     const options = [
         { id: 1, label: 'Nifty', value: 26000 },
         { id: 2, label: 'Banknifty', value: 26009 },
@@ -70,7 +67,6 @@ const Dashboard = () => {
     const handleSelect = (selectedOptions: { id: number; label: string; value: string }[]) => {
         // Log the selected objects to the console
         setSelectedOptions(selectedOptions)
-        console.log('Selected options:', selectedOptions);
     };
       
 
@@ -114,7 +110,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (data.length) {
-      console.log('Updating chart data with:', data);
       setChartData([
         {
           id: 'Live Price',

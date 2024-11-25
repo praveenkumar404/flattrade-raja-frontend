@@ -36,16 +36,13 @@ const OrderPages = () => {
 
   const handleStartDateChange = (value: Date | null, id: string) => {
     setSelectedStartDate(value);
-    console.log(`Component: ${id}, Selected Start Value:`, value);
   };
 
   const handleEndDateChange = (value: Date | null, id: string) => {
     setSelectedEndDate(value);
-    console.log(`Component: ${id}, Selected End Value:`, value);
   };
 
   const fetchOrders = async (startDate: string, endDate: string) => {
-    console.log("check date formate --> Start : ", startDate, "  End : ",endDate)
     try {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}/orders?filters[createdAt][$gte]=${encodeURIComponent(
@@ -69,7 +66,6 @@ const OrderPages = () => {
   useEffect(() => {
     const startDate = formatDateToISO(new Date());
     const endDate = formatDateToISO(new Date(new Date().setHours(23, 59, 59)));
-    console.log("check default date formate --> Start : ", startDate, "  End : ",endDate)
     fetchOrders(startDate, endDate);
   }, []);
 

@@ -31,39 +31,28 @@ const MarketScoredDatas: React.FC<any> = ({myoption}:any) => {
   return (
     <Box>
       {/* Dashboard Content */}
-      <Grid container spacing={2} sx={{ marginTop: '10px',backgroundColor: '#0D1B2A',borderRadius:'10px',padding: '10px', }}>
+      <Grid container sx={{ marginTop: '10px',backgroundColor: subscriptmessageincdec == true ? 'green' : '#ff0000',borderRadius:'10px', padding:'5px 0px 0px 5px' }}>
         {/* Emails Sent Card */}
         <Grid item xs={12}>
           <Paper
             sx={{
-              backgroundColor: '#1C2541',
+              backgroundColor: '#e3defb',
               padding: '10px',
               borderRadius: '8px',
             }}
           >
-            <Box display="flex" alignItems="center">
-              <EmailIcon sx={{ fontSize: 40, color: '#6FFFE9' }} />
-              <Box ml={2} sx={{color:'#ff00ff'}}>
-                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+            <Box sx={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
+              <Box ml={2}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color:'#3b2f75' }}>
                  {Selectoption?.mylabel}
                 </Typography>
-                <Typography>{Number(Selectoption?.myvalue)}</Typography>
+                <Typography sx={{color:'#5c5c5c'}}>{Number(Selectoption?.myvalue)}</Typography>
+                
               </Box>
               <Box display="flex" alignItems="center" justifyContent="space-between" mt={2}>
-              {/* <CircularProgress
-                variant="determinate"
-                value={14}
-                sx={{
-                  color: '#6FFFE9',
-                  '& .MuiCircularProgress-circle': { strokeLinecap: 'round' },
-                }}
-                thickness={5}
-                size={50}
-              /> */}
-
-              {subscriptmessageincdec == true ? <VerticalAlignTopIcon sx={{color:'#00ff00',fontSize:'24px'}}/>:<VerticalAlignBottomIcon sx={{color:'#ff0000',fontSize:'24px'}}/>}
-              <Typography sx={{ color: subscriptmessageincdec == true ? '#00ff00' :'#ff0000', fontWeight: 'bold' }}>{myoption?.some((item:any) => item.value === Number(selectedValue)) ? `${isType?.pc && Number(isType.pc)} %`:'Index Not Selected'}</Typography>
-            </Box>
+                  {subscriptmessageincdec == true ? <VerticalAlignTopIcon sx={{color:'green',fontSize:'24px'}}/>:<VerticalAlignBottomIcon sx={{color:'#ff0000',fontSize:'24px'}}/>}
+                  <Typography sx={{ color: subscriptmessageincdec == true ? 'green' :'#ff0000', fontWeight: 'bold' }}>{myoption?.some((item:any) => item.value === Number(selectedValue)) ? `${isType?.pc || isType?.pc ==undefined ? 0 : Number(isType.pc)} %`:'-'}</Typography>
+                </Box>
             </Box>
             
           </Paper>

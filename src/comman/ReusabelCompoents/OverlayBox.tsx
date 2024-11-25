@@ -10,7 +10,6 @@ interface OverlayBoxProps {
 
 const OverlayBox: React.FC<OverlayBoxProps> = ({ loading, textinfo, children, setOverlayLoading }) => {
   const [currentMessage, setCurrentMessage] = useState("Loading...");
-  console.log("meeees : ", textinfo)
 
   useEffect(() => {
     if (loading) {

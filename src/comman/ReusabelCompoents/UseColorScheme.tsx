@@ -10,7 +10,6 @@ const UseColorScheme = () => {
     const updateColorScheme = () => {
       const scheme = document.documentElement.getAttribute('data-toolpad-color-scheme') || 'default';
       setColorScheme(scheme);
-      console.log("Current color scheme:", scheme);
     };
 
     // Initialize the color scheme value

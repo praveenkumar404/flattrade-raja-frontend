@@ -9,7 +9,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 
 const MarketScoreCard: React.FC<any> = ({subscriptmessage,myoption,SelectedOptions}:any) => {
-    console.log("subm : ",subscriptmessage)
 
     const selectedDropdownValues = useSelector((state: RootState) => state.auth.selectedDropdownValues);
     const selectedValue = selectedDropdownValues.map(option => option.value).join(', ');

@@ -79,7 +79,6 @@ const AlgoTradersPages: React.FC = () => {
       const handleSelect = (selectedOptions: { id: number; label: string; value: string }[]) => {
         // Log the selected objects to the console
         setSelectedOptions(selectedOptions)
-        console.log('Selected options:', selectedOptions);
       };
       
       const getselctedvalues = SelectedOptions?.map((item:any)=>item?.value.toString())
@@ -195,7 +194,6 @@ const AlgoTradersPages: React.FC = () => {
   // API call on submt
   const handleSubmit = async () => {
     
-    console.log('payloadalgo',payload)
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/variables/handleInvestmentVariables`,
@@ -207,7 +205,6 @@ const AlgoTradersPages: React.FC = () => {
           },
         }
       );
-      console.log(response.data); // Handle the response
       settradingstatus(response.data)
       sebuttondisabledObject((prev:any) =>({...prev,isCalculated:false, showcalctable:false ,issubmitform:true}));
       setstopTrading(true);
@@ -256,7 +253,6 @@ const AlgoTradersPages: React.FC = () => {
           },
         }
       );
-      console.log(response.data); // Handle the response
       handleShowToast(response?.data?.message,'info',true)
       sebuttondisabledObject((prev:any) =>({...prev,isCalculated:false, showcalctable:false ,issubmitform:true }));
     } catch (error) {
@@ -273,7 +269,6 @@ const AlgoTradersPages: React.FC = () => {
 
 
     const colorScheme = UseColorScheme();
-    console.log('wave :',colorScheme)
 
     const backgroundLayoutWave = colorScheme === 'dark'
     ? waveBackground_dark
@@ -293,7 +288,6 @@ const AlgoTradersPages: React.FC = () => {
           try {
             const data = await fetchUserToken(`${process.env.REACT_APP_USER_TOKEN}`);
             dispatch(setRequestToken(data?.requestToken));
-            console.log('log', data);
             if (data && !appKey) {
               console.error('App key is not defined');
             }
@@ -331,7 +325,6 @@ const AlgoTradersPages: React.FC = () => {
 
   useEffect(() => {
     if (data.length) {
-      console.log('Updating chart data with:', data);
       setChartData([
         {
           id: 'Live Price',
@@ -350,9 +343,6 @@ const AlgoTradersPages: React.FC = () => {
   const Support2Line = 300;
   const Resistance1Line = 120;
   const Support1Line = 240;
-
-  console.log("trading status : ", tradingstatus)
-  console.log("buttons disaable status status : ", buttondisabledObject)
 
   return (
     <Box>

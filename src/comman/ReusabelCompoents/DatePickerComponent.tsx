@@ -1,7 +1,7 @@
 import React from 'react';
 import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import Grid from '@material-ui/core/Grid';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import { Box } from '@mui/material';
 
 interface DatePickerComponentProps {
@@ -20,23 +20,25 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({ id, label, fo
 
   return (
     <Box>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <Grid container style={{ backgroundColor: '#fff', borderRadius: '5px', width: 'fit-content', padding: '5px', paddingLeft:'15px', paddingRight:'15px' , boxShadow:'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset'}}>
-          {selectedDate && (
-            <KeyboardDatePicker
-              margin="normal"
+        <Box style={{ backgroundColor: '#fff', borderRadius: '5px', width: 'fit-content', padding: '15px' , boxShadow:'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset'}}>
+          {/* {selectedDate && ( */}
+            <>
+            <label htmlFor={id} style={{ marginBottom: '5px', display: 'block' }}>
+              {label}
+            </label>
+            <DatePicker
               id={id}
-              label={label}
-              format={format}  // Apply the format prop
-              value={selectedDate}
+              selected={selectedDate}
               onChange={handleDateChange}
-              KeyboardButtonProps={{
-                'aria-label': 'change date',
-              }}
+              dateFormat={format} // Uses format prop
+              placeholderText={`Select a date (${format})`}
+              isClearable
+              className="date-picker-inputn mydatepickermodify"
+              wrapperClassName="date-picker-wrapper"
             />
-          )}
-        </Grid>
-      </MuiPickersUtilsProvider>
+            </>
+          {/* )} */}
+        </Box>
     </Box>
   );
 };

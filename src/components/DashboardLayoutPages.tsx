@@ -26,7 +26,6 @@ import NotificationComponent from '../comman/NotificationComponent';
 import '../assets/css/DashboardLayoutPages.css'
 import { useDispatch } from 'react-redux';
 import { resetAuthState } from '../redux/authSlice';
-import '../assets/css/style.css'
 
 const NAVIGATION: Navigation = [
   {
@@ -254,8 +253,8 @@ export default function DashboardLayoutPages() {
       onNavigate={({ segment }: { segment: string }) => handleNavigation(segment)}
       theme={customTheme}
       branding={{
-        logo: <img src="https://flattrade.in/images/icon/stairs.svg" alt="Flattrade logo" style={{width:'30px',height:'30px'}}/>,
-        title: 'FLATTRADE App',
+        logo: <img src={require('../assets/images/myapp_icon.jpg')} alt="Flattrade logo" style={{width:'30px',height:'30px'}}/>,
+        title: 'FLATTRADE APP',
       }}
       session={session}
     //   authentication={authentication}
