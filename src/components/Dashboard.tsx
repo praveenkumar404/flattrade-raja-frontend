@@ -10,12 +10,12 @@ import waveBackground_default from '../assets/images/wave-haikei_light.svg';
 import { useNavigate } from 'react-router-dom';
 import { fetchUserToken } from '../api/authapi';
 import { setRequestToken } from '../redux/authSlice';
-import { connectFlattradeWebSocket } from '../websocketClient';
-import { DataObject, MarketCard } from '../comman/MarketCard';
-import { LineBarWidgetchats } from './Pages/WidgetCharts/LineBarCharts/LineBarWidgetchats';
-import { LineBardata1 } from './Pages/WidgetCharts/LineBarCharts/datas/LineBardata1';
-import { ResponsiveLine } from '@nivo/line';
-import MarketScoreCard from '../comman/MarketScoreCard';
+// import { connectFlattradeWebSocket } from '../websocketClient';
+// import { DataObject, MarketCard } from '../comman/MarketCard';
+// import { LineBarWidgetchats } from './Pages/WidgetCharts/LineBarCharts/LineBarWidgetchats';
+// import { LineBardata1 } from './Pages/WidgetCharts/LineBarCharts/datas/LineBardata1';
+// import { ResponsiveLine } from '@nivo/line';
+// import MarketScoreCard from '../comman/MarketScoreCard';
 import UseColorScheme from '../comman/ReusabelCompoents/UseColorScheme';
 import MarketScoredDatas from '../comman/MarketScoredDatas';
 // import { bgwaveidentify } from '../comman/mythems';
@@ -26,10 +26,10 @@ const Dashboard = () => {
     const dispatch = useDispatch<any>();
     const navigate = useNavigate();
 
-    const requestToken = useSelector((state: RootState) => state.auth.requestToken);
+    // const requestToken = useSelector((state: RootState) => state.auth.requestToken);
     const [SelectedOptions, setSelectedOptions] = useState<any>([])
 
-    const [bgwaveidentify, setbgwaveidentify] = useState<string | null>(null);
+    // const [bgwaveidentify, setbgwaveidentify] = useState<string | null>(null);
 
     useEffect(() => {
         const getToken = async () => {
@@ -70,57 +70,57 @@ const Dashboard = () => {
     };
       
 
-    const [data, setData] = useState<any[]>([]);
-  const [chartData, setChartData] = useState<any[]>([
-    {x: '0',y:  0}
-  ]);
-  const [subscriptmessage,setsubscriptmessage] = useState<any>()
-  const [supportAndResistanceLines, setSupportAndResistanceLines] = useState<any[]>([
-    { id: 'Base Price', value: 75500 },
-    { id: 'Support 1', value: 30000 },
-    { id: 'Support 2', value: 60500 },
-    { id: 'Resistance 1', value: 82000 },
-    { id: 'Resistance 2', value: 40500 },
-  ]);
+  //   const [data, setData] = useState<any[]>([]);
+  // const [chartData, setChartData] = useState<any[]>([
+  //   {x: '0',y:  0}
+  // ]);
+  // const [subscriptmessage,setsubscriptmessage] = useState<any>()
+  // const [supportAndResistanceLines, setSupportAndResistanceLines] = useState<any[]>([
+  //   { id: 'Base Price', value: 75500 },
+  //   { id: 'Support 1', value: 30000 },
+  //   { id: 'Support 2', value: 60500 },
+  //   { id: 'Resistance 1', value: 82000 },
+  //   { id: 'Resistance 2', value: 40500 },
+  // ]);
 
-  const getselctedvalues = SelectedOptions?.map((item: any) => item?.value.toString())
+  // const getselctedvalues = SelectedOptions?.map((item: any) => item?.value.toString())
 
-  useEffect(() => {
-    const handleLpValue = (message: any) => {
-      setsubscriptmessage(message);
-      const timestamp = new Date().toLocaleTimeString();
-      setData((prevData) => {
-        const newData = [...prevData, { x: timestamp, y: message.lp }];
-        return newData.slice(-80); // Keep only the last 80 points
-      });
-    };
+  // useEffect(() => {
+  //   const handleLpValue = (message: any) => {
+  //     setsubscriptmessage(message);
+  //     const timestamp = new Date().toLocaleTimeString();
+  //     setData((prevData) => {
+  //       const newData = [...prevData, { x: timestamp, y: message.lp }];
+  //       return newData.slice(-80); // Keep only the last 80 points
+  //     });
+  //   };
   
-    const ws = SelectedOptions?.length > 0
-      ? connectFlattradeWebSocket(`${process.env.REACT_APP_USER_ID}`, requestToken, `${process.env.REACT_APP_ACCOUNT_ID}`, `NSE|${getselctedvalues}`, handleLpValue)
-      : null;
+  //   const ws = SelectedOptions?.length > 0
+  //     ? connectFlattradeWebSocket(`${process.env.REACT_APP_USER_ID}`, requestToken, `${process.env.REACT_APP_ACCOUNT_ID}`, `NSE|${getselctedvalues}`, handleLpValue)
+  //     : null;
   
-    return () => {
-      if (ws) {
-        ws.close(); // Clean up WebSocket connection on unmount
-      }
-    };
-  }, [SelectedOptions, requestToken]);
+  //   return () => {
+  //     if (ws) {
+  //       ws.close(); // Clean up WebSocket connection on unmount
+  //     }
+  //   };
+  // }, [SelectedOptions, requestToken]);
 
 
 
-  useEffect(() => {
-    if (data.length) {
-      setChartData([
-        {
-          id: 'Live Price',
-          data: data.map((point) => ({
-            x: point?.x || '0',
-            y: point?.y || 0
-          }))
-        }
-      ]);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data.length) {
+  //     setChartData([
+  //       {
+  //         id: 'Live Price',
+  //         data: data.map((point) => ({
+  //           x: point?.x || '0',
+  //           y: point?.y || 0
+  //         }))
+  //       }
+  //     ]);
+  //   }
+  // }, [data]);
 
 
 //   useEffect(() => {

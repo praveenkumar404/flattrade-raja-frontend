@@ -3,6 +3,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // Load requestToken from localStorage if available
 const tokenFromLocalStorage = localStorage.getItem('requestToken');
 const selectedValuesFromLocalStorage = localStorage.getItem('selectedDropdownValues');
+const OverLaystorePersist = localStorage.getItem('overLaypersist')
+const NotifystorePersist = localStorage.getItem('notifications')
 
 interface Option {
   id: number;
@@ -10,9 +12,16 @@ interface Option {
   value: any;
 }
 
+interface Notification {
+  id: number;
+  message: string;
+}
+
 interface AuthState {
   requestToken: string | null;
   selectedDropdownValues: Option[];
+  overLaypersist: boolean;
+  notifications: Notification[]
 }
 
 
@@ -21,6 +30,8 @@ const initialState: AuthState = {
   selectedDropdownValues: selectedValuesFromLocalStorage
     ? JSON.parse(selectedValuesFromLocalStorage)
     : [],
+  overLaypersist:OverLaystorePersist ? JSON.parse(OverLaystorePersist) === true : false,
+  notifications:[]
 };
 
 const authSlice = createSlice({
@@ -45,6 +56,21 @@ const authSlice = createSlice({
       localStorage.removeItem('selectedDropdownValues');
     },
 
+    setoverLaypersist: (state, action: PayloadAction<boolean>) => {
+      state.overLaypersist = action.payload;
+      localStorage.setItem('overLaypersist', JSON.stringify(action.payload)); // Save token to localStorage
+    },
+
+    setNotifications : (state, action: PayloadAction<Notification[]>) =>{
+      state.notifications = action.payload;
+      localStorage.setItem('notifications', JSON.stringify(action.payload));
+    },
+
+    clearoverLaypersist: (state) => {
+      state.overLaypersist = false;
+      localStorage.removeItem('overLaypersist'); // Remove token from localStorage on logout or token clear
+    },
+
     resetAuthState: (state) => {
       state.selectedDropdownValues = [];
       state.requestToken = null; // Reset the token on logout
@@ -55,7 +81,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { setRequestToken, clearRequestToken, setSelectedDropdownValues, clearSelectedDropdownValues, resetAuthState } = authSlice.actions;
+export const { setRequestToken, clearRequestToken, setSelectedDropdownValues, clearSelectedDropdownValues, setNotifications, setoverLaypersist, resetAuthState } = authSlice.actions;
 
 export default authSlice.reducer;
 

@@ -12,8 +12,8 @@ import waveBackground_light from '../../../assets/images/backgroundsvgs/bg-light
 import waveBackground_default from '../../../assets/images/Light_theme.jpg';
 import { useNavigate } from 'react-router-dom';
 import { fetchUserToken } from '../../../api/authapi';
-import { setRequestToken } from '../../../redux/authSlice';
-import { connectFlattradeWebSocket } from '../../../websocketClient';
+import { setoverLaypersist, setRequestToken } from '../../../redux/authSlice';
+// import { connectFlattradeWebSocket } from '../../../websocketClient';
 import { DataObject, MarketCard } from '../../../comman/MarketCard';
 import { LineBarWidgetchats } from '../../Pages/WidgetCharts/LineBarCharts/LineBarWidgetchats';
 import { LineBardata1 } from '../../Pages/WidgetCharts/LineBarCharts/datas/LineBardata1';
@@ -33,6 +33,7 @@ import { useWebSocketMessages } from '../../../Webhooktypeprocess';
 const AlgoTradersPages: React.FC = () => {
 
   const selectedDropdownValues = useSelector((state: RootState) => state.auth.selectedDropdownValues);
+  const {overLaypersist} = useSelector((state: RootState) => state.auth);
   const selectedValue = selectedDropdownValues.map(option => option.value).join(', ');
 
 
@@ -62,7 +63,6 @@ const AlgoTradersPages: React.FC = () => {
   const [buttondisabledObject, sebuttondisabledObject] = useState<any>({isCalculated:false,showcalctable:false,issubmitform:true});
   const [tradingstatus, settradingstatus] = useState<any>();
   const [stopTrading,setstopTrading] = useState<boolean>(false);
-  const [Overlayloading, setOverlayLoading] = useState(false);
   const webhookdatas = useWebSocketMessages();
   const webhookcontrol = webhookdatas.flat()
 
@@ -217,7 +217,8 @@ const AlgoTradersPages: React.FC = () => {
 
         const isOrderType = webhookcontrol.some((item: any) => item?.type === 'action');
         if (response?.data?.status == true) {
-          setOverlayLoading(true);
+          // setOverlayLoading(true);
+          dispatch(setoverLaypersist(true))
         } else {
           console.log('No matching type found.');
         }
@@ -276,12 +277,12 @@ const AlgoTradersPages: React.FC = () => {
     ? waveBackground_light
     : waveBackground_default;
     
-    const [data, setData] = useState<any[]>([
-      {x: '0',y:  0}]);
-  const [chartData, setChartData] = useState<any[]>([
+//     const [data, setData] = useState<any[]>([
+//       {x: '0',y:  0}]);
+//   const [chartData, setChartData] = useState<any[]>([
     
-]);
-  const [subscriptmessage,setsubscriptmessage] = useState<any>()
+// ]);
+  // const [subscriptmessage,setsubscriptmessage] = useState<any>()
 
     useEffect(() => {
         const getToken = async () => {
@@ -300,42 +301,42 @@ const AlgoTradersPages: React.FC = () => {
       }, [dispatch, appKey]);
 
 
-  useEffect(() => {
-    const handleLpValue = (message: any) => {
-      setsubscriptmessage(message);
-      const timestamp = new Date().toLocaleTimeString();
-      setData((prevData) => {
-        const newData = [...prevData, { x: timestamp, y: message.lp }];
-        return newData.slice(-80); // Keep only the last 80 points
-      });
-    };
+  // useEffect(() => {
+  //   const handleLpValue = (message: any) => {
+  //     setsubscriptmessage(message);
+  //     const timestamp = new Date().toLocaleTimeString();
+  //     setData((prevData) => {
+  //       const newData = [...prevData, { x: timestamp, y: message.lp }];
+  //       return newData.slice(-80); // Keep only the last 80 points
+  //     });
+  //   };
   
-    const ws = SelectedOptions?.length > 0
-      ? connectFlattradeWebSocket(`${process.env.REACT_APP_USER_ID}`, requestToken, `${process.env.REACT_APP_USER_ID}`, `NSE|${getselctedvalues}`, handleLpValue)
-      : null;
+  //   const ws = SelectedOptions?.length > 0
+  //     ? connectFlattradeWebSocket(`${process.env.REACT_APP_USER_ID}`, requestToken, `${process.env.REACT_APP_USER_ID}`, `NSE|${getselctedvalues}`, handleLpValue)
+  //     : null;
   
-    return () => {
-      if (ws) {
-        ws.close(); // Clean up WebSocket connection on unmount
-      }
-    };
-  }, [SelectedOptions, requestToken]);
+  //   return () => {
+  //     if (ws) {
+  //       ws.close(); // Clean up WebSocket connection on unmount
+  //     }
+  //   };
+  // }, [SelectedOptions, requestToken]);
 
 
 
-  useEffect(() => {
-    if (data.length) {
-      setChartData([
-        {
-          id: 'Live Price',
-          data: data?.map((point) => ({
-            x: point?.x || '0',
-            y: point?.y || 0
-          }))
-        }
-      ]);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data.length) {
+  //     setChartData([
+  //       {
+  //         id: 'Live Price',
+  //         data: data?.map((point) => ({
+  //           x: point?.x || '0',
+  //           y: point?.y || 0
+  //         }))
+  //       }
+  //     ]);
+  //   }
+  // }, [data]);
 
 
   const BasePriceLine = 180; // Just an example
@@ -346,7 +347,7 @@ const AlgoTradersPages: React.FC = () => {
 
   return (
     <Box>
-      <OverlayBox loading={Overlayloading} textinfo={webhookdatas.map((data: any, index: number) =>data)} setOverlayLoading={setOverlayLoading}>
+      <OverlayBox textinfo={webhookdatas.map((data: any, index: number) =>data)}>
       <SnackbarProvider maxSnack={3}>
       <Box className="backgrounddash" sx={{backgroundImage:`url(${backgroundLayoutWave})`,background:`url(${backgroundLayoutWave}) center center / cover no-repeat fixed`}}>
          <div className="backgrounddashoverlay">

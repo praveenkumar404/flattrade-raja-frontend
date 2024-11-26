@@ -1,103 +1,114 @@
-import { Box, Card, CardContent, Grid, Typography, Button } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Box, Grid, Typography, Button, TextField, Select, MenuItem , Card, CardContent } from '@mui/material';
 import DatePickerComponent from '../../../comman/ReusabelCompoents/DatePickerComponent';
-
-
-interface Order {
-  id: number;
-  documentId: string;
-  index: string;
-  orderType: string;
-  contractType: string;
-  contractTsym: string;
-  contractToken: string;
-  indexLtp: string;
-  lotSize: number;
-  price: number;
-  contractLp: number;
-  norenordno: string | null;
-  orderStatus: string | null;
-  remarks: string | null;
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
-};
-
+import { RootState } from '../../../redux/store';
+import { resetFilters, setOrders, updateFilters } from '../../../redux/OrderSlice';
 
 const OrderPages = () => {
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
-  const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(new Date());
-  const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(new Date());
+  const dispatch = useDispatch();
+  const { orders, filters } = useSelector((state: RootState) => state?.orderSlice);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
 
-  const formatDateToISO = (date: Date): string => {
-    return date.toISOString();
-  };
-
-  const handleStartDateChange = (value: Date | null, id: string) => {
-    setSelectedStartDate(value);
-  };
-
-  const handleEndDateChange = (value: Date | null, id: string) => {
-    setSelectedEndDate(value);
-  };
-
-  const fetchOrders = async (startDate: string, endDate: string) => {
+  const fetchOrders = async () => {
+    if(startDate != null && endDate !=null){
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/orders?filters[createdAt][$gte]=${encodeURIComponent(
-          startDate
-        )}&filters[createdAt][$lte]=${encodeURIComponent(endDate)}`,
+        `${process.env.REACT_APP_API_URL}/orders?filters[createdAt][$gte]=${startDate?.toISOString()}&filters[createdAt][$lte]=${endDate?.toISOString()}`,
         {
-          headers: {
-            Authorization: `Bearer ${process.env.REACT_APP_USER_TOKEN}`, // Replace with your token
-          },
+          headers: { Authorization: `Bearer ${process.env.REACT_APP_USER_TOKEN}` },
         }
       );
       const result = await response.json();
-      const ordersData: Order[] = result.data;
-      setOrders(ordersData);
-      setFilteredOrders(ordersData);
+      dispatch(setOrders(result?.data));
     } catch (error) {
       console.error('Error fetching orders:', error);
     }
+  }else{
+    alert("Please the Start and End Date ! ")
+  }
   };
 
-  useEffect(() => {
-    const startDate = formatDateToISO(new Date());
-    const endDate = formatDateToISO(new Date(new Date().setHours(23, 59, 59)));
-    fetchOrders(startDate, endDate);
-  }, []);
+  const handleFilterChange = (key: keyof typeof filters, value: any) => {
+    dispatch(updateFilters({ [key]: value }));
+  };
 
-  useEffect(() => {
-    if (selectedStartDate && selectedEndDate) {
-      const startDate = formatDateToISO(new Date(selectedStartDate.setHours(0, 0, 0)));
-      const endDate = formatDateToISO(new Date(selectedEndDate.setHours(23, 59, 59)));
-      fetchOrders(startDate, endDate);
-    }
-  }, [selectedStartDate, selectedEndDate]);
+  const resetFiltersHandler = () => {
+    setStartDate(null);
+    setEndDate(null);
+    dispatch(resetFilters());
+  };
 
-  const resetDatefield = () =>{
-    setSelectedStartDate(null)
-    setSelectedEndDate(null)
-  }
+  const filteredOrders = orders?.filter((order:any) => {
+    return Object.entries(filters).every(([key, value]) => {
+      if (value === undefined || value === null) return true;
+      if(value === "") return order
+      return order[key as keyof typeof order] === value;
+    });
+  });
+
   return (
     <Box>
-      <Box mb={2}>
-        <Typography variant="h4">Order Pages</Typography>
+      <Typography variant="h6" gutterBottom>
+        Order Pages
+      </Typography>
+
+      <Box display="flex" gap={2} mb={2}>
+        <DatePickerComponent
+          id="start-date"
+          label="From Date : "
+          placeholderdiplay ="From Date"
+          format="dd/MM/yyyy"
+          onChange={(date) => setStartDate(date)}
+        />
+        <DatePickerComponent
+          id="end-date"
+          label="To Date : "
+          placeholderdiplay ="Last Date"
+          format="dd/MM/yyyy"
+          onChange={(date) => setEndDate(date)}
+        />
+        <Button variant="contained" onClick={fetchOrders} sx={{boxShadow:'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset'}}>
+          Fetch Orders
+        </Button>
+        <Button variant="outlined" onClick={resetFiltersHandler} sx={{boxShadow:'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset'}}>
+          Reset Filters
+        </Button>
       </Box>
 
-      <Box mb={2} sx={{display:'flex',columnGap:'20px'}}>
-          <DatePickerComponent id="date-picker-1" label="Start Date" format="dd/MM/yyyy" onChange={handleStartDateChange} />
-          <DatePickerComponent id="date-picker-1" label="End Date" format="dd/MM/yyyy" onChange={handleEndDateChange} />
-      </Box>
+      <Box sx={{display:'flex', width:'fit-content', flexWrap:'wrap',gap:2, mb:2, mt:4, boxShadow:'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset' }}>
+        <Select
+          value={filters.index || ''}
+          onChange={(e) => handleFilterChange('index', e.target.value)}
+          displayEmpty
+        >
+          <MenuItem value="">All Indices</MenuItem>
+          {orders.map((order:any) => (
+            <MenuItem key={order.id} value={order.index}>
+              {order.index}
+            </MenuItem>
+          ))}
+        </Select>
+        {/* <Select
+          value={filters.orderType || ''}
+          onChange={(e) => handleFilterChange('orderType', e.target.value)}
+          displayEmpty
+        >
+          <MenuItem value="">All Order Types</MenuItem>
+          {orders.map((order:any) => (
+            <MenuItem key={order.id} value={order.orderType}>
+              {order.orderType}
+            </MenuItem>
+          ))}
+        </Select> */}
+        {/* Add more filters similarly */}
+      </Box>      
 
-      <Box>
-        <Button onClick={resetDatefield}>Reset Filter</Button>
-      </Box>
-
-      <Box sx={{ padding: 2 }}>
-        <Grid container spacing={2}>
+      <Box sx={{ padding: 2 , boxShadow:'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset'}}>
+      
+        <Grid container sx={{rowGap:'10px'}}>
+        {orders?.length == 0 ? <Box sx={{display:'flex',flexDirection:'column', justifyContent:'center', alignItems:'center',width:'full'}}><Box><h4>No Available Orders ! </h4></Box><Box><img style={{height:'250px',width:'250px'}} src={require('../../../assets/images/Loading_app.gif')}/></Box></Box>:null}
           {filteredOrders.map((order) => (
             <Grid item xs={12} sm={6} md={4} lg={12} key={order.id}>
               <Card variant="outlined" sx={{ borderRadius: 2, height: '100%' }}>
@@ -105,13 +116,13 @@ const OrderPages = () => {
                   <Grid container spacing={1}>
                     <Grid item xs={12} sm={6}>
                       <Typography variant="subtitle2" color="text.secondary">
-                        Document ID
+                        Index
                       </Typography>
-                      <Typography variant="body1">{order.documentId}</Typography>
+                      <Typography variant="body1">{order.index}</Typography>
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <Typography variant="subtitle2" color="text.secondary">
-                        Order Type
+                      Order Type
                       </Typography>
                       <Typography variant="body1">{order.orderType}</Typography>
                     </Grid>
@@ -123,22 +134,34 @@ const OrderPages = () => {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <Typography variant="subtitle2" color="text.secondary">
-                        Quantity
+                      Contract Trading symbol
+                      </Typography>
+                      <Typography variant="body1">{order.contractTsym}</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="subtitle2" color="text.secondary">
+                        Lot Size
                       </Typography>
                       <Typography variant="body1">{order.lotSize}</Typography>
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <Typography variant="subtitle2" color="text.secondary">
-                        Price
+                        order Number
                       </Typography>
-                      <Typography variant="body1">{order.price}</Typography>
+                      <Typography variant="body1">{order.norenordno ? order.norenordno : 'Pending...'}</Typography>
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <Typography variant="subtitle2" color="text.secondary">
-                        Published At
+                        Order Status
+                      </Typography>
+                      <Typography variant="body1">{order.orderStatus ? order.orderStatus : 'Pending...'}</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="subtitle2" color="text.secondary">
+                        Updated Date
                       </Typography>
                       <Typography variant="body1">
-                        {new Date(order.publishedAt).toLocaleString()}
+                        {new Date(order.updatedAt).toLocaleString()}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -147,7 +170,7 @@ const OrderPages = () => {
             </Grid>
           ))}
         </Grid>
-      </Box>
+        </Box>
     </Box>
   );
 };

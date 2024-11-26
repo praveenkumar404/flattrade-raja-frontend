@@ -19,6 +19,7 @@ const MarketScoredDatas: React.FC<any> = ({myoption}:any) => {
   const isType = webhookcontrol.find(
     (item: any) => item?.type === 'index'
   )?.data;
+  console.log("valsing : ", isType)
   const webookindexdata = webhookcontrol.map((res: any, index) =>res)
 
 
@@ -27,6 +28,18 @@ const MarketScoredDatas: React.FC<any> = ({myoption}:any) => {
     mylabel : selectedDropdownValues?.length > 0 ? `${selectedDropdownValues?.map((item: any) => item?.label?.toString())}` :'',
     myvalue : selectedDropdownValues?.length > 0 ? `${selectedDropdownValues?.map((item: any) => item?.value?.toString())}` :''
    } 
+
+//    {
+//     "type": "index",
+//     "data": {
+//         "t": "tf",
+//         "e": "NSE",
+//         "tk": "26037",
+//         "lp": "24041.80",
+//         "pc": "-0.07"
+//     },
+//     "status": true
+// }
    
   return (
     <Box>
@@ -51,10 +64,10 @@ const MarketScoredDatas: React.FC<any> = ({myoption}:any) => {
               </Box>
               <Box display="flex" alignItems="center" justifyContent="space-between" mt={2}>
                   {subscriptmessageincdec == true ? <VerticalAlignTopIcon sx={{color:'green',fontSize:'24px'}}/>:<VerticalAlignBottomIcon sx={{color:'#ff0000',fontSize:'24px'}}/>}
-                  <Typography sx={{ color: subscriptmessageincdec == true ? 'green' :'#ff0000', fontWeight: 'bold' }}>{myoption?.some((item:any) => item.value === Number(selectedValue)) ? `${isType?.pc || isType?.pc ==undefined ? 0 : Number(isType.pc)} %`:'-'}</Typography>
+                  <Typography sx={{ color: subscriptmessageincdec == true ? 'green' :'#ff0000', fontWeight: 'bold' }}>{myoption?.some((item:any) => item.value === Number(selectedValue)) ? `${Number(isType?.pc)} %`:'-'}</Typography>
                 </Box>
             </Box>
-            
+          
           </Paper>
         </Grid>
       </Grid>
