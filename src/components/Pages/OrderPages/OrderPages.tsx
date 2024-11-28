@@ -17,7 +17,7 @@ const OrderPages = () => {
     if(startDate != null && endDate !=null){
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/orders?filters[createdAt][$gte]=${moment(startDate).format("YYYY-MM-DD")}T00:00:00&filters[createdAt][$lte]=${moment(startDate).format("YYYY-MM-DD")}T23:59:59`,
+        `${process.env.REACT_APP_API_URL}/orders?filters[createdAt][$gte]=${moment(startDate).format("YYYY-MM-DD")}T00:00:00&filters[createdAt][$lte]=${moment(endDate).format("YYYY-MM-DD")}T23:59:59`,
         {
           headers: { Authorization: `Bearer ${process.env.REACT_APP_USER_TOKEN}` },
         }

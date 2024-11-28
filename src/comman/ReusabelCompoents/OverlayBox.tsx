@@ -23,27 +23,26 @@ const OverlayBox: React.FC<OverlayBoxProps> = ({ textinfo, children }) => {
   const webhookdatas = useWebSocketMessages();
   const webhookcontrol = webhookdatas.flat()
   const isType = webhookcontrol.find(
-    (item: any) => item?.type === 'variable' || item?.type === 'variable'
+    (item: any) => item?.type === 'variable' || item?.type === 'order'
+  )?.type;
+
+  const isTypeMessage = webhookcontrol.find(
+    (item: any) => item?.type === 'variable' || item?.type === 'order'
   )?.message;
-  console.log("valsing : ", isType)
+  console.log("valsing : ", isTypeMessage)
 
   useEffect(() => {
     if (overLaypersist) {
-      // setCurrentMessage("Loading...");
+      setCurrentMessage("Loading...");
       const firstTimer = setTimeout(() => {
         setCurrentMessage("Application is running and monitoring the market for Algotrading...");
-      }, 2000); // 2 seconds for the first message
-
-      const secondTimer = setTimeout(() => {
-        if (textinfo) {
-          setCurrentMessage(isType? isType :'Not Found Message !');
-        }
-      },40000); // 4 seconds for the second message
+      }, 2000);
+        
+      setCurrentMessage(isTypeMessage? isTypeMessage :'Not Found Message !');
 
       return () => {
         clearTimeout(firstTimer);
-        clearTimeout(secondTimer);
-      }; // Cleanup timers
+      };
     }
   }, [overLaypersist, textinfo]);
 
@@ -66,7 +65,6 @@ const OverlayBox: React.FC<OverlayBoxProps> = ({ textinfo, children }) => {
 
   return (
     <Box position="relative" width="100%" height="100%">
-      {/* Content Box */}
       <Box
         sx={{
           opacity: overLaypersist ? 0.5 : 1,
@@ -76,7 +74,6 @@ const OverlayBox: React.FC<OverlayBoxProps> = ({ textinfo, children }) => {
         {children}
       </Box>
 
-      {/* Overlay */}
       {overLaypersist && (
         <Backdrop
         sx={{
@@ -94,18 +91,30 @@ const OverlayBox: React.FC<OverlayBoxProps> = ({ textinfo, children }) => {
           }}
           open={overLaypersist}
         >
-          {/* <CircularProgress color="inherit" /> */}
-          <Typography variant="body1" sx={{ marginTop: 2, textAlign: "center" }}>
-            {currentMessage}
-            {/* {isType} */}
-          </Typography>
           <Button
             variant="contained"
             onClick={stoptradingprocess}
             sx={{ marginTop: 2 }}
           >
-            Stop Tranding
+            Stop Trading
           </Button>
+          <Box sx={{height:'10rem'}}>
+          {currentMessage =='Not Found Message !' ? <Box>
+            <Typography variant="h5" sx={{ marginTop: 2, textAlign: "center" , color:'dodgerblue'}}>
+              Processing
+            </Typography>
+
+            <img src={require(`../../assets/images/Loading_app.gif`)} style={{height:'200px',width:'200px'}}/>
+          </Box>:<>
+          <Typography variant="h5" sx={{ marginTop: 2, textAlign: "center" , color:'dodgerblue'}}>
+            {isType == 'variable' ? `Status`:isType == 'order' ? 'Order Update': null}
+          </Typography>
+          <Typography variant="body1" sx={{ marginTop: 2, textAlign: "center" }}>
+            {currentMessage}
+          </Typography>
+          </>}
+          </Box>
+          
         </Backdrop>
       )}
     </Box>
