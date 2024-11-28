@@ -61,7 +61,7 @@ const Dashboard = () => {
         { id: 2, label: 'Banknifty', value: 26009 },
         { id: 3, label: 'Niftynxt50', value: 26013 },
         { id: 4, label: 'Finnifty', value: 26037 },
-        { id: 5, label: 'NiftyMind Select', value: 26014 },
+        { id: 5, label: 'Midcap Nifty', value: 26014 },
     ];
 
     const handleSelect = (selectedOptions: { id: number; label: string; value: string }[]) => {
@@ -242,7 +242,7 @@ const Dashboard = () => {
                       </Typography>
                         
                         {/* <MarketScoreCard subscriptmessage={subscriptmessage} myoption={options} SelectedOptions={SelectedOptions}/> */}
-                        <MarketScoredDatas myoption={options}/>
+                        {/* <MarketScoredDatas myoption={options}/> */}
 
                         </Box>
                     </div>

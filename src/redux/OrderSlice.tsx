@@ -10,7 +10,9 @@ interface Order {
   lotSize: number;
   norenordno: string | null;
   orderStatus: string | null;
-  updatedAt: any
+  updatedAt: any;
+  price:number;
+  contractLp:number;
 }
 
 interface OrderState {
@@ -23,6 +25,8 @@ interface OrderState {
     lotSize?: number;
     norenordno?: string | null;
     orderStatus?: string | null;
+    price?:number;
+    contractLp?:number;
   };
 }
 

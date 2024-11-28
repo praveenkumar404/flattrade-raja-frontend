@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { setoverLaypersist } from "../../redux/authSlice";
 import axios from "axios";
+import { useWebSocketMessages } from "../../Webhooktypeprocess";
 
 interface OverlayBoxProps {
   // loading: boolean;
@@ -18,16 +19,24 @@ const OverlayBox: React.FC<OverlayBoxProps> = ({ textinfo, children }) => {
   const {overLaypersist} = useSelector((state: RootState) => state.auth);
   const {selectedDropdownValues} = useSelector((state: RootState) => state.auth);
   console.log("Fetch textinfo",textinfo)
+
+  const webhookdatas = useWebSocketMessages();
+  const webhookcontrol = webhookdatas.flat()
+  const isType = webhookcontrol.find(
+    (item: any) => item?.type === 'variable' || item?.type === 'variable'
+  )?.message;
+  console.log("valsing : ", isType)
+
   useEffect(() => {
     if (overLaypersist) {
-      setCurrentMessage("Loading...");
+      // setCurrentMessage("Loading...");
       const firstTimer = setTimeout(() => {
         setCurrentMessage("Application is running and monitoring the market for Algotrading...");
       }, 2000); // 2 seconds for the first message
 
       const secondTimer = setTimeout(() => {
         if (textinfo) {
-          setCurrentMessage(textinfo?.map((item:any)=>item?.message ? item?.message :'Not Found Message !'));
+          setCurrentMessage(isType? isType :'Not Found Message !');
         }
       },40000); // 4 seconds for the second message
 
@@ -41,7 +50,7 @@ const OverlayBox: React.FC<OverlayBoxProps> = ({ textinfo, children }) => {
   const stoptradingprocess  = async () =>{
     dispatch(setoverLaypersist(false))
       try {
-        const response = await axios.post(
+        await axios.post(
           `${process.env.REACT_APP_API_URL}/variables/stopTrading`,{token:Number(selectedDropdownValues?.map((item: any) => item?.value?.toString()))},
           {
             headers: {
@@ -88,13 +97,14 @@ const OverlayBox: React.FC<OverlayBoxProps> = ({ textinfo, children }) => {
           {/* <CircularProgress color="inherit" /> */}
           <Typography variant="body1" sx={{ marginTop: 2, textAlign: "center" }}>
             {currentMessage}
+            {/* {isType} */}
           </Typography>
           <Button
             variant="contained"
             onClick={stoptradingprocess}
             sx={{ marginTop: 2 }}
           >
-            Stop Loading
+            Stop Tranding
           </Button>
         </Backdrop>
       )}

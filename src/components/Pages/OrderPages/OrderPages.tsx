@@ -4,6 +4,7 @@ import { Box, Grid, Typography, Button, TextField, Select, MenuItem , Card, Card
 import DatePickerComponent from '../../../comman/ReusabelCompoents/DatePickerComponent';
 import { RootState } from '../../../redux/store';
 import { resetFilters, setOrders, updateFilters } from '../../../redux/OrderSlice';
+import moment from 'moment';
 
 const OrderPages = () => {
   const dispatch = useDispatch();
@@ -12,10 +13,11 @@ const OrderPages = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
 
   const fetchOrders = async () => {
+    console.log("datinggg : ", startDate, endDate)
     if(startDate != null && endDate !=null){
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/orders?filters[createdAt][$gte]=${startDate?.toISOString()}&filters[createdAt][$lte]=${endDate?.toISOString()}`,
+        `${process.env.REACT_APP_API_URL}/orders?filters[createdAt][$gte]=${moment(startDate).format("YYYY-MM-DD")}T00:00:00&filters[createdAt][$lte]=${moment(startDate).format("YYYY-MM-DD")}T23:59:59`,
         {
           headers: { Authorization: `Bearer ${process.env.REACT_APP_USER_TOKEN}` },
         }
@@ -79,14 +81,14 @@ const OrderPages = () => {
 
       <Box sx={{display:'flex', width:'fit-content', flexWrap:'wrap',gap:2, mb:2, mt:4, boxShadow:'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset' }}>
         <Select
-          value={filters.index || ''}
+          value={filters?.index || ''}
           onChange={(e) => handleFilterChange('index', e.target.value)}
           displayEmpty
         >
           <MenuItem value="">All Indices</MenuItem>
-          {orders.map((order:any) => (
-            <MenuItem key={order.id} value={order.index}>
-              {order.index}
+          {orders?.map((order:any) => (
+            <MenuItem key={order?.id} value={order?.index}>
+              {order?.index}
             </MenuItem>
           ))}
         </Select>
@@ -114,12 +116,12 @@ const OrderPages = () => {
               <Card variant="outlined" sx={{ borderRadius: 2, height: '100%' }}>
                 <CardContent>
                   <Grid container spacing={1}>
-                    <Grid item xs={12} sm={6}>
+                    {/* <Grid item xs={12} sm={6}>
                       <Typography variant="subtitle2" color="text.secondary">
                         Index
                       </Typography>
                       <Typography variant="body1">{order.index}</Typography>
-                    </Grid>
+                    </Grid> */}
                     <Grid item xs={12} sm={6}>
                       <Typography variant="subtitle2" color="text.secondary">
                       Order Type
@@ -138,18 +140,18 @@ const OrderPages = () => {
                       </Typography>
                       <Typography variant="body1">{order.contractTsym}</Typography>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    {/* <Grid item xs={12} sm={6}>
                       <Typography variant="subtitle2" color="text.secondary">
                         Lot Size
                       </Typography>
                       <Typography variant="body1">{order.lotSize}</Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
+                    </Grid> */}
+                    {/* <Grid item xs={12} sm={6}>
                       <Typography variant="subtitle2" color="text.secondary">
                         order Number
                       </Typography>
                       <Typography variant="body1">{order.norenordno ? order.norenordno : 'Pending...'}</Typography>
-                    </Grid>
+                    </Grid> */}
                     <Grid item xs={12} sm={6}>
                       <Typography variant="subtitle2" color="text.secondary">
                         Order Status
@@ -158,12 +160,24 @@ const OrderPages = () => {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <Typography variant="subtitle2" color="text.secondary">
+                        Price
+                      </Typography>
+                      <Typography variant="body1">{order?.price ? order?.price : 'Pending...'}</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="subtitle2" color="text.secondary">
+                        Contract LP
+                      </Typography>
+                      <Typography variant="body1">{order?.contractLp ? order?.contractLp : 'Pending...'}</Typography>
+                    </Grid>
+                    {/* <Grid item xs={12} sm={6}>
+                      <Typography variant="subtitle2" color="text.secondary">
                         Updated Date
                       </Typography>
                       <Typography variant="body1">
                         {new Date(order.updatedAt).toLocaleString()}
                       </Typography>
-                    </Grid>
+                    </Grid> */}
                   </Grid>
                 </CardContent>
               </Card>
