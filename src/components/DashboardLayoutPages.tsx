@@ -26,6 +26,8 @@ import NotificationComponent from '../comman/NotificationComponent';
 import '../assets/css/DashboardLayoutPages.css'
 import { useDispatch } from 'react-redux';
 import { resetAuthState } from '../redux/authSlice';
+import InsightsMaincomp from './Pages/Insights/InsightsMaincomp';
+import Seller from './Pages/Seller/Seller';
 
 const NAVIGATION: Navigation = [
   {
@@ -45,6 +47,11 @@ const NAVIGATION: Navigation = [
   {
     segment: 'orders',
     title: 'Orders',
+    icon: <ShoppingCartIcon />,
+  },
+  {
+    segment: 'seller',
+    title: 'Seller',
     icon: <ShoppingCartIcon />,
   },
   {
@@ -72,8 +79,8 @@ const NAVIGATION: Navigation = [
     ],
   },
   {
-    segment: 'integrations',
-    title: 'Integrations',
+    segment: 'insights',
+    title: 'Insights',
     icon: <LayersIcon />,
   },
 ];
@@ -158,7 +165,7 @@ export default function DashboardLayoutPages() {
     user: {
         name: 'Bharat Kashyap',
         email: 'bharatkashyap@outlook.com',
-        image: 'https://imgcdn.stablediffusionweb.com/2024/6/12/4d688bcf-f53b-42b6-a98d-3254619f3b58.jpg',
+        image: 'https://cdn3.iconfinder.com/data/icons/30-office-business-sticker-icons-part-1/202/Businesman-512.png',
       },
   }
 
@@ -283,6 +290,8 @@ export default function DashboardLayoutPages() {
             <Route path="/orders" element={<OrderPages />} />
             <Route path="/algotrading" element={<AlgoTradersPages />} />
             <Route path="/profile" element={<Profilepage />} />
+            <Route path="/insights" element={<InsightsMaincomp />} />
+            <Route path="/seller" element={<Seller />} />
           </Routes>
         </PageContainer>
       </DashboardLayout>

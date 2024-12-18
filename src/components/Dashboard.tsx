@@ -34,7 +34,7 @@ const Dashboard = () => {
     useEffect(() => {
         const getToken = async () => {
           try {
-            const data = await fetchUserToken(`${process.env.REACT_APP_USER_TOKEN}`);
+            const data = await fetchUserToken();
             dispatch(setRequestToken(data?.requestToken));
             if (data && !appKey) {
               console.error('App key is not defined');
@@ -216,6 +216,7 @@ const Dashboard = () => {
         <Box>
             <Box className="backgrounddash" sx={{backgroundImage:`url(${backgroundLayoutWave})`,background:`url(${backgroundLayoutWave}) center center / cover no-repeat fixed`}}>
                 <div className="backgrounddashoverlay">
+
                     <Box>
                         <MultipleSelectWithSearch
                             options={options}
@@ -245,8 +246,10 @@ const Dashboard = () => {
                         {/* <MarketScoredDatas myoption={options}/> */}
 
                         </Box>
+
                     </div>
                 <Box>
+                  
                 </Box>
 
                 

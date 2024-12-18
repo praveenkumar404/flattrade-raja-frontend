@@ -5,6 +5,7 @@ const tokenFromLocalStorage = localStorage.getItem('requestToken');
 const selectedValuesFromLocalStorage = localStorage.getItem('selectedDropdownValues');
 const OverLaystorePersist = localStorage.getItem('overLaypersist')
 const NotifystorePersist = localStorage.getItem('notifications')
+const selectedoptionspreadLocalStorage = localStorage.getItem('selectedDropdownspreatobject');
 
 interface Option {
   id: number;
@@ -15,14 +16,24 @@ interface Option {
 interface Notification {
   id: number;
   message: string;
+  type:string;
 }
+
 
 interface AuthState {
   requestToken: string | null;
   selectedDropdownValues: Option[];
-  overLaypersist: boolean;
-  notifications: Notification[]
+  overLaypersist: any[];
+  notifications: Notification[];
+  selectedDropdownspreatobject: any[];
 }
+
+const optionsdata = [
+  { "id": 1, "label": "Nifty", "value": 26000 },
+  { "id": 2, "label": "Banknifty", "value": 26009 },
+  { "id": 3, "label": "Niftynxt50", "value": 26013 },
+  { "id": 4, "label": "Finnifty", "value": 26037 },
+]
 
 
 const initialState: AuthState = {
@@ -30,8 +41,12 @@ const initialState: AuthState = {
   selectedDropdownValues: selectedValuesFromLocalStorage
     ? JSON.parse(selectedValuesFromLocalStorage)
     : [],
-  overLaypersist:OverLaystorePersist ? JSON.parse(OverLaystorePersist) === true : false,
-  notifications:[]
+  // overLaypersist:OverLaystorePersist ? JSON.parse(OverLaystorePersist) === true : false,
+  overLaypersist: OverLaystorePersist ? JSON.parse(OverLaystorePersist) : [],
+  notifications:NotifystorePersist ? JSON.parse(NotifystorePersist) : [],
+  selectedDropdownspreatobject:selectedoptionspreadLocalStorage
+  ? JSON.parse(selectedoptionspreadLocalStorage)
+  : []
 };
 
 const authSlice = createSlice({
@@ -50,26 +65,129 @@ const authSlice = createSlice({
     setSelectedDropdownValues: (state, action: PayloadAction<Option[]>) => {
       state.selectedDropdownValues = action.payload; // Update selected values
       localStorage.setItem('selectedDropdownValues', JSON.stringify(action.payload));
+
     },
+    
+
+    addObjectByIdToSelectedDropdownspreat: (state, action: PayloadAction<Option>) => {
+      const newObject = action.payload;
+      console.log("Incoming object: ", action.payload);
+    
+      // Check if the newObject exists in `optionsdata` (optional)
+      const existsInOptions = optionsdata.some((item) => item.value === newObject.value);
+    
+      if (existsInOptions) {
+        // Add newObject and ensure no duplicates in `selectedDropdownspreatobject`
+        const updatedArray = [...state.selectedDropdownspreatobject, newObject].filter(
+          (item, index, self) =>
+            index === self.findIndex((t) => t.value === item.value) // Remove duplicates by `value`
+        );
+    
+        // Update state
+        state.selectedDropdownspreatobject = updatedArray;
+    
+        // Persist to localStorage
+        localStorage.setItem('selectedDropdownspreatobject', JSON.stringify(updatedArray));
+      } else {
+        console.log("The object does not exist in optionsdata and will not be added.");
+      }
+    },
+    
+    
+
+    // Remove an object based on its id
+    selectedRemoveIdDropdownspreatobject: (state, action: PayloadAction<any>) => {
+      const idToRemove = action.payload;
+
+      // Filter out the object with the specified id
+      const updatedArray = state.selectedDropdownspreatobject.filter(
+        (item) => item.id !== idToRemove?.id
+      );
+
+      // Update state
+      state.selectedDropdownspreatobject = updatedArray;
+
+      // Save updated array to localStorage
+      localStorage.setItem('selectedDropdownspreatobject', JSON.stringify(updatedArray));
+    },
+
     clearSelectedDropdownValues: (state) => {
       state.selectedDropdownValues = []; // Clear selected values
       localStorage.removeItem('selectedDropdownValues');
     },
 
-    setoverLaypersist: (state, action: PayloadAction<boolean>) => {
-      state.overLaypersist = action.payload;
-      localStorage.setItem('overLaypersist', JSON.stringify(action.payload)); // Save token to localStorage
-    },
+    // setoverLaypersist: (state, action: PayloadAction<boolean>) => {
+    //   state.overLaypersist = action.payload;
+    //   localStorage.setItem('overLaypersist', JSON.stringify(action.payload)); // Save token to localStorage
+    // },
 
-    setNotifications : (state, action: PayloadAction<Notification[]>) =>{
-      state.notifications = action.payload;
-      localStorage.setItem('notifications', JSON.stringify(action.payload));
+    // clearoverLaypersist: (state) => {
+    //   state.overLaypersist = false;
+    //   localStorage.removeItem('overLaypersist'); // Remove token from localStorage on logout or token clear
+    // },
+
+    setoverLaypersist: (state) => {
+      // Map selectedDropdownspreatobject to overlay objects with persist=true
+      state.overLaypersist = state.selectedDropdownspreatobject.map((obj) => ({
+        ...obj,
+        persist: true,
+      }));
+
+      localStorage.setItem("overLaypersist", JSON.stringify(state.overLaypersist));
     },
 
     clearoverLaypersist: (state) => {
-      state.overLaypersist = false;
-      localStorage.removeItem('overLaypersist'); // Remove token from localStorage on logout or token clear
+      state.overLaypersist = [];
+      localStorage.removeItem("overLaypersist");
     },
+
+
+    // setNotifications : (state, action: PayloadAction<Notification[]>) =>{
+    //   state.notifications = action.payload;
+    //   localStorage.setItem('notifications', JSON.stringify(action.payload));
+    // },
+
+    setNotifications: (state, action: PayloadAction<Notification[]>) => {
+      state.notifications = action.payload;
+      localStorage.setItem('notifications', JSON.stringify(action.payload));
+    },
+    
+    addNotification: (state, action: PayloadAction<Notification>) => {
+      const newNotification = action.payload;
+    
+      // Use the spread operator to add the notification immutably
+      state.notifications = [...state.notifications, newNotification];
+    
+      // Persist to localStorage
+      localStorage.setItem('notifications', JSON.stringify(state.notifications));
+    },
+    
+    updateNotification: (state, action: PayloadAction<Notification>) => {
+      const updatedNotification = action.payload;
+    
+      // Update an existing notification by id
+      state.notifications = state.notifications.map((notification) =>
+        notification.id === updatedNotification.id
+          ? { ...notification, ...updatedNotification } // Merge updates
+          : notification
+      );
+    
+      // Persist to localStorage
+      localStorage.setItem('notifications', JSON.stringify(state.notifications));
+    },
+    
+    removeNotification: (state, action: PayloadAction<number>) => {
+      const idToRemove = action.payload;
+    
+      // Remove a notification immutably
+      state.notifications = state.notifications.filter(
+        (notification) => notification.id !== idToRemove
+      );
+    
+      // Persist to localStorage
+      localStorage.setItem('notifications', JSON.stringify(state.notifications));
+    },
+    
 
     resetAuthState: (state) => {
       state.selectedDropdownValues = [];
@@ -81,7 +199,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { setRequestToken, clearRequestToken, setSelectedDropdownValues, clearSelectedDropdownValues, setNotifications, setoverLaypersist, resetAuthState } = authSlice.actions;
+export const { setRequestToken, clearRequestToken, setSelectedDropdownValues, addObjectByIdToSelectedDropdownspreat, selectedRemoveIdDropdownspreatobject, clearSelectedDropdownValues, setNotifications, setoverLaypersist, resetAuthState } = authSlice.actions;
 
 export default authSlice.reducer;
 

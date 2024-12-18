@@ -18,6 +18,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
 import CircularIntegration from './ReusabelCompoents/CircularIntegration'; // Use your custom component
 import { useWebSocketMessages } from '../Webhooktypeprocess';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
+import { setNotifications } from '../redux/authSlice';
 
 interface Notification {
   id: number;
@@ -27,10 +30,14 @@ interface Notification {
 
 const NotificationComponent: React.FC<any> = () => {
   const messages = useWebSocketMessages();
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const dispatch = useDispatch<any>();
+  const notifications = useSelector((state: RootState) => state.auth.notifications);
+  // const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  
+
 
   // Play sound when a new notification is added
   const playChime = () => {
@@ -46,16 +53,38 @@ const NotificationComponent: React.FC<any> = () => {
     );
 
     filteredMessages.forEach((msg) => {
-      setNotifications((prevNotifications) => [
-        ...prevNotifications,
-        {
-          id: prevNotifications.length > 0
-            ? prevNotifications[prevNotifications.length - 1].id + 1
-            : 1,
-          message: msg.message,
-          type: msg.type,
-        },
-      ]);
+      // setNotifications((prevNotifications) => [
+      //   ...prevNotifications,
+      //   {
+      //     id: prevNotifications.length > 0
+      //       ? prevNotifications[prevNotifications.length - 1].id + 1
+      //       : 1,
+      //     message: msg.message,
+      //     type: msg.type,
+      //   },
+      // ]);
+
+      // dispatch(setNotifications((prevNotifications) => [
+      //   ...prevNotifications,
+      //   {
+      //     id: prevNotifications.length > 0
+      //       ? prevNotifications[prevNotifications.length - 1].id + 1
+      //       : 1,
+      //     message: msg.message,
+      //     type: msg.type,
+      //   },
+      // ]))
+
+
+      const newNotification = {
+        id: notifications.length > 0
+          ? notifications[notifications.length - 1].id + 1
+          : 1,
+        message: msg.message,
+        type: msg.type,
+      };
+      dispatch(setNotifications([...notifications, newNotification]));
+
       setUnreadCount((prevCount) => prevCount + 1);
       playChime();
     });
@@ -76,14 +105,21 @@ const NotificationComponent: React.FC<any> = () => {
 
   // Delete individual notification
   const handleDeleteNotification = (id: number) => {
-    setNotifications((prevNotifications) =>
-      prevNotifications.filter((notification) => notification.id !== id)
+    // setNotifications((prevNotifications) =>
+    //   prevNotifications.filter((notification) => notification.id !== id)
+    // );
+    const updatedNotifications = notifications.filter(
+      (notification) => notification.id !== id
     );
+    dispatch(setNotifications(updatedNotifications));
+
   };
 
   // Clear all notifications
   const handleClearAll = () => {
-    setNotifications([]);
+    // setNotifications([]);
+    dispatch(setNotifications([]));
+
   };
 
   return (
@@ -91,7 +127,7 @@ const NotificationComponent: React.FC<any> = () => {
       <Box>
         {/* Notification Bell Icon */}
         <IconButton color="inherit" onClick={handleNotificationClick}>
-          <Badge badgeContent={unreadCount} color="error">
+          <Badge badgeContent={notifications?.length} color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>

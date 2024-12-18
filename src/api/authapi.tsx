@@ -2,11 +2,11 @@ import axios from "axios";
 
 const AUTH_ENDPOINT = '/authentications';
 
-export const fetchUserToken = async (authToken: string) => {
+export const fetchUserToken = async () => {
   try {
     const response = await axios.get(`${process.env.REACT_APP_API_URL}${AUTH_ENDPOINT}`, {
       headers: {
-        Authorization: `Bearer ${authToken}`,
+        Authorization: `Bearer ${process.env.REACT_APP_USER_TOKEN}`,
       },
     });
     return response.data?.data[0];

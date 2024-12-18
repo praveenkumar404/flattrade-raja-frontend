@@ -22,7 +22,7 @@ const Profilepage: React.FC = () => {
 useEffect(() => {
     const getToken = async () => {
       try {
-        const data = await fetchUserToken(`${process.env.REACT_APP_USER_TOKEN}`);
+        const data = await fetchUserToken();
         dispatch(setRequestToken(data?.requestToken));
         if (data && !appKey) {
           console.error('App key is not defined');
