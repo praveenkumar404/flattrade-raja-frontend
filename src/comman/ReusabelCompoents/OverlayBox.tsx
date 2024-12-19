@@ -74,7 +74,7 @@ const OverlayBox: React.FC<OverlayBoxProps> = ({ children }) => {
 
         setTimeout(()=>{
           window?.location?.reload()
-        },1000)
+        },5000)
       } catch (error) {
         console.error('Error submitting data:', error);
       }
@@ -125,7 +125,7 @@ const OverlayBox: React.FC<OverlayBoxProps> = ({ children }) => {
           <Typography variant="h5" sx={{ marginTop: 2, textAlign: "center" , color:'dodgerblue'}}>
             {isType == 'variable' ? `Status`:isType == 'order' ? 'Order Update': null}
           </Typography>
-          <Typography variant="body1" sx={{ marginTop: 2, textAlign: "center", color:`${(isTypewithMessagewithstatus?.type=='order' && isTypewithMessagewithstatus?.status == 'success') ? 'green':'dodgerblue'}` }}>
+          <Typography variant="body1" sx={{ marginTop: 2, textAlign: "center", color:`${(isTypewithMessagewithstatus?.type=='order' && isTypewithMessagewithstatus?.status == true) ? 'green':'dodgerblue'}` }}>
             {currentMessage}
           </Typography>
           </>}

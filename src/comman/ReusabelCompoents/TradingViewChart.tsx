@@ -36,7 +36,7 @@ const TradingViewChart = () => {
     // }
 
 
-    const [options, setOptions] = useState<AgFinancialChartOptions>({
+    const [options, setOptions] = useState<any>({
         data: getData(),
         title: { text: "NIFTY" },
         toolbar: true,
@@ -48,6 +48,60 @@ const TradingViewChart = () => {
         // minHeight: ,
          chartType:'candlestick',
         theme: 'ag-financial' ,
+        // subtitle: {
+        //   text: "Candlestick Patterns",
+        // },
+        footnote: {
+          text: "1 Minute",
+        },
+        series: [
+          {
+            type: "candlestick",
+            xKey: "date",
+            xName: "Time",
+            lowKey: "low",
+            highKey: "high",
+            openKey: "open",
+            closeKey: "close",
+            item: {
+              up: {
+                fill: "#ff0000",
+                stroke: "#000",
+                wick: {
+                  strokeWidth: 2,
+                },
+              },
+              down: {
+                fill: "#089981",
+                stroke: "#000",
+                wick: {
+                  strokeWidth: 2,
+                },
+              },
+            },
+          },
+        ],
+        axes: [
+          {
+            type: "ordinal-time",
+            position: "bottom",
+            label: {
+              format: "%H:%M",
+            },
+          },
+          {
+            type: "number",
+            position: "right",
+            label: {
+              formatter: ({ value }:any) => Number(value).toLocaleString(),
+            },
+            crosshair: {
+              label: {
+                format: ",f",
+              },
+            },
+          },
+        ],
         initialState: {
           
           annotations: [
@@ -65,7 +119,7 @@ const TradingViewChart = () => {
             },
             {
               type: "horizontal-line",
-              value: 111.0,
+              value: 131.0,
               stroke: "#089981",
               axisLabel: {
                 fill: "#089981",
@@ -75,7 +129,7 @@ const TradingViewChart = () => {
             {
               type: "horizontal-line",
               value: 125.0,
-              stroke: "#089981",
+              stroke: "#a5a9ac",
               axisLabel: {
                 fill: "#089981",
               },
@@ -88,8 +142,8 @@ const TradingViewChart = () => {
             },
             {
               type: "horizontal-line",
-              value: 143.8,
-              stroke: "#F23645",
+              value: 140.8,
+              stroke: "#a5a9ac",
               axisLabel: {
                 fill: "#F23645",
               },
@@ -97,15 +151,15 @@ const TradingViewChart = () => {
             {
               type: "horizontal-line",
               value: 120.8,
-              stroke: "#F23645",
+              stroke: "#a5a9ac",
               axisLabel: {
-                fill: "#F23645",
+                fill: "#a5a9ac",
               },
               text: {
                 label: "Resistance",
                 position: "center",
                 alignment: "left",
-                color: "#F23645",
+                color: "#a5a9ac",
               },
             },
             {
@@ -190,39 +244,39 @@ const TradingViewChart = () => {
         },
       });
     
-      const clearAnnotations = () => {
-        setOptions((prevOptions) => ({
-          ...prevOptions,
-          initialState: {
-            ...prevOptions.initialState,
-            annotations: [],
-          },
-        }));
-      };
+      // const clearAnnotations = () => {
+      //   setOptions((prevOptions) => ({
+      //     ...prevOptions,
+      //     initialState: {
+      //       ...prevOptions.initialState,
+      //       annotations: [],
+      //     },
+      //   }));
+      // };
     
     
-      const changeChartType = (type: string) => {
-        setOptions((prevOptions:any) => ({
-          ...prevOptions,
-          chartType: type,
-        }));
-      };
+      // const changeChartType = (type: string) => {
+      //   setOptions((prevOptions:any) => ({
+      //     ...prevOptions,
+      //     chartType: type,
+      //   }));
+      // };
 
 
-
+console.log("dataing",getData())
       
   return (
     <div>
         <Box sx={{display:'flex',flexDirection:'column',justifyContent:'center', rowGap:'10px',columnGap:'30px'}}>
 
-        <Box>
+        {/* <Box>
           <div style={{ display: "flex", gap: "10px", marginBottom: "15px" }}>
             <Button variant="contained" color="primary"  onClick={() => changeChartType("candlestick")}>Candlestick</Button>
             <Button variant="contained" color="primary"  onClick={() => changeChartType("line")}>Line</Button>
             <Button variant="contained" color="primary"  onClick={() => changeChartType("area")}>Area</Button>
             <Button variant="contained" color="primary"  onClick={clearAnnotations}>Clear All</Button>
           </div>
-        </Box>
+        </Box> */}
         <Box sx={{marginTop:'40px'}}>
             <AgFinancialCharts style={{height:400}} options={options as any} />
             

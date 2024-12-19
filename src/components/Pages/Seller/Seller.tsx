@@ -106,72 +106,7 @@ const Seller = () => {
               item.tsym &&
               item.lotSize
           );
-          setPositions([...validData,
-            {
-                "id": 42,
-                "documentId": "xzb1jlccnqxl8lx2qevptdth",
-                "index": "NIFTY",
-                "indexToken": "26000",
-                "contractType": "BUY",
-                "contractToken": 2.4,
-                "tsym": 3.4,
-                "lotSize": -5,
-                "createdAt": "2024-12-05T12:45:01.497Z",
-                "updatedAt": "2024-12-13T03:54:45.953Z",
-                "publishedAt": "2024-12-13T03:54:45.942Z"
-            },
-            {
-                "id": 17,
-                "documentId": "m4q7tnerinpqun7tcb3ejmek",
-                "index": "FINNIFTY",
-                "indexToken": "26037",
-                "contractType": "SELL",
-                "contractToken": 0,
-                "tsym": 1.5,
-                "lotSize": 7,
-                "createdAt": "2024-12-05T12:45:15.771Z",
-                "updatedAt": "2024-12-05T12:45:15.771Z",
-                "publishedAt": "2024-12-05T12:45:15.765Z"
-            },
-            {
-                "id": 18,
-                "documentId": "t3q1uu0a3c3hejvv0lmxkhw7",
-                "index": "MIDCPNIFTY",
-                "indexToken": "26014",
-                "contractType": "BUY",
-                "contractToken": -4.2,
-                "tsym": 0,
-                "lotSize": -12,
-                "createdAt": "2024-12-05T12:45:30.310Z",
-                "updatedAt": "2024-12-05T12:45:30.310Z",
-                "publishedAt": "2024-12-05T12:45:30.303Z"
-            },
-            {
-                "id": 19,
-                "documentId": "b1l2ujcscxiiu6lzl5w16q7p",
-                "index": "BANKNIFTY",
-                "indexToken": "26009",
-                "contractType": "SELL",
-                "contractToken": 3.3,
-                "tsym": -6.5,
-                "lotSize": 5,
-                "createdAt": "2024-12-05T12:45:42.295Z",
-                "updatedAt": "2024-12-05T12:45:42.295Z",
-                "publishedAt": "2024-12-05T12:45:42.290Z"
-            },
-            {
-                "id": 20,
-                "documentId": "fjdkyj6ibchfttx1fwcw1yz6",
-                "index": "NIFTYNXT50",
-                "indexToken": "26013",
-                "contractType": "BUY",
-                "contractToken": 4.7,
-                "tsym": 6.1,
-                "lotSize": 0,
-                "createdAt": "2024-12-05T12:45:59.525Z",
-                "updatedAt": "2024-12-05T12:45:59.525Z",
-                "publishedAt": "2024-12-05T12:45:59.517Z"
-            }
+          setPositions([validData
         ]
           );
         }
@@ -203,9 +138,9 @@ const Seller = () => {
       };
 
       try {
-        // if(selectedItem.contractType && isTypeindexload?.lp && selectedItem.index && selectedItem.indexToken){
+        if(selectedItem.contractType && isTypeindexload?.lp && selectedItem.index && selectedItem.indexToken){
         await fetchpostplaceholder(placeholderpayload);
-        // }else{handleShowToast(`Error : Not loading Progress run application 9:00 - 3.30`,'error',true)}
+        }else{handleShowToast(`Error : Not loading Progress run application 9:00 - 3.30`,'error',true)}
       } catch (error) {
         console.error("Error in fetchpostplaceholder:", error);
         handleShowToast(`Error : ${error}`,'error',true)
@@ -233,6 +168,7 @@ const Seller = () => {
             >
               Positions Table
             </Typography>
+            {positions.length > 0 ? (
             <Table>
               <TableHead>
                 <TableRow>
@@ -269,7 +205,7 @@ const Seller = () => {
                         {item?.lotSize}
                       </TableCell>
                       <TableCell style={{ color: istsymPositive ? "green" : "red", fontWeight: 500 }}>
-                        {item?.tsym}%
+                        {item?.tsym}
                       </TableCell>
                       <TableCell>
                         <Box onClick={() => handleOpen(item)}>
@@ -281,6 +217,16 @@ const Seller = () => {
                 })}
               </TableBody>
             </Table>
+            ):(
+              <Box sx={{display:'flex',flexDirection:'column', justifyContent:'center', alignItems:'center',width:'full'}}>
+            <Box>
+              <h4>No Available Orders ! </h4>
+              </Box>
+              <Box>
+                <img style={{height:'250px',width:'250px'}} src={require('../../../assets/images/Loading_app.gif')}/>
+                </Box>
+                </Box>
+            )}
           </Paper>
         </ResponsiveTableContainer>
 
