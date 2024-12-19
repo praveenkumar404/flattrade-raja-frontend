@@ -22,7 +22,7 @@ const OverlayBox: React.FC<OverlayBoxProps> = ({ children }) => {
 
   const webhookdatas = useWebSocketMessages();
   const webhookcontrol = webhookdatas.flat()
-  console.log("Fetch webhookdatas",webhookdatas)
+  // console.log("Fetch webhookdatas",webhookdatas)
   const isType = webhookcontrol.find(
     (item: any) => item?.type === 'variable' || item?.type === 'order'
   )?.type;
@@ -34,7 +34,7 @@ const OverlayBox: React.FC<OverlayBoxProps> = ({ children }) => {
   const isTypewithMessagewithstatus = webhookcontrol.find(
     (item: any) => item?.type === 'variable' || item?.type === 'order'
   );
-  console.log("valsing : ", isTypeMessage)
+  // console.log("valsing : ", isTypeMessage)
 
 //   {
 //     "type": "variable",

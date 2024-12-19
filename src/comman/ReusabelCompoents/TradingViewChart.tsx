@@ -7,11 +7,15 @@ import { getData } from "../DataFiles/DataTrading";
 import { Box, Button, IconButton, Menu, MenuItem } from "@mui/material";
 import { ScreenCapture } from 'react-screen-capture';
 import { useWebSocketMessages } from "../../Webhooktypeprocess";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 
 // 'ag-default' | 'ag-default-dark' | 'ag-sheets' | 'ag-sheets-dark' | 'ag-polychroma' | 'ag-polychroma-dark' | 'ag-vivid' | 'ag-vivid-dark' | 'ag-material' | 'ag-material-dark' | 'ag-financial' | 'ag-financial-dark
 
 const TradingViewChart = () => {
+  
+  const {selectedDropdownValues} = useSelector((state: RootState) => state.auth);
 
     const webhookdatas = useWebSocketMessages();
     const webhookcontrol = webhookdatas.flat()
@@ -20,7 +24,7 @@ const TradingViewChart = () => {
       (item: any) => item?.type === 'index'
     )?.data;
 
-    console.log("is Data",isData)
+    // console.log("is Data",isData)
 
     // webhook response
     // {
@@ -38,7 +42,7 @@ const TradingViewChart = () => {
 
     const [options, setOptions] = useState<any>({
         data: getData(),
-        title: { text: "NIFTY" },
+        title: { text: `${selectedDropdownValues?.map((item: any) => item?.label?.toString())}` },
         toolbar: true,
         rangeButtons: false,
         // container:'' ,
@@ -263,7 +267,7 @@ const TradingViewChart = () => {
       // };
 
 
-console.log("dataing",getData())
+// console.log("dataing",getData())
       
   return (
     <div>

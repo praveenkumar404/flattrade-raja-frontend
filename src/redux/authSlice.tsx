@@ -71,7 +71,7 @@ const authSlice = createSlice({
 
     addObjectByIdToSelectedDropdownspreat: (state, action: PayloadAction<Option>) => {
       const newObject = action.payload;
-      console.log("Incoming object: ", action.payload);
+      // console.log("Incoming object: ", action.payload);
     
       // Check if the newObject exists in `optionsdata` (optional)
       const existsInOptions = optionsdata.some((item) => item.value === newObject.value);
@@ -89,7 +89,7 @@ const authSlice = createSlice({
         // Persist to localStorage
         localStorage.setItem('selectedDropdownspreatobject', JSON.stringify(updatedArray));
       } else {
-        console.log("The object does not exist in optionsdata and will not be added.");
+        console.log("The object does not exist in options data and will not be added.");
       }
     },
     

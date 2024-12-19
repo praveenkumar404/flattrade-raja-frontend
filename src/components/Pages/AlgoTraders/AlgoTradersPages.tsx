@@ -64,7 +64,7 @@ const AlgoTradersPages: React.FC = () => {
 
   const requestToken = useSelector((state: RootState) => state?.auth?.requestToken);
   const selectedOptionSPreaddata = useSelector((state: RootState) => state?.auth?.selectedDropdownspreatobject);
-  console.log("seletinghjk : ", selectedOptionSPreaddata)
+  // console.log("seletinghjk : ", selectedOptionSPreaddata)
     const [SelectedOptionsList, setSelectedOptionsList] = useState<any>([])
     const options = [
         { id: 1, label: 'Nifty', value: 26000 },
@@ -78,7 +78,7 @@ const AlgoTradersPages: React.FC = () => {
       };
       
 
-      console.log("Selected option:", SelectedOptionsList);
+      // console.log("Selected option:", SelectedOptionsList);
 
       const [formfillchecked, setformfillchecked] = React.useState('notfilledlist');
 
@@ -354,7 +354,7 @@ const [btnchoice,setbtnchoice] = useState({
     try {
       const data = await fetchPosition();
   
-      console.log("Fetched position data: ", data?.data);
+      // console.log("Fetched position data: ", data?.data);
 
   
       // Compare indexToken from payload with the fetched data
@@ -429,7 +429,7 @@ const [btnchoice,setbtnchoice] = useState({
   };
 
   // API call on submt
-  console.log("itemss : ", findallowapplyindex)
+  // console.log("itemss : ", findallowapplyindex)
   const handleSubmit = async () => {
     // dispatch(setoverLaypersist(true))
     
@@ -506,7 +506,7 @@ const [btnchoice,setbtnchoice] = useState({
     sebuttondisabledObject((prev:any) =>({...prev,isCalculated:false,showcalctable:false,issubmitform:false}));
   }
 
-  console.log("overLaypersist : ",selectedOptionSPreaddata)
+  // console.log("overLaypersist : ",selectedOptionSPreaddata)
 
   return(
     <DynamicComponent>
