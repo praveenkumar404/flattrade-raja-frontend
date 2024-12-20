@@ -53,28 +53,6 @@ const NotificationComponent: React.FC<any> = () => {
     );
 
     filteredMessages.forEach((msg) => {
-      // setNotifications((prevNotifications) => [
-      //   ...prevNotifications,
-      //   {
-      //     id: prevNotifications.length > 0
-      //       ? prevNotifications[prevNotifications.length - 1].id + 1
-      //       : 1,
-      //     message: msg.message,
-      //     type: msg.type,
-      //   },
-      // ]);
-
-      // dispatch(setNotifications((prevNotifications) => [
-      //   ...prevNotifications,
-      //   {
-      //     id: prevNotifications.length > 0
-      //       ? prevNotifications[prevNotifications.length - 1].id + 1
-      //       : 1,
-      //     message: msg.message,
-      //     type: msg.type,
-      //   },
-      // ]))
-
 
       const newNotification = {
         id: notifications.length > 0
@@ -82,6 +60,8 @@ const NotificationComponent: React.FC<any> = () => {
           : 1,
         message: msg.message,
         type: msg.type,
+        currentdate: new Date().toLocaleDateString(), // Generate current date
+        currenttime: new Date().toLocaleTimeString(), // Generate current time
       };
       dispatch(setNotifications([...notifications, newNotification]));
 
@@ -158,29 +138,28 @@ const NotificationComponent: React.FC<any> = () => {
         </Typography>
 
         {/* List of Notifications */}
-        <List sx={{ width: '350px' }}>
+        {/* <List sx={{ width: '350px' }}>
           {notifications.length > 0 ? (
             <>
-              {notifications.map((notification) => (
+              {notifications?.sort((a, b) => {
+          // Combine date and time into a single Date object and get numeric timestamps
+          const dateTimeA = new Date(`${a.currentdate} ${a.currenttime}`).getTime();
+          const dateTimeB = new Date(`${b.currentdate} ${b.currenttime}`).getTime();
+          // Sort in descending order (latest first)
+          return dateTimeB - dateTimeA;
+        })?.map((notification) => (
                 <ListItem key={notification.id}>
                   <ListItemText
                     primary={notification.message}
-                    secondary={notification.type}
+                    secondary={`${notification?.type} - ${notification?.currentdate} ${notification?.currenttime}`}
                   />
                   <ListItemSecondaryAction>
                     <IconButton edge="end">
-                      <CircularIntegration
-                        loadingDuration={2000}
-                        fabColor="secondary"
-                        fabIcon={<DeleteIcon sx={{ color: 'red' }} />}
-                        successIcon={<CheckIcon sx={{ color: 'green' }} />}
-                        onAccept={() => handleDeleteNotification(notification.id)}
-                      />
+                      <img onClick={()=>handleDeleteNotification(notification.id)} style={{height:'20px',width:'25px'}} src={'https://cdn.pixabay.com/photo/2012/05/07/02/13/cancel-47588_960_720.png'} />
                     </IconButton>
                   </ListItemSecondaryAction>
                 </ListItem>
               ))}
-              {/* Clear All Button */}
               <ListItem>
                 <Button
                   fullWidth
@@ -197,7 +176,57 @@ const NotificationComponent: React.FC<any> = () => {
               <ListItemText primary="No notifications" />
             </ListItem>
           )}
-        </List>
+        </List> */}
+
+
+
+        {/* List of Notifications */}
+<List sx={{ width: '350px' }}>
+  {notifications.length > 0 ? (
+    <>
+      {[...notifications] // Create a shallow copy to avoid modifying the original array
+        .sort((a, b) => {
+          const dateTimeA = new Date(`${a.currentdate} ${a.currenttime}`).getTime();
+          const dateTimeB = new Date(`${b.currentdate} ${b.currenttime}`).getTime();
+          return dateTimeB - dateTimeA; // Sort in descending order
+        })
+        .map((notification) => (
+          <ListItem key={notification.id}>
+            <ListItemText
+              primary={notification.message}
+              secondary={`${notification?.type} - ${notification?.currentdate} ${notification?.currenttime}`}
+            />
+            <ListItemSecondaryAction>
+              <IconButton edge="end">
+                <img
+                  style={{ height: '20px', width: '25px' }}
+                  src="https://cdn.pixabay.com/photo/2012/05/07/02/13/cancel-47588_960_720.png"
+                  alt="Delete"
+                  onClick={()=>{handleDeleteNotification(notification.id)}}
+                />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+        ))}
+      {/* Clear All Button */}
+      <ListItem>
+        <Button
+          fullWidth
+          color="error"
+          variant="contained"
+          onClick={handleClearAll}
+        >
+          Clear All
+        </Button>
+      </ListItem>
+    </>
+  ) : (
+    <ListItem>
+      <ListItemText primary="No notifications" />
+    </ListItem>
+  )}
+</List>
+
       </Popover>
     </>
   );

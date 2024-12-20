@@ -29,7 +29,7 @@ const ResponsiveTableContainer = styled(TableContainer)(({ theme }) => ({
   overflowX: "auto",
   maxWidth: "100%",
   [theme.breakpoints.up("lg")]: {
-    maxWidth: "50%",
+    maxWidth: "60%",
     width: "100%",
   },
   [theme.breakpoints.down("lg")]: {
@@ -67,6 +67,7 @@ interface PositionData {
   contractToken: string | null | number;
   tsym: string | null | number;
   lotSize: string | null | number;
+  updatedAt:any
 }
 
 const Seller = () => {
@@ -98,16 +99,16 @@ const Seller = () => {
     const handlePosition = async () => {
       try {
         const response = await fetchPosition();
+        console.log("posiiiii resp : ",response?.data)
         if (response?.data) {
           const validData = response.data.filter(
-            (item: PositionData) =>
+            (item: any) =>
               item.contractType &&
               item.contractToken &&
               item.tsym &&
               item.lotSize
           );
-          setPositions([validData
-        ]
+          setPositions(validData
           );
         }
       } catch (error) {
@@ -172,6 +173,7 @@ const Seller = () => {
             <Table>
               <TableHead>
                 <TableRow>
+                  <TableCell style={{ fontWeight: "bold", color: "#777" }}>Date</TableCell>
                   <TableCell style={{ fontWeight: "bold", color: "#777" }}>Index</TableCell>
                   <TableCell style={{ fontWeight: "bold", color: "#777" }}>Contract Type</TableCell>
                   <TableCell style={{ fontWeight: "bold", color: "#777" }}>Lot Size</TableCell>
@@ -180,7 +182,9 @@ const Seller = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {positions.map((item) => {
+                {positions?.slice() // Create a shallow copy to avoid modifying the source data
+                ?.sort((a: any, b: any) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()) // Sort by updatedAt in descending order
+                ?.map((item) => {
                   const islotsizePositive = parseFloat(item?.lotSize?.toString() || "0") > 0;
                   const istsymPositive = parseFloat(item?.tsym?.toString() || "0") > 0;
                   return (
@@ -195,6 +199,7 @@ const Seller = () => {
                       <TableCell>
                         <Typography variant="body1">{item.indexToken || "N/A"}</Typography>
                       </TableCell> */}
+                      <TableCell>{`${new Date(item?.updatedAt).toLocaleDateString()} - ${new Date(item?.updatedAt).toLocaleTimeString()}`}</TableCell>
                       <TableCell style={{ fontWeight: 500 }}>
                         {item?.index}
                       </TableCell>

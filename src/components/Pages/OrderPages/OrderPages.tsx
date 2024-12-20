@@ -150,6 +150,7 @@ const OrderPages = () => {
           <Table aria-label="customized table">
             <TableHead>
               <TableRow>
+                <StyledTableCell>Date</StyledTableCell>
                 <StyledTableCell>Order Type</StyledTableCell>
                 <StyledTableCell>Contract Type</StyledTableCell>
                 <StyledTableCell>Contract Trading Symbol</StyledTableCell>
@@ -159,14 +160,17 @@ const OrderPages = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredOrders.map((order: any) => (
-                <StyledTableRow key={order.id}>
-                  <StyledTableCell>{order.orderType}</StyledTableCell>
-                  <StyledTableCell>{order.contractType}</StyledTableCell>
-                  <StyledTableCell>{order.contractTsym}</StyledTableCell>
-                  <StyledTableCell>{order.orderStatus || 'Pending...'}</StyledTableCell>
-                  <StyledTableCell>{order.price || 'Pending...'}</StyledTableCell>
-                  <StyledTableCell>{order.contractLp || 'Pending...'}</StyledTableCell>
+              {filteredOrders?.slice() // Create a shallow copy to avoid modifying the source data
+                ?.sort((a: any, b: any) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()) // Sort by updatedAt in descending order
+                ?.map((order: any) => (
+                <StyledTableRow key={order?.id}>
+                  <StyledTableCell>{`${new Date(order?.updatedAt).toLocaleDateString()} - ${new Date(order?.updatedAt).toLocaleTimeString()}`}</StyledTableCell>
+                  <StyledTableCell>{order?.orderType}</StyledTableCell>
+                  <StyledTableCell>{order?.contractType}</StyledTableCell>
+                  <StyledTableCell>{order?.contractTsym}</StyledTableCell>
+                  <StyledTableCell>{order?.orderStatus || 'Pending...'}</StyledTableCell>
+                  <StyledTableCell>{order?.price || 'Pending...'}</StyledTableCell>
+                  <StyledTableCell>{order?.contractLp || 'Pending...'}</StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>

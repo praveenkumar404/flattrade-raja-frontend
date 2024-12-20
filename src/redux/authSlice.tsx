@@ -17,6 +17,8 @@ interface Notification {
   id: number;
   message: string;
   type:string;
+  currentdate?: any, // Generate current date
+  currenttime?: any, // Generate current time
 }
 
 
