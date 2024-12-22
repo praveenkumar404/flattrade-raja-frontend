@@ -28,6 +28,8 @@ import { useDispatch } from 'react-redux';
 import { resetAuthState } from '../redux/authSlice';
 import InsightsMaincomp from './Pages/Insights/InsightsMaincomp';
 import Seller from './Pages/Seller/Seller';
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import SellIcon from '@mui/icons-material/Sell';
 
 const NAVIGATION: Navigation = [
   {
@@ -42,7 +44,7 @@ const NAVIGATION: Navigation = [
   {
     segment: 'algotrading',
     title: 'Algotrading',
-    icon: <ShoppingCartIcon />,
+    icon: <AccountTreeIcon/>,
   },
   {
     segment: 'orders',
@@ -52,7 +54,7 @@ const NAVIGATION: Navigation = [
   {
     segment: 'seller',
     title: 'Seller',
-    icon: <ShoppingCartIcon />,
+    icon: <SellIcon />,
   },
   {
     kind: 'divider',

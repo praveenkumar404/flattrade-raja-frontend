@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { AgFinancialCharts } from "ag-charts-react";
 import { AgFinancialChartOptions } from "ag-charts-enterprise";
@@ -27,34 +27,66 @@ const TradingViewChart = () => {
     // console.log("is Data",isData)
 
     // webhook response
-    // {
-    //     "type": "index",
-    //     "data": {
-    //         "t": "tf",
-    //         "e": "NSE",
-    //         "tk": "26013",
-    //         "lp": "70432.20",
-    //         "pc": "0.25"
-    //     },
-    //     "status": true
-    // }
+    const data = {
+        "type": "index",
+        "data": {
+            tk: "26000",
+            date: "2022-03-01T00:00:00.000Z",
+            volume: "3402910",
+            open: "23016",
+            high: "27017",
+            low: "22019",
+            close: "22019",
+            ap: "25493",
+            lp: "22019",
+            pc: "0.1",
+            e: "NSE",
+        },
+        "status": true
+    }
 
+
+    // State to store the transformed data
+  const [storedData, setStoredData] = useState<any[]>([
+    {
+      date: new Date(), // Default to today's date
+      volume: 0,
+      open: 0,
+      high: 0,
+      low: 0,
+      close: 0,
+    }
+  ]);
+
+  // Process and update data
+  useEffect(() => {
+    if (isData) {
+      // Transform incoming data into the required format
+      const newData = {
+        date: new Date(isData.date), // Convert string to Date
+        volume: parseInt(isData.volume, 10),
+        open: parseFloat(isData.open),
+        high: parseFloat(isData.high),
+        low: parseFloat(isData.low),
+        close: parseFloat(isData.close),
+      };
+
+      // Add the new data and ensure only the latest 40 entries are stored
+      setStoredData((prev) => {
+        const updatedData = [...prev, newData];
+        return updatedData.slice(-40); // Keep only the last 40 entries
+      });
+    }
+  }, [isData]);
 
     const [options, setOptions] = useState<any>({
-        data: getData(),
+        data: storedData,
         title: { text: `${selectedDropdownValues?.map((item: any) => item?.label?.toString())}` },
         toolbar: true,
         rangeButtons: false,
-        // container:'' ,
-        // width:  ,
         height:500 ,
-        // minWidth: ,
-        // minHeight: ,
          chartType:'candlestick',
         theme: 'ag-financial' ,
-        // subtitle: {
-        //   text: "Candlestick Patterns",
-        // },
         footnote: {
           text: "1 Minute",
         },
@@ -247,40 +279,22 @@ const TradingViewChart = () => {
           ],
         },
       });
-    
-      // const clearAnnotations = () => {
-      //   setOptions((prevOptions) => ({
-      //     ...prevOptions,
-      //     initialState: {
-      //       ...prevOptions.initialState,
-      //       annotations: [],
-      //     },
-      //   }));
-      // };
-    
-    
-      // const changeChartType = (type: string) => {
-      //   setOptions((prevOptions:any) => ({
-      //     ...prevOptions,
-      //     chartType: type,
-      //   }));
-      // };
 
 
 // console.log("dataing",getData())
+
+
+// Update options when storedData changes
+useEffect(() => {
+  setOptions((prev:any) => ({
+    ...prev,
+    data: storedData,
+  }));
+}, [storedData]);
       
   return (
     <div>
         <Box sx={{display:'flex',flexDirection:'column',justifyContent:'center', rowGap:'10px',columnGap:'30px'}}>
-
-        {/* <Box>
-          <div style={{ display: "flex", gap: "10px", marginBottom: "15px" }}>
-            <Button variant="contained" color="primary"  onClick={() => changeChartType("candlestick")}>Candlestick</Button>
-            <Button variant="contained" color="primary"  onClick={() => changeChartType("line")}>Line</Button>
-            <Button variant="contained" color="primary"  onClick={() => changeChartType("area")}>Area</Button>
-            <Button variant="contained" color="primary"  onClick={clearAnnotations}>Clear All</Button>
-          </div>
-        </Box> */}
         <Box sx={{marginTop:'40px'}}>
             <AgFinancialCharts style={{height:400}} options={options as any} />
             
