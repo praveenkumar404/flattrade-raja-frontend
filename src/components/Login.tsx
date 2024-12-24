@@ -24,10 +24,8 @@ const Login: React.FC = () => {
             console.error('App key is not defined');
           }
           else{
-            setTimeout(()=>{
             const redirectUrl = `https://auth.flattrade.in/?app_key=${appKey}`;
             window.location.href = redirectUrl;
-          },15000)
           }
         } catch (error) {
           console.error('Error fetching request token', error);
