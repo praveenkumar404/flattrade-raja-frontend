@@ -18,13 +18,16 @@ const Login: React.FC = () => {
     const getToken = async () => {
         try {
           const data = await fetchUserToken();
+          console.log("responseee_info",data)
           dispatch(setRequestToken(data?.requestToken));
           if (data && !appKey) {
             console.error('App key is not defined');
           }
           else{
+            setTimeout(()=>{
             const redirectUrl = `https://auth.flattrade.in/?app_key=${appKey}`;
             window.location.href = redirectUrl;
+          },15000)
           }
         } catch (error) {
           console.error('Error fetching request token', error);

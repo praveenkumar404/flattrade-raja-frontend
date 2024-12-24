@@ -9,6 +9,7 @@ export const fetchUserToken = async () => {
         Authorization: `Bearer ${process.env.REACT_APP_USER_TOKEN}`,
       },
     });
+    console.log("responseee",response)
     return response.data?.data[0];
   } catch (error) {
     console.error('Error fetching request token', error);
