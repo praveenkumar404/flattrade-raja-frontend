@@ -22,6 +22,7 @@ import DatePickerComponent from '../../../comman/ReusabelCompoents/DatePickerCom
 import { RootState } from '../../../redux/store';
 import { resetFilters, setOrders, updateFilters } from '../../../redux/OrderSlice';
 import moment from 'moment';
+import OrderPopupModal from '../../../comman/ReusabelCompoents/OrderPopupModal';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -102,6 +103,20 @@ const OrderPages = () => {
     setPage(value);
   };
 
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const handleRowClick = (order: any) => {
+    setSelectedOrder(order);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setSelectedOrder(null);
+  };
+
+  
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
@@ -150,6 +165,10 @@ const OrderPages = () => {
         </Select>
       </Box>
 
+      <Box>
+        <OrderPopupModal open={modalOpen} onClose={handleCloseModal} data={selectedOrder} />
+      </Box>
+
       {filteredOrders?.length > 0 ? (
         <Box>
           <TableContainer component={Paper}>
@@ -169,15 +188,15 @@ const OrderPages = () => {
                 {filteredOrders
                   // ?.slice()
                   // ?.sort((a: any, b: any) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
-                  ?.map((order: any) => (
-                    <StyledTableRow key={order?.id}>
-                      <StyledTableCell>{`${new Date(order?.updatedAt).toLocaleDateString()} - ${new Date(order?.updatedAt).toLocaleTimeString()}`}</StyledTableCell>
-                      <StyledTableCell>{order?.orderType}</StyledTableCell>
-                      <StyledTableCell>{order?.contractType}</StyledTableCell>
-                      <StyledTableCell>{order?.contractTsym}</StyledTableCell>
-                      <StyledTableCell>{order?.orderStatus || 'Pending...'}</StyledTableCell>
-                      <StyledTableCell>{order?.price || 'Pending...'}</StyledTableCell>
-                      <StyledTableCell>{order?.contractLp || 'Pending...'}</StyledTableCell>
+                  ?.map((orderitem: any) => (
+                    <StyledTableRow key={orderitem?.id} onClick={() => handleRowClick(orderitem)}>
+                      <StyledTableCell>{`${new Date(orderitem?.updatedAt).toLocaleDateString()} - ${new Date(orderitem?.updatedAt).toLocaleTimeString()}`}</StyledTableCell>
+                      <StyledTableCell>{orderitem?.orderType}</StyledTableCell>
+                      <StyledTableCell>{orderitem?.contractType}</StyledTableCell>
+                      <StyledTableCell>{orderitem?.contractTsym}</StyledTableCell>
+                      <StyledTableCell>{orderitem?.orderStatus || 'Pending...'}</StyledTableCell>
+                      <StyledTableCell>{orderitem?.price || 'Pending...'}</StyledTableCell>
+                      <StyledTableCell>{orderitem?.contractLp || 'Pending...'}</StyledTableCell>
                     </StyledTableRow>
                   ))}
               </TableBody>

@@ -175,7 +175,7 @@ const AlgoTradersPages: React.FC = () => {
         <Box>
           <Box>
           <FormControl>
-            <FormLabel id="demo-controlled-radio-buttons-group">Algodrading Form</FormLabel>
+            <FormLabel id="demo-controlled-radio-buttons-group" sx={{paddingTop:'10px'}}>Algodrading Form</FormLabel>
             <RadioGroup
               aria-labelledby="demo-controlled-radio-buttons-group"
               name="controlled-radio-buttons-group"
@@ -337,6 +337,7 @@ const handleShowToast = (text:any,typestatus:'success' | 'error' | 'warning' | '
   setToastSeverity(typestatus);
   setToastOpen(true);
 };
+
 
 const [btnchoice,setbtnchoice] = useState({
   sendbtn: {

@@ -24,26 +24,8 @@ const TradingViewChart = () => {
       (item: any) => item?.type === 'index'
     )?.data;
 
-    // console.log("is Data",isData)
-
-    // webhook response
-    const data = {
-        "type": "index",
-        "data": {
-            tk: "26000",
-            date: "2022-03-01T00:00:00.000Z",
-            volume: "3402910",
-            open: "23016",
-            high: "27017",
-            low: "22019",
-            close: "22019",
-            ap: "25493",
-            lp: "22019",
-            pc: "0.1",
-            e: "NSE",
-        },
-        "status": true
-    }
+    console.log("is Data",isData)
+    
 
 
     // State to store the transformed data
@@ -84,7 +66,7 @@ const TradingViewChart = () => {
         title: { text: `${selectedDropdownValues?.map((item: any) => item?.label?.toString())}` },
         toolbar: true,
         rangeButtons: false,
-        height:500 ,
+        height:700 ,
          chartType:'candlestick',
         theme: 'ag-financial' ,
         footnote: {
@@ -291,13 +273,16 @@ useEffect(() => {
     data: storedData,
   }));
 }, [storedData]);
+
+useEffect(()=>{
+
+},[selectedDropdownValues])
       
   return (
-    <div>
+    <div style={{width:'70%'}}>
         <Box sx={{display:'flex',flexDirection:'column',justifyContent:'center', rowGap:'10px',columnGap:'30px'}}>
-        <Box sx={{marginTop:'40px'}}>
-            <AgFinancialCharts style={{height:400}} options={options as any} />
-            
+        <Box>
+            <AgFinancialCharts style={{height:700}} options={options as any} />
       </Box>
       </Box>
     </div>

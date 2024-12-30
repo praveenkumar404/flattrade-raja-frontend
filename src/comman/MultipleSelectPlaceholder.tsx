@@ -132,6 +132,10 @@ export default function MultipleSelectWithSearch({
 
     // Dispatch selected options to Redux
     dispatch(setSelectedDropdownValues(selectedOptions));
+
+    setTimeout(()=>{
+      window?.location?.reload()
+    },200)
   };
 
   // const selectedLabels = options

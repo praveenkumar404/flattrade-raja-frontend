@@ -29,7 +29,7 @@ const ResponsiveTableContainer = styled(TableContainer)(({ theme }) => ({
   overflowX: "auto",
   maxWidth: "100%",
   [theme.breakpoints.up("lg")]: {
-    maxWidth: "60%",
+    maxWidth: "100%",
     width: "100%",
   },
   [theme.breakpoints.down("lg")]: {
@@ -67,7 +67,8 @@ interface PositionData {
   contractToken: string | null | number;
   tsym: string | null | number;
   lotSize: string | null | number;
-  updatedAt:any
+  quantity:any;
+  updatedAt:any;
 }
 
 const Seller = () => {
@@ -134,8 +135,8 @@ const Seller = () => {
         contractType: `${selectedItem.contractType}`,
         lp: `${isTypeindexload?.lp}`,
         index: `${selectedItem.index}`,
-        indexToken: `${selectedItem.indexToken}`,
-        quantity: `${selectedItem.lotSize}`,
+        indexToken: `${selectedItem?.indexToken}`,
+        quantity: selectedItem?.quantity,
       };
 
       try {
@@ -159,7 +160,7 @@ const Seller = () => {
         severity={toastSeverity}
         onClose={handleCloseToast}
       />
-      <Box sx={{ width: "100%", overflowX: "auto", margin: "16px 0" }}>
+      <Box sx={{ overflowX: "auto"}}>
         <ResponsiveTableContainer>
           <Paper elevation={3}>
             <Typography
@@ -167,7 +168,7 @@ const Seller = () => {
               component="div"
               style={{ padding: "12px 16px", fontWeight: 600, color: "#555" }}
             >
-              Positions Table
+              Portfolio
             </Typography>
             {positions.length > 0 ? (
             <Table>
