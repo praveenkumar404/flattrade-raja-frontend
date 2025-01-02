@@ -67,12 +67,17 @@ const PointData: React.FC = () => {
   return (
     <Box>
       {/* Watchlist Header */}
-      <Typography variant="h6" gutterBottom>
-        Watchlist
-      </Typography>
 
       {/* Table Section */}
       <TableContainer component={Paper}>
+      <Typography
+              variant="h6"
+              component="div"
+              style={{ padding: "12px 16px", fontWeight: 600 }}
+              gutterBottom
+            >
+              Watchlist
+            </Typography>
         <Table>
           <TableHead>
             <TableRow>
@@ -124,7 +129,7 @@ const PointData: React.FC = () => {
 
       {/* Footer Section for Detailed Data */}
       {selectedRow && (
-        <Box mt={2} p={2} border={1} borderColor="grey.300" borderRadius={2}>
+        <Box sx={{mt:0.5,mb:0.5}} p={2} border={1} borderColor="grey.300" borderRadius={2}>
           <Typography variant="h6">{selectedRow.symbol}</Typography>
           <Typography
             variant="h4"

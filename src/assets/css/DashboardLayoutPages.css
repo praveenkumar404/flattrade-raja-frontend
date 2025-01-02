@@ -1,4 +1,10 @@
-.DashboardAppprovider .css-1ie2bpi-MuiButtonBase-root-MuiIconButton-root{
+/* .DashboardAppprovider .css-1ie2bpi-MuiButtonBase-root-MuiIconButton-root{
     position: relative !important;
     right: 150px !important;
+} */
+
+.DashboardAppprovider .css-1ie2bpi-MuiButtonBase-root-MuiIconButton-root {
+    position: absolute !important;
+    left: 280px !important;
+    top: 10px !important;
 }

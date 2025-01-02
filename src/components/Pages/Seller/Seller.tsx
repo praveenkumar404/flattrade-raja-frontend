@@ -82,6 +82,10 @@ const Seller = () => {
     (item: any) => item?.type === "index"
   )?.data;
 
+  const isTypePositionload = webhookcontrol.find(
+    (item: any) => item?.type === "position"
+  )?.data;
+
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState('This is a notification');
   const [toastSeverity, setToastSeverity] = useState<'success' | 'error' | 'warning' | 'info'>('info');
@@ -96,11 +100,34 @@ const Seller = () => {
     setToastOpen(false);
   };
 
+  // useEffect(() => {
+  //   const handlePosition = async () => {
+  //     try {
+  //       const response = await fetchPosition();
+  //       console.log("posiiiii resp : ",response?.data)
+  //       if (response?.data) {
+  //         const validData = response.data.filter(
+  //           (item: any) =>
+  //             item.contractType &&
+  //             item.contractToken &&
+  //             item.tsym &&
+  //             item.lotSize
+  //         );
+  //         setPositions(validData
+  //         );
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching position data:", error);
+  //     }
+  //   };
+  //   handlePosition();
+  // }, []);
+
+
   useEffect(() => {
-    const handlePosition = async () => {
+    const fetchData = async () => {
       try {
         const response = await fetchPosition();
-        console.log("posiiiii resp : ",response?.data)
         if (response?.data) {
           const validData = response.data.filter(
             (item: any) =>
@@ -109,15 +136,25 @@ const Seller = () => {
               item.tsym &&
               item.lotSize
           );
-          setPositions(validData
-          );
+          setPositions((prevPositions) => {
+            if (JSON.stringify(prevPositions) !== JSON.stringify(validData)) {
+              return validData;
+            }
+            return prevPositions;
+          });
         }
       } catch (error) {
         console.error("Error fetching position data:", error);
       }
     };
-    handlePosition();
-  }, []);
+  
+    fetchData(); // Initial fetch
+  
+    // const intervalId = setInterval(fetchData, 5000); // Poll every 5 seconds
+  
+    // return () => clearInterval(intervalId); // Cleanup on unmount
+  }, [positions]);
+  
 
   const handleOpen = (item: PositionData) => {
     setSelectedItem(item);
@@ -161,15 +198,16 @@ const Seller = () => {
         onClose={handleCloseToast}
       />
       <Box sx={{ overflowX: "auto"}}>
-        <ResponsiveTableContainer>
-          <Paper elevation={3}>
+      <Paper elevation={3}>
             <Typography
               variant="h6"
               component="div"
-              style={{ padding: "12px 16px", fontWeight: 600, color: "#555" }}
+              style={{ padding: "12px 16px", fontWeight: 600}}
             >
               Portfolio
             </Typography>
+        <ResponsiveTableContainer>
+          
             {positions.length > 0 ? (
             <Table>
               <TableHead>
@@ -179,6 +217,8 @@ const Seller = () => {
                   <TableCell style={{ fontWeight: "bold", color: "#777" }}>Contract Type</TableCell>
                   <TableCell style={{ fontWeight: "bold", color: "#777" }}>Lot Size</TableCell>
                   <TableCell style={{ fontWeight: "bold", color: "#777" }}>Tysm</TableCell>
+                  <TableCell style={{ fontWeight: "bold", color: "#777" }}>LP</TableCell>
+                  <TableCell style={{ fontWeight: "bold", color: "#777" }}>RealizedPL</TableCell>
                   <TableCell style={{ fontWeight: "bold", color: "#777" }}>Send</TableCell>
                 </TableRow>
               </TableHead>
@@ -188,6 +228,7 @@ const Seller = () => {
                 ?.map((item) => {
                   const islotsizePositive = parseFloat(item?.lotSize?.toString() || "0") > 0;
                   const istsymPositive = parseFloat(item?.tsym?.toString() || "0") > 0;
+                  const isPositionMatch = item?.indexToken === isTypePositionload?.token;
                   return (
                     <TableRow key={item.id}>
                       {/* <TableCell>
@@ -213,6 +254,12 @@ const Seller = () => {
                       <TableCell style={{ color: istsymPositive ? "green" : "red", fontWeight: 500 }}>
                         {item?.tsym}
                       </TableCell>
+                      <TableCell style={{ fontWeight: 500 }}>
+                        {isPositionMatch ? isTypePositionload?.lp : "N/A"}
+                      </TableCell>
+                      <TableCell style={{ fontWeight: 500, color: isTypePositionload?.realizedPL < 0 ? "red" : "green" }}>
+                        {isPositionMatch ? isTypePositionload?.realizedPL : "N/A"}
+                      </TableCell>
                       <TableCell>
                         <Box onClick={() => handleOpen(item)}>
                           <SendIcon sx={{ color: "#1e90fe", cursor: "pointer" }} />
@@ -233,8 +280,8 @@ const Seller = () => {
                 </Box>
                 </Box>
             )}
-          </Paper>
         </ResponsiveTableContainer>
+        </Paper>
 
         {/* Confirmation Dialog */}
         <Dialog

@@ -46,29 +46,64 @@ const NotificationComponent: React.FC<any> = () => {
     }
   };
 
-  // Add new notifications when messages are received
+  // // Add new notifications when messages are received
+  // useEffect(() => {
+  //   const filteredMessages = messages.filter(
+  //     (msg) => msg?.type === 'action' || msg?.type === 'order'
+  //   );
+
+  //   filteredMessages.forEach((msg) => {
+
+  //     const newNotification = {
+  //       id: notifications.length > 0
+  //         ? notifications[notifications.length - 1].id + 1
+  //         : 1,
+  //       message: msg.message,
+  //       type: msg.type,
+  //       currentdate: new Date().toLocaleDateString(), // Generate current date
+  //       currenttime: new Date().toLocaleTimeString(), // Generate current time
+  //     };
+  //     dispatch(setNotifications([...notifications, newNotification]));
+
+  //     setUnreadCount((prevCount) => prevCount + 1);
+  //     playChime();
+  //   });
+  // }, [messages]);
+  
+
+
   useEffect(() => {
+    const currentDate = new Date().toLocaleDateString();
+  
+    // Filter out notifications that are not from today
+    const currentDayNotifications = notifications.filter(
+      (notification) => notification.currentdate === currentDate
+    );
+  
     const filteredMessages = messages.filter(
       (msg) => msg?.type === 'action' || msg?.type === 'order'
     );
-
-    filteredMessages.forEach((msg) => {
-
-      const newNotification = {
-        id: notifications.length > 0
-          ? notifications[notifications.length - 1].id + 1
-          : 1,
-        message: msg.message,
-        type: msg.type,
-        currentdate: new Date().toLocaleDateString(), // Generate current date
-        currenttime: new Date().toLocaleTimeString(), // Generate current time
-      };
-      dispatch(setNotifications([...notifications, newNotification]));
-
-      setUnreadCount((prevCount) => prevCount + 1);
+  
+    const newNotifications = filteredMessages.map((msg) => ({
+      id: currentDayNotifications.length > 0
+        ? currentDayNotifications[currentDayNotifications.length - 1].id + 1
+        : 1,
+      message: msg.message,
+      type: msg.type,
+      currentdate: currentDate,
+      currenttime: new Date().toLocaleTimeString(),
+    }));
+  
+    const updatedNotifications = [...currentDayNotifications, ...newNotifications];
+  
+    dispatch(setNotifications(updatedNotifications));
+    setUnreadCount((prevCount) => prevCount + newNotifications.length);
+  
+    if (newNotifications.length > 0) {
       playChime();
-    });
+    }
   }, [messages]);
+  
 
   // Open/Close Popover
   const handleNotificationClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -136,49 +171,6 @@ const NotificationComponent: React.FC<any> = () => {
         <Typography variant="h6" sx={{ p: 2 }}>
           Notifications
         </Typography>
-
-        {/* List of Notifications */}
-        {/* <List sx={{ width: '350px' }}>
-          {notifications.length > 0 ? (
-            <>
-              {notifications?.sort((a, b) => {
-          // Combine date and time into a single Date object and get numeric timestamps
-          const dateTimeA = new Date(`${a.currentdate} ${a.currenttime}`).getTime();
-          const dateTimeB = new Date(`${b.currentdate} ${b.currenttime}`).getTime();
-          // Sort in descending order (latest first)
-          return dateTimeB - dateTimeA;
-        })?.map((notification) => (
-                <ListItem key={notification.id}>
-                  <ListItemText
-                    primary={notification.message}
-                    secondary={`${notification?.type} - ${notification?.currentdate} ${notification?.currenttime}`}
-                  />
-                  <ListItemSecondaryAction>
-                    <IconButton edge="end">
-                      <img onClick={()=>handleDeleteNotification(notification.id)} style={{height:'20px',width:'25px'}} src={'https://cdn.pixabay.com/photo/2012/05/07/02/13/cancel-47588_960_720.png'} />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))}
-              <ListItem>
-                <Button
-                  fullWidth
-                  color="error"
-                  variant="contained"
-                  onClick={handleClearAll}
-                >
-                  Clear All
-                </Button>
-              </ListItem>
-            </>
-          ) : (
-            <ListItem>
-              <ListItemText primary="No notifications" />
-            </ListItem>
-          )}
-        </List> */}
-
-
 
         {/* List of Notifications */}
 <List sx={{ width: '350px' }}>
