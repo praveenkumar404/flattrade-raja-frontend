@@ -148,7 +148,7 @@ const Seller = () => {
       }
     };
 
-    if(webhookcontrol.find((item: any) => item?.type !== "position"))
+    if(webhookcontrol.find((item: any) => item?.type !== "order"))
     { 
     fetchData(); // Initial fetch
     }
