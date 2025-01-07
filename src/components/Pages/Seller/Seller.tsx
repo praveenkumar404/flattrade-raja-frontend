@@ -147,12 +147,17 @@ const Seller = () => {
         console.error("Error fetching position data:", error);
       }
     };
-  
+
+    if(webhookcontrol.find((item: any) => item?.type !== "position"))
+    { 
     fetchData(); // Initial fetch
+    }
+    else{
   
-    // const intervalId = setInterval(fetchData, 5000); // Poll every 5 seconds
+    const intervalId = setInterval(fetchData, 5000); // Poll every 5 seconds
   
-    // return () => clearInterval(intervalId); // Cleanup on unmount
+    return () => clearInterval(intervalId); // Cleanup on unmount
+    }
   }, [positions]);
   
 
@@ -228,19 +233,9 @@ const Seller = () => {
                 ?.map((item) => {
                   const islotsizePositive = parseFloat(item?.lotSize?.toString() || "0") > 0;
                   const istsymPositive = parseFloat(item?.tsym?.toString() || "0") > 0;
-                  const isPositionMatch = item?.indexToken === isTypePositionload?.token;
+                  const isPositionMatch = item?.contractToken === isTypePositionload?.token;
                   return (
                     <TableRow key={item.id}>
-                      {/* <TableCell>
-                        <Box display="flex" alignItems="center">
-                          <Typography variant="body1" style={{ fontWeight: 500 }}>
-                            {item.index || "N/A"}
-                          </Typography>
-                        </Box>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="body1">{item.indexToken || "N/A"}</Typography>
-                      </TableCell> */}
                       <TableCell>{`${new Date(item?.updatedAt).toLocaleDateString()} - ${new Date(item?.updatedAt).toLocaleTimeString()}`}</TableCell>
                       <TableCell style={{ fontWeight: 500 }}>
                         {item?.index}

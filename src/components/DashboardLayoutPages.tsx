@@ -80,8 +80,8 @@ const NAVIGATION: Navigation = [
         icon: <DescriptionIcon />,
       },
       {
-        segment: 'traffic',
-        title: 'Traffic',
+        segment: 'Service',
+        title: 'Service',
         icon: <DescriptionIcon />,
       },
     ],

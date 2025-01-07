@@ -77,6 +77,9 @@ const AlgoTradersPages: React.FC = () => {
         setSelectedOptionsList(selectedOptions)
       };
       
+      const datadeclare = () =>{
+        return options
+      }
 
       // console.log("Selected option:", SelectedOptionsList);
 
