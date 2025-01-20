@@ -81,10 +81,10 @@ const PointData: React.FC = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Symbol</TableCell>
-              <TableCell align="right">Last</TableCell>
-              <TableCell align="right">Change</TableCell>
-              <TableCell align="right">Chg%</TableCell>
+              <TableCell sx={{fontSize:'8px'}}>Symbol</TableCell>
+              <TableCell align="right" sx={{fontSize:'8px'}}>Last</TableCell>
+              <TableCell align="right" sx={{fontSize:'8px'}}>Change</TableCell>
+              <TableCell align="right" sx={{fontSize:'8px'}}>Chg%</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -104,19 +104,19 @@ const PointData: React.FC = () => {
                       selectedRow?.symbol === rowData.symbol ? '#f0f0f0' : 'inherit',
                   }}
                 >
-                  <TableCell component="th" scope="row">
+                  <TableCell component="th" scope="row" sx={{fontSize:'8px'}}>
                     {rowData.symbol}
                   </TableCell>
-                  <TableCell align="right">{rowData.last}</TableCell>
+                  <TableCell align="right" sx={{fontSize:'8px'}}>{rowData.last}</TableCell>
                   <TableCell
                     align="right"
-                    style={{ color: rowData.change.toString().startsWith('-') ? 'red' : 'green' }}
+                    style={{ color: rowData.change.toString().startsWith('-') ? 'red' : 'green', fontSize:'8px' }}
                   >
                     {rowData.change}
                   </TableCell>
                   <TableCell
                     align="right"
-                    style={{ color: rowData.change.toString().startsWith('-') ? 'red' : 'green' }}
+                    style={{ color: rowData.change.toString().startsWith('-') ? 'red' : 'green', fontSize:'8px' }}
                   >
                     {parseFloat(rowData.change as string).toFixed(2)}%
                   </TableCell>

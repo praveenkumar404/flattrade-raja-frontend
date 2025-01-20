@@ -23,6 +23,9 @@ import { styled } from "@mui/system";
 import SendIcon from "@mui/icons-material/Send";
 import { useWebSocketMessages } from "../../../Webhooktypeprocess";
 import ToastNotification from "../../../comman/ReusabelCompoents/ToastNotification";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import { setPositionsPersist } from "../../../redux/SellerSlice";
 
 // Define custom styles for TableContainer
 const ResponsiveTableContainer = styled(TableContainer)(({ theme }) => ({
@@ -71,10 +74,20 @@ interface PositionData {
   updatedAt:any;
 }
 
+
+
+
 const Seller = () => {
   const [positions, setPositions] = useState<PositionData[]>([]);
+  const [hasOrderReloaded, setHasOrderReloaded] = useState(false); // Tracks if API has been reloaded
   const [open, setOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<PositionData | null>(null);
+  const dispatch = useDispatch();
+  const persistedPositions = useSelector(
+    (state: RootState) => state.seller.positionsPersist
+  );
+
+
 
   const webhookdatas = useWebSocketMessages();
   const webhookcontrol = webhookdatas.flat();
@@ -85,6 +98,10 @@ const Seller = () => {
   const isTypePositionload = webhookcontrol.find(
     (item: any) => item?.type === "position"
   )?.data;
+
+  const isTypeOrderload = webhookcontrol.find(
+    (item: any) => item?.type === "order"
+  );
 
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState('This is a notification');
@@ -100,11 +117,12 @@ const Seller = () => {
     setToastOpen(false);
   };
 
+
+
   // useEffect(() => {
-  //   const handlePosition = async () => {
+  //   const fetchData = async () => {
   //     try {
   //       const response = await fetchPosition();
-  //       console.log("posiiiii resp : ",response?.data)
   //       if (response?.data) {
   //         const validData = response.data.filter(
   //           (item: any) =>
@@ -113,52 +131,73 @@ const Seller = () => {
   //             item.tsym &&
   //             item.lotSize
   //         );
-  //         setPositions(validData
-  //         );
+  //         setPositions((prevPositions) => {
+  //           if (JSON.stringify(prevPositions) !== JSON.stringify(validData)) {
+  //             return validData;
+  //           }
+  //           return prevPositions;
+  //         });
   //       }
   //     } catch (error) {
   //       console.error("Error fetching position data:", error);
   //     }
   //   };
-  //   handlePosition();
-  // }, []);
 
+  //   fetchData(); 
+  // }, [positions]);
+
+
+
+  //  useEffect(() => {
+
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetchPosition();
+  //       if (response?.data) {
+  //         const validData = response.data.filter(
+  //           (item: any) =>
+  //             item.contractType &&
+  //             item.contractToken &&
+  //             item.tsym &&
+  //             item.lotSize
+  //         );
+  //         setPositions(validData);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching position data:", error);
+  //     }
+  //   };
+  //     if(isTypeOrderload){
+  //     fetchData(); // Fetch initial data
+  //     }
+  // }, []); 
+
+
+  const fetchData = async () => {
+    try {
+      const response = await fetchPosition(); // Replace with your actual API call function
+      if (response?.data) {
+        const validData = response.data.filter(
+          (item: any) =>
+            item.contractType &&
+            item.contractToken &&
+            item.tsym &&
+            item.lotSize
+        );
+        setPositions(validData); // Ensure `setPositions` is a state setter
+      }
+    } catch (error) {
+      console.error("Error fetching position data:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetchPosition();
-        if (response?.data) {
-          const validData = response.data.filter(
-            (item: any) =>
-              item.contractType &&
-              item.contractToken &&
-              item.tsym &&
-              item.lotSize
-          );
-          setPositions((prevPositions) => {
-            if (JSON.stringify(prevPositions) !== JSON.stringify(validData)) {
-              return validData;
-            }
-            return prevPositions;
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching position data:", error);
-      }
-    };
-
-    if(webhookcontrol.find((item: any) => item?.type !== "order"))
-    { 
-    fetchData(); // Initial fetch
+    if ((isTypeOrderload && !hasOrderReloaded) || performance?.navigation?.type === 1) {
+      fetchData();
+      setHasOrderReloaded(true); // Mark as reloaded to prevent further calls
     }
-    else{
+  }, [isTypeOrderload, hasOrderReloaded]);
   
-    const intervalId = setInterval(fetchData, 5000); // Poll every 5 seconds
-  
-    return () => clearInterval(intervalId); // Cleanup on unmount
-    }
-  }, [positions]);
   
 
   const handleOpen = (item: PositionData) => {
@@ -194,6 +233,8 @@ const Seller = () => {
     }
   };
 
+  dispatch(setPositionsPersist(positions)); // Save to Redux store
+
   return (
     <ThemeProvider theme={theme}>
         <ToastNotification
@@ -213,46 +254,46 @@ const Seller = () => {
             </Typography>
         <ResponsiveTableContainer>
           
-            {positions.length > 0 ? (
+            {persistedPositions.length > 0 ? (
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell style={{ fontWeight: "bold", color: "#777" }}>Date</TableCell>
-                  <TableCell style={{ fontWeight: "bold", color: "#777" }}>Index</TableCell>
-                  <TableCell style={{ fontWeight: "bold", color: "#777" }}>Contract Type</TableCell>
-                  <TableCell style={{ fontWeight: "bold", color: "#777" }}>Lot Size</TableCell>
-                  <TableCell style={{ fontWeight: "bold", color: "#777" }}>Tysm</TableCell>
-                  <TableCell style={{ fontWeight: "bold", color: "#777" }}>LP</TableCell>
-                  <TableCell style={{ fontWeight: "bold", color: "#777" }}>RealizedPL</TableCell>
-                  <TableCell style={{ fontWeight: "bold", color: "#777" }}>Send</TableCell>
+                  <TableCell style={{ fontWeight: "bold", color: "#777",fontSize:'8px' }}>Date</TableCell>
+                  <TableCell style={{ fontWeight: "bold", color: "#777",fontSize:'8px' }}>Index</TableCell>
+                  <TableCell style={{ fontWeight: "bold", color: "#777",fontSize:'8px' }}>Contract Type</TableCell>
+                  <TableCell style={{ fontWeight: "bold", color: "#777",fontSize:'8px' }}>Lot Size</TableCell>
+                  <TableCell style={{ fontWeight: "bold", color: "#777",fontSize:'8px' }}>Tysm</TableCell>
+                  <TableCell style={{ fontWeight: "bold", color: "#777",fontSize:'8px' }}>LP</TableCell>
+                  <TableCell style={{ fontWeight: "bold", color: "#777",fontSize:'8px' }}>RealizedPL</TableCell>
+                  <TableCell style={{ fontWeight: "bold", color: "#777",fontSize:'8px' }}>Send</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {positions?.slice() // Create a shallow copy to avoid modifying the source data
+                {persistedPositions?.slice() // Create a shallow copy to avoid modifying the source data
                 ?.sort((a: any, b: any) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()) // Sort by updatedAt in descending order
                 ?.map((item) => {
                   const islotsizePositive = parseFloat(item?.lotSize?.toString() || "0") > 0;
                   const istsymPositive = parseFloat(item?.tsym?.toString() || "0") > 0;
                   const isPositionMatch = item?.contractToken === isTypePositionload?.token;
                   return (
-                    <TableRow key={item.id}>
-                      <TableCell>{`${new Date(item?.updatedAt).toLocaleDateString()} - ${new Date(item?.updatedAt).toLocaleTimeString()}`}</TableCell>
-                      <TableCell style={{ fontWeight: 500 }}>
+                    <TableRow key={item.id} >
+                      <TableCell sx={{fontSize:'8px'}}>{`${new Date(item?.updatedAt).toLocaleDateString()} - ${new Date(item?.updatedAt).toLocaleTimeString()}`}</TableCell>
+                      <TableCell style={{ fontWeight: 500,fontSize:'8px' }}>
                         {item?.index}
                       </TableCell>
                       <TableCell style={{ fontWeight: 500 }}>
                         <Button size="small" variant="outlined" color={item?.contractType == "BUY" ? "success" : "error"} sx={{fontSize:'8px',fontWeight:'600'}}>{item?.contractType}</Button>
                       </TableCell>
-                      <TableCell style={{ color: islotsizePositive ? "green" : "red", fontWeight: 500 }}>
+                      <TableCell style={{ color: islotsizePositive ? "green" : "red", fontWeight: 500, fontSize:'8px'}}>
                         {item?.lotSize}
                       </TableCell>
-                      <TableCell style={{ color: istsymPositive ? "green" : "red", fontWeight: 500 }}>
+                      <TableCell style={{ color: istsymPositive ? "green" : "red", fontWeight: 500, fontSize:'8px' }}>
                         {item?.tsym}
                       </TableCell>
-                      <TableCell style={{ fontWeight: 500 }}>
+                      <TableCell style={{ fontWeight: 500, fontSize:'8px' }}>
                         {isPositionMatch ? isTypePositionload?.lp : "N/A"}
                       </TableCell>
-                      <TableCell style={{ fontWeight: 500, color: isTypePositionload?.realizedPL < 0 ? "red" : "green" }}>
+                      <TableCell style={{ fontWeight: 500, color: isTypePositionload?.realizedPL < 0 ? "red" : "green", fontSize:'8px' }}>
                         {isPositionMatch ? isTypePositionload?.realizedPL : "N/A"}
                       </TableCell>
                       <TableCell>
@@ -279,11 +320,12 @@ const Seller = () => {
         </Paper>
 
         {/* Confirmation Dialog */}
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="confirm-dialog-title"
-          aria-describedby="confirm-dialog-description"
+        {open && (
+        <Box
+          // open={open}
+          // onClose={handleClose}
+          // aria-labelledby="confirm-dialog-title"
+          // aria-describedby="confirm-dialog-description"
         >
           <DialogTitle id="confirm-dialog-title">Confirm Action</DialogTitle>
           <DialogContent>
@@ -299,7 +341,8 @@ const Seller = () => {
               Confirm
             </Button>
           </DialogActions>
-        </Dialog>
+        </Box>
+        )}
       </Box>
     </ThemeProvider>
   );

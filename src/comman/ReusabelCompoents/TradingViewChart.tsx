@@ -279,7 +279,7 @@ useEffect(()=>{
 },[selectedDropdownValues])
       
   return (
-    <div style={{width:'70%'}}>
+    <div style={{width:'65%'}}>
         <Box sx={{display:'flex',flexDirection:'column',justifyContent:'center', rowGap:'10px',columnGap:'30px'}}>
         <Box>
             <AgFinancialCharts style={{height:700}} options={options as any} />

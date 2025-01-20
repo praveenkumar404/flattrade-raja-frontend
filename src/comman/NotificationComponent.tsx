@@ -72,6 +72,11 @@ const NotificationComponent: React.FC<any> = () => {
   
 
 
+//   Uncaught runtime errors:
+// ×
+// ERROR
+// play() failed because the user didn't interact with the document first. https://goo.gl/xX8pDD
+
   useEffect(() => {
     const currentDate = new Date().toLocaleDateString();
   
@@ -88,8 +93,8 @@ const NotificationComponent: React.FC<any> = () => {
       id: currentDayNotifications.length > 0
         ? currentDayNotifications[currentDayNotifications.length - 1].id + 1
         : 1,
-      message: msg.message,
-      type: msg.type,
+      message: msg?.message?.dmsg ? msg?.message?.dmsg : msg?.message,
+      type: msg?.type,
       currentdate: currentDate,
       currenttime: new Date().toLocaleTimeString(),
     }));

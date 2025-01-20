@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './authSlice';
 import orderSlice from './OrderSlice'
 import formValues from './FormSlice'
+import sellerReducer from './SellerSlice';
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
     orderSlice: orderSlice,
-    formValues:formValues
+    formValues:formValues,
+    seller: sellerReducer,
   },
 });
 
