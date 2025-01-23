@@ -28,3 +28,18 @@ export const fetchpostplaceholder = async (obj:any) => {
       throw error;
     }
   };
+
+
+  export const fetchchartapi = async (obj:any) => {
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/variables/getTimePriceData`,obj, {
+        headers: {
+          Authorization: `Bearer ${process.env.REACT_APP_USER_TOKEN}`,
+        },
+      });
+      return response;
+    } catch (error) {
+      console.error('Error fetching request token', error);
+      throw error;
+    }
+  };

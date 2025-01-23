@@ -7,7 +7,7 @@ import PointData from '../../../comman/ReusabelCompoents/PointData'
 
 const AlgoTradersMainPage: React.FC = () => {
 
-  const [width, setWidth] = useState<number>(350); // Initial width of the scrollable area
+  const [width, setWidth] = useState<number>(600); // Initial width of the scrollable area
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
   // Handle drag start
@@ -19,7 +19,7 @@ const AlgoTradersMainPage: React.FC = () => {
   // Handle drag movement
   const handleMouseMove = (e: MouseEvent) => {
     if (isDragging) {
-      const newWidth = Math.max(350, e.clientX); // Prevent shrinking below 100px
+      const newWidth = Math.max(550, e.clientX); // Prevent shrinking below 100px
       setWidth(newWidth);
     }
   };
