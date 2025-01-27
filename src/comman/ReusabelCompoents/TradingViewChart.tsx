@@ -95,29 +95,9 @@ const TradingViewChart = () => {
   // }, []); // Do not include `storedData` here
   
 
-  // console.log("chart response store: ",storedData)
+  console.log("chart response store: ",storedData)
   
 
-  // Process and update data
-  // useEffect(() => {
-  //   if (isData) {
-  //     // Transform incoming data into the required format
-  //     const newData = {
-  //       date: new Date(isData.date), // Convert string to Date
-  //       volume: parseInt(isData.volume, 10),
-  //       open: parseFloat(isData.open),
-  //       high: parseFloat(isData.high),
-  //       low: parseFloat(isData.low),
-  //       close: parseFloat(isData.close),
-  //     };
-
-  //     // Add the new data and ensure only the latest 40 entries are stored
-  //     setStoredData((prev) => {
-  //       const updatedData = [...prev, newData];
-  //       return updatedData.slice(-40); // Keep only the last 40 entries
-  //     });
-  //   }
-  // }, [isData]);
 
     const [options, setOptions] = useState<any>({
         data: storedData,
@@ -320,17 +300,47 @@ const TradingViewChart = () => {
         },
       });
 
+useEffect(() => {
 
-// console.log("dataing",getData())
+  // const fetchchartapifunction = async () => {
+  //   const Obj = {
+  //     indexToken: "26009",
+  //     "interval": "5"
+  //   };
+
+  //   try {
+  //     const response = await fetchchartapi(Obj);
+  //     console.log("Full response:", response);
+  //     console.log("response.data:", response?.data);
+
+  //     const transformedData = Array.isArray(response?.data?.data)
+  //       ? response?.data?.data?.map((item: any) => ({
+  //           ...item,
+  //           volume: 100, // Add the volume key with the value 100
+  //         }))
+  //       : []; // Handle non-array data by setting it to an empty array
+
+  //     // Only update state if the new data is different from the current data
+  //     if (JSON.stringify(transformedData) !== JSON.stringify(storedData)) {
+  //       setStoredData(transformedData);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching chart data:", error);
+  //     // Only set empty array if it's not already empty
+  //     if (storedData.length > 0) {
+  //       setStoredData([]); 
+  //     }
+  //   }
+  // };
+
+  // fetchchartapifunction();
 
 
-// Update options when storedData changes
-// useEffect(() => {
-//   setOptions((prev:any) => ({
-//     ...prev,
-//     data: storedData,
-//   }));
-// }, [storedData]);
+  setOptions((prev:any) => ({
+    ...prev,
+    data: storedData,
+  }));
+}, [storedData]);
 
 useEffect(()=>{
 
@@ -339,7 +349,7 @@ useEffect(()=>{
   return (
     <div style={{width:'65%',backgroundColor:'#fff'}}>
       <div style={{ display: "flex", gap: "1rem", alignItems: "center" , padding:'5px'}}>
-      {/* Interval Dropdown */}
+
       <FormControl size="small" sx={{ minWidth: 120, "& .MuiSelect-root": {
             height: 30,
           }, }}>
@@ -359,7 +369,6 @@ useEffect(()=>{
         </Select>
       </FormControl>
 
-      {/* Days Dropdown */}
       <FormControl size="small" sx={{ minWidth: 120, "& .MuiSelect-root": {
             height: 30,
           }, }}>

@@ -3,6 +3,7 @@ import authReducer from './authSlice';
 import orderSlice from './OrderSlice'
 import formValues from './FormSlice'
 import sellerReducer from './SellerSlice';
+import tradingWatchlist from './TradingWatchlistSlice'
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     orderSlice: orderSlice,
     formValues:formValues,
     seller: sellerReducer,
+    tradingWatchlist: tradingWatchlist
   },
 });
 

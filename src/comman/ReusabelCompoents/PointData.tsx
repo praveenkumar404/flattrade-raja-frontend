@@ -11,11 +11,17 @@ import {
   Typography,
   Box,
 } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { setTradingWatchlistPersist } from '../../redux/TradingWatchlistSlice';
 
 interface RowData {
   symbol: string;
   last: string | number;
   change: string | number;
+}
+
+interface pointDataPropstypes {
+  setwatchlistselectrow?:any
 }
 
 const PointData: React.FC = () => {
@@ -32,6 +38,7 @@ const PointData: React.FC = () => {
 
   const [dataMap, setDataMap] = useState<Record<string, RowData>>({});
   const [selectedRow, setSelectedRow] = useState<RowData | null>(null);
+  const dispatch = useDispatch<any>();
 
   useEffect(() => {
     // Process incoming webhook data
@@ -58,9 +65,15 @@ const PointData: React.FC = () => {
     return match ? match.label : 'Unknown';
   };
 
-  const handleRowClick = (row: RowData) => {
+  const handleRowClick = (row: RowData, option:any) => {
+    // console.log("selected row : ",option)
     setSelectedRow(row);
+    // setwatchlistselectrow(option)
+    dispatch(setTradingWatchlistPersist(option));
+
   };
+
+  
 
   console.log("dataMap : ",dataMap)
 
@@ -97,7 +110,7 @@ const PointData: React.FC = () => {
               return (
                 <TableRow
                   key={option.id}
-                  onClick={() => handleRowClick(rowData)}
+                  onClick={() => handleRowClick(rowData,option)}
                   style={{
                     cursor: 'pointer',
                     backgroundColor:

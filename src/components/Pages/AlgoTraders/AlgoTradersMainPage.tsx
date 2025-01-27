@@ -4,11 +4,22 @@ import AlgoTradersPages from './AlgoTradersPages'
 import TradingViewChart from '../../../comman/ReusabelCompoents/TradingViewChart'
 import Seller from '../Seller/Seller'
 import PointData from '../../../comman/ReusabelCompoents/PointData'
+import { useWebSocketMessages } from '../../../Webhooktypeprocess'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../../redux/store'
 
 const AlgoTradersMainPage: React.FC = () => {
 
   const [width, setWidth] = useState<number>(600); // Initial width of the scrollable area
   const [isDragging, setIsDragging] = useState<boolean>(false);
+
+  const watchlistselectrow = useSelector((state: RootState) => state?.tradingWatchlist?.TradingWatchlistPersist);
+
+  const webhookdatas = useWebSocketMessages();
+  const webhookcontrol = webhookdatas.flat()
+  const isTypemarketload = webhookcontrol.find(
+    (item: any) => item?.type === 'market' && item?.tk == watchlistselectrow?.value
+  );
 
   // Handle drag start
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -44,6 +55,15 @@ const AlgoTradersMainPage: React.FC = () => {
   return (
     <Box>
       <Box>
+        {
+          isTypemarketload ? <Box style={{
+          }}>
+              <Box sx={{color:'#fff',bgcolor: isTypemarketload?.status == '001' ? '#ff0000' : isTypemarketload?.status == '002' ? '#00ff00' : isTypemarketload?.status == '003' ? 'yellow' : 'palevioletred',padding:1}}>
+                  {isTypemarketload?.message}
+              </Box>
+          </Box> : null
+        }
+      <Box>{watchlistselectrow?.value}</Box>
         <Box sx={{ display: 'flex', justifyContent: 'center', margin: '10px 0px' }}>
           <TradingViewChart />
           <Box sx={{
@@ -73,7 +93,7 @@ const AlgoTradersMainPage: React.FC = () => {
               ></Box>
             </Box>
             <Box>
-              <PointData />
+              <PointData/>
               <Seller />
             </Box>
           </Box>

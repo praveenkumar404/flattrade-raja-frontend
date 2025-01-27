@@ -93,7 +93,8 @@ const NotificationComponent: React.FC<any> = () => {
       id: currentDayNotifications.length > 0
         ? currentDayNotifications[currentDayNotifications.length - 1].id + 1
         : 1,
-      message: msg?.message?.dmsg ? msg?.message?.dmsg : msg?.message,
+      // message: msg?.message?.dmsg ? msg?.message?.dmsg : msg?.message,
+      message: msg?.message || msg?.message?.dmsg,
       type: msg?.type,
       currentdate: currentDate,
       currenttime: new Date().toLocaleTimeString(),
