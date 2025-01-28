@@ -94,10 +94,10 @@ const PointData: React.FC = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{fontSize:'8px'}}>Symbol</TableCell>
-              <TableCell align="right" sx={{fontSize:'8px'}}>Last</TableCell>
-              <TableCell align="right" sx={{fontSize:'8px'}}>Change</TableCell>
-              <TableCell align="right" sx={{fontSize:'8px'}}>Chg%</TableCell>
+              <TableCell sx={{fontSize:'12px'}}>Symbol</TableCell>
+              <TableCell align="right" sx={{fontSize:'12px'}}>Last</TableCell>
+              <TableCell align="right" sx={{fontSize:'12px'}}>Change</TableCell>
+              <TableCell align="right" sx={{fontSize:'12px'}}>Chg%</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -117,19 +117,19 @@ const PointData: React.FC = () => {
                       selectedRow?.symbol === rowData.symbol ? '#f0f0f0' : 'inherit',
                   }}
                 >
-                  <TableCell component="th" scope="row" sx={{fontSize:'8px'}}>
+                  <TableCell component="th" scope="row" sx={{fontSize:'12px'}}>
                     {rowData.symbol}
                   </TableCell>
-                  <TableCell align="right" sx={{fontSize:'8px'}}>{rowData.last}</TableCell>
+                  <TableCell align="right" sx={{fontSize:'12px'}}>{rowData.last}</TableCell>
                   <TableCell
                     align="right"
-                    style={{ color: rowData.change.toString().startsWith('-') ? 'red' : 'green', fontSize:'8px' }}
+                    style={{ color: rowData.change.toString().startsWith('-') ? 'red' : 'green', fontSize:'12px' }}
                   >
                     {rowData.change}
                   </TableCell>
                   <TableCell
                     align="right"
-                    style={{ color: rowData.change.toString().startsWith('-') ? 'red' : 'green', fontSize:'8px' }}
+                    style={{ color: rowData.change.toString().startsWith('-') ? 'red' : 'green', fontSize:'12px' }}
                   >
                     {parseFloat(rowData.change as string).toFixed(2)}%
                   </TableCell>

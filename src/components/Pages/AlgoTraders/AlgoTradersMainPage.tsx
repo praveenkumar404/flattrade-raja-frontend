@@ -40,7 +40,9 @@ const AlgoTradersMainPage: React.FC = () => {
   // Handle drag movement
   const handleMouseMove = (e: MouseEvent) => {
     if (isDragging) {
-      const newWidth = Math.max(550, e.clientX); // Prevent shrinking below 100px
+      // console.log(window.innerWidth);
+      // console.log(e.clientX)
+      const newWidth = window.innerWidth-e.clientX; // Prevent shrinking below 100px
       setWidth(newWidth);
     }
   };
