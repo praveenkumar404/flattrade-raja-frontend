@@ -12,6 +12,7 @@ const AlgoTradersMainPage: React.FC = () => {
 
   const [width, setWidth] = useState<number>(600); // Initial width of the scrollable area
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [marketMessage, setMarketMessage] = useState<any>(null); // To persist the last 'market' message
 
   const watchlistselectrow = useSelector((state: RootState) => state?.tradingWatchlist?.TradingWatchlistPersist);
 
@@ -20,6 +21,15 @@ const AlgoTradersMainPage: React.FC = () => {
   const isTypemarketload = webhookcontrol.find(
     (item: any) => item?.type === 'market' && item?.tk == watchlistselectrow?.value
   );
+
+  console.log("market shade :",isTypemarketload)
+
+  // Update market message only when a new 'type: market' arrives
+  useEffect(() => {
+    if (isTypemarketload && isTypemarketload.message !== marketMessage?.message) {
+      setMarketMessage(isTypemarketload);
+    }
+  }, [isTypemarketload, marketMessage]);
 
   // Handle drag start
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -55,15 +65,37 @@ const AlgoTradersMainPage: React.FC = () => {
   return (
     <Box>
       <Box>
-        {
+        {/* {
           isTypemarketload ? <Box style={{
           }}>
               <Box sx={{color:'#fff',bgcolor: isTypemarketload?.status == '001' ? '#ff0000' : isTypemarketload?.status == '002' ? '#00ff00' : isTypemarketload?.status == '003' ? 'yellow' : 'palevioletred',padding:1}}>
                   {isTypemarketload?.message}
               </Box>
           </Box> : null
-        }
-      <Box>{watchlistselectrow?.value}</Box>
+        } */}
+
+        {marketMessage ? (
+          <Box>
+            <Box
+              sx={{
+                color: '#fff',
+                bgcolor:
+                  marketMessage?.status === '001'
+                    ? '#ff0000'
+                    : marketMessage?.status === '002'
+                    ? 'green'
+                    : marketMessage?.status === '003'
+                    ? 'yellow'
+                    : 'palevioletred',
+                padding: 1,
+              }}
+            >
+              {marketMessage?.message}
+            </Box>
+          </Box>
+        ) : null}
+
+      {/* <Box>{watchlistselectrow?.value}</Box> */}
         <Box sx={{ display: 'flex', justifyContent: 'center', margin: '10px 0px' }}>
           <TradingViewChart />
           <Box sx={{
