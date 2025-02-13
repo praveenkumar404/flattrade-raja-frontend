@@ -182,6 +182,7 @@ const OrderPages = () => {
                   <StyledTableCell>Order Status</StyledTableCell>
                   <StyledTableCell>Price</StyledTableCell>
                   <StyledTableCell>Contract LP</StyledTableCell>
+                  <StyledTableCell>Realized PL</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -197,6 +198,7 @@ const OrderPages = () => {
                       <StyledTableCell>{orderitem?.orderStatus || 'Pending...'}</StyledTableCell>
                       <StyledTableCell>{orderitem?.price || 'Pending...'}</StyledTableCell>
                       <StyledTableCell>{orderitem?.contractLp || 'Pending...'}</StyledTableCell>
+                      <StyledTableCell>{orderitem?.realizedPL}</StyledTableCell>
                     </StyledTableRow>
                   ))}
               </TableBody>

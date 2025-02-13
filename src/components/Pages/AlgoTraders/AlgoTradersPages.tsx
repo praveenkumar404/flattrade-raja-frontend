@@ -67,19 +67,15 @@ const AlgoTradersPages: React.FC = () => {
   // console.log("seletinghjk : ", selectedOptionSPreaddata)
     const [SelectedOptionsList, setSelectedOptionsList] = useState<any>([])
     const options = [
-        { id: 1, label: 'Nifty', value: 26000 },
-        { id: 2, label: 'Banknifty', value: 26009 },
-        { id: 3, label: 'Niftynxt50', value: 26013 },
-        { id: 4, label: 'Finnifty', value: 26037 },
-      ];
+      { id: 1, label: 'Nifty', value: 26000 },
+      { id: 2, label: 'Banknifty', value: 26009 },
+      { id: 3, label: 'Niftynxt50', value: 26013 },
+      { id: 4, label: 'Finnifty', value: 26037 },
+    ];
 
-      const handleSelect = (selectedOptions: { id: number; label: string; value: string }[]) => {
-        setSelectedOptionsList(selectedOptions)
-      };
-      
-      const datadeclare = () =>{
-        return options
-      }
+    const handleSelect = (selectedOptions: { id: number; label: string; value: string }[]) => {
+      setSelectedOptionsList(selectedOptions)
+    };
 
       // console.log("Selected option:", SelectedOptionsList);
 

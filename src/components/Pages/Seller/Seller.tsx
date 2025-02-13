@@ -82,6 +82,14 @@ const Seller = () => {
   const [hasOrderReloaded, setHasOrderReloaded] = useState(false); // Tracks if API has been reloaded
   const [open, setOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<PositionData | null>(null);
+
+  // Single state for previous LP and realizedPL
+  const [previousData, setPreviousData] = useState({
+    lp: null,
+    realizedPL: null,
+  });
+
+
   const dispatch = useDispatch();
   const persistedPositions = useSelector(
     (state: RootState) => state.seller.positionsPersist
@@ -117,61 +125,7 @@ const Seller = () => {
     setToastOpen(false);
   };
 
-
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetchPosition();
-  //       if (response?.data) {
-  //         const validData = response.data.filter(
-  //           (item: any) =>
-  //             item.contractType &&
-  //             item.contractToken &&
-  //             item.tsym &&
-  //             item.lotSize
-  //         );
-  //         setPositions((prevPositions) => {
-  //           if (JSON.stringify(prevPositions) !== JSON.stringify(validData)) {
-  //             return validData;
-  //           }
-  //           return prevPositions;
-  //         });
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching position data:", error);
-  //     }
-  //   };
-
-  //   fetchData(); 
-  // }, [positions]);
-
-
-
-  //  useEffect(() => {
-
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetchPosition();
-  //       if (response?.data) {
-  //         const validData = response.data.filter(
-  //           (item: any) =>
-  //             item.contractType &&
-  //             item.contractToken &&
-  //             item.tsym &&
-  //             item.lotSize
-  //         );
-  //         setPositions(validData);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching position data:", error);
-  //     }
-  //   };
-  //     if(isTypeOrderload){
-  //     fetchData(); // Fetch initial data
-  //     }
-  // }, []); 
-
+  console.log("isTypePositionload : ", isTypePositionload)
 
   const fetchData = async () => {
     try {
@@ -185,6 +139,22 @@ const Seller = () => {
             item.lotSize
         );
         setPositions(validData); // Ensure `setPositions` is a state setter
+
+      //   setPositions([...validData,{
+      //     "id": 16,
+      //     "documentId": "xzb1jlccnqxl8lx2qevptdth",
+      //     "index": "NIFTY",
+      //     "indexToken": "26000",
+      //     "contractType": "44.8",
+      //     "contractToken": "24",
+      //     "tsym": "86",
+      //     "lotSize": "23",
+      //     "createdAt": "2024-12-05T07:15:42.295Z",
+      //     "updatedAt": "2025-02-04T03:57:13.193Z",
+      //     "publishedAt": "2025-01-20T16:26:40.803Z",
+      //     "price": 50,
+      //     "quantity": 1
+      // }]);
       }
     } catch (error) {
       console.error("Error fetching position data:", error);
@@ -234,6 +204,25 @@ const Seller = () => {
   };
 
   dispatch(setPositionsPersist(positions)); // Save to Redux store
+
+  // useEffect(() => {
+  //   if (isTypePositionload?.lp !== undefined || isTypePositionload?.realizedPL !== undefined) {
+  //     setPreviousData((prev) => ({
+  //       lp: isTypePositionload?.lp !== undefined ? isTypePositionload.lp : prev.lp,
+  //       realizedPL: isTypePositionload?.realizedPL !== undefined ? isTypePositionload.realizedPL : prev.realizedPL,
+  //     }));
+  //   }
+  // }, [isTypePositionload]);
+
+  useEffect(() => {
+    if (isTypePositionload?.lp !== undefined || isTypePositionload?.realizedPL !== undefined) {
+      setPreviousData((prev) => ({
+        lp: isTypePositionload?.lp !== undefined ? isTypePositionload.lp : prev.lp,
+        realizedPL: isTypePositionload?.realizedPL !== undefined ? isTypePositionload.realizedPL : prev.realizedPL,
+      }));
+    }
+  }, [isTypePositionload]);
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -290,12 +279,26 @@ const Seller = () => {
                       <TableCell style={{ color: istsymPositive ? "green" : "red", fontWeight: 500, fontSize:'8px' }}>
                         {item?.tsym}
                       </TableCell>
-                      <TableCell style={{ fontWeight: 500, fontSize:'8px' }}>
+                      {/* <TableCell style={{ fontWeight: 500, fontSize:'8px' }}>
                         {isPositionMatch ? isTypePositionload?.lp : "N/A"}
                       </TableCell>
                       <TableCell style={{ fontWeight: 500, color: isTypePositionload?.realizedPL < 0 ? "red" : "green", fontSize:'8px' }}>
                         {isPositionMatch ? isTypePositionload?.realizedPL : "N/A"}
-                      </TableCell>
+                      </TableCell> */}
+
+                      {/* <TableCell style={{ fontWeight: 500, fontSize: '8px' }}>
+                            {isPositionMatch ? (isTypePositionload?.lp !== undefined ? isTypePositionload?.lp : previousData.lp) : "N/A"}
+                          </TableCell>
+                          <TableCell style={{ fontWeight: 500, color: (isTypePositionload?.realizedPL !== undefined ? isTypePositionload?.realizedPL : previousData.realizedPL) < 0 ? "red" : "green", fontSize: '8px' }}>
+                            {isPositionMatch ? (isTypePositionload?.realizedPL !== undefined ? isTypePositionload?.realizedPL : previousData.realizedPL) : "N/A"}
+                          </TableCell> */}
+
+                      <TableCell style={{ fontWeight: 500, fontSize: '8px' }}>
+                            {isPositionMatch ? (isTypePositionload?.lp !== undefined ? isTypePositionload?.lp : previousData.lp) : previousData.lp}
+                          </TableCell>
+                          <TableCell style={{ fontWeight: 500, color: (isTypePositionload?.realizedPL !== undefined ? isTypePositionload?.realizedPL : previousData.realizedPL) < 0 ? "red" : "green", fontSize: '8px' }}>
+                            {isPositionMatch ? (isTypePositionload?.realizedPL !== undefined ? isTypePositionload?.realizedPL : previousData.realizedPL) : previousData.realizedPL}
+                          </TableCell>
                       <TableCell>
                         <Box onClick={() => handleOpen(item)}>
                           <SendIcon sx={{ color: "#1e90fe", cursor: "pointer" }} />
@@ -319,13 +322,8 @@ const Seller = () => {
         </ResponsiveTableContainer>
         </Paper>
 
-        {/* Confirmation Dialog */}
         {open && (
         <Box
-          // open={open}
-          // onClose={handleClose}
-          // aria-labelledby="confirm-dialog-title"
-          // aria-describedby="confirm-dialog-description"
         >
           <DialogTitle id="confirm-dialog-title">Confirm Action</DialogTitle>
           <DialogContent>
