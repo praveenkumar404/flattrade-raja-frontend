@@ -44,12 +44,12 @@ const NAVIGATION: Navigation = [
   },
   {
     segment: 'algotrading',
-    title: 'Algotrading',
+    title: 'Algotrading Inputs',
     icon: <AccountTreeIcon/>,
   },
   {
     segment: 'algotradingmainpage',
-    title: 'Algotrading Main Page',
+    title: 'Algotrading Outputs',
     icon: <AccountTreeIcon/>,
   },
   {
