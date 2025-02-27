@@ -400,26 +400,26 @@ const [btnchoice,setbtnchoice] = useState({
 
   // Calculation logic
   const handleCalculate = () => {
-     const calculatedResistance1 = Number(formValues.basePrice) + Number(formValues.call);
-    const calculatedResistance2 = calculatedResistance1 + Number(formValues.put);
-    const calculatedSupport1 = Number(formValues.basePrice) - Number(formValues.put);
-    const calculatedSupport2 = calculatedSupport1 - Number(formValues.call);
+     const calculatedResistance1 = (Math.ceil((Number(formValues.basePrice) + Number(formValues.call)) * 10) / 10).toFixed(2);
+    const calculatedResistance2 = (Math.ceil((parseFloat(calculatedResistance1) + Number(formValues.put)) * 10) / 10).toFixed(2);
+    const calculatedSupport1 = (Math.ceil((Number(formValues.basePrice) - Number(formValues.put)) * 10) / 10).toFixed(2);
+    const calculatedSupport2 = (Math.ceil((parseFloat(calculatedSupport1) - Number(formValues.call)) * 10) / 10).toFixed(2);
 
     dispatch(
       setFormValues({
-        resistance2: calculatedResistance2.toString(),
-        resistance1: calculatedResistance1.toString(),
-        support1: calculatedSupport1.toString(),
-        support2: calculatedSupport2.toString(),
+        resistance2: typeof(calculatedResistance2) === "string"? calculatedResistance2 : String(calculatedResistance2),
+        resistance1: typeof(calculatedResistance1) === "string"? calculatedResistance1 : String(calculatedResistance1),
+        support1: typeof(calculatedSupport1) === "string"? calculatedSupport1 : String(calculatedSupport1),
+        support2: typeof(calculatedSupport2) === "string"? calculatedSupport2 : String(calculatedSupport2),
       })
     );
     
   };
 
   const payload = {
-    basePrice: Number(formValues?.basePrice),
     resistance1: Number(formValues?.resistance1),
     resistance2: Number(formValues?.resistance2),
+    basePrice: Number(formValues?.basePrice),
     support1: Number(formValues?.support1),
     support2: Number(formValues?.support2),
     indexToken: selectedDropdownValues?.map((item: any) => item?.value?.toString()).join(''),
@@ -427,6 +427,9 @@ const [btnchoice,setbtnchoice] = useState({
     expiry: moment(formValues?.expiry).format('YYYY-MM-DD'),
     quantity: Number(formValues?.quantity)
   };
+
+console.log("CalC payload : " , payload);
+
 
   // API call on submt
   // console.log("itemss : ", findallowapplyindex)

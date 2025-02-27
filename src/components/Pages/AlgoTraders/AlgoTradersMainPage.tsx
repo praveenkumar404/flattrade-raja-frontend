@@ -37,6 +37,24 @@ const AlgoTradersMainPage: React.FC = () => {
     e.preventDefault();
   };
 
+  // useEffect(() => {
+  //   if (isTypemarketload) {
+  //     setMarketMessage((prev: any) => 
+  //       prev?.message !== isTypemarketload.message ? isTypemarketload : prev
+  //     );
+  //   } else{
+  //     const defaultMessageLoad = {
+  //       type: 'market',
+  //       message: 'Application is trying to detect Market status and report if it is Sideways or trending...',
+  //       tk: watchlistselectrow?.value,
+  //       isSideWays: false,
+  //       status: '003'
+  //     };
+  //     setMarketMessage(defaultMessageLoad);
+  //   }
+  // }, [isTypemarketload, watchlistselectrow?.value]);
+
+
   // Handle drag movement
   const handleMouseMove = (e: MouseEvent) => {
     if (isDragging) {

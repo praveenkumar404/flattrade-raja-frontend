@@ -80,6 +80,7 @@ interface PositionData {
 const Seller = () => {
   const [positions, setPositions] = useState<PositionData[]>([]);
   const [hasOrderReloaded, setHasOrderReloaded] = useState(false); // Tracks if API has been reloaded
+  const [previousPositions, setPreviousPositions] = useState<PositionData[]>([]);
   const [open, setOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<PositionData | null>(null);
 
@@ -138,8 +139,14 @@ const Seller = () => {
             item.tsym &&
             item.lotSize
         );
-        setPositions(validData); // Ensure `setPositions` is a state setter
+        
+        // setPositions(validData); // Ensure `setPositions` is a state setter
 
+        // Compare with the previous state
+      if (JSON.stringify(validData) !== JSON.stringify(previousPositions)) {
+        setPositions(validData); // Update the positions state
+        setPreviousPositions(validData); // Store the previous response
+      }
       //   setPositions([...validData,{
       //     "id": 16,
       //     "documentId": "xzb1jlccnqxl8lx2qevptdth",
@@ -167,6 +174,12 @@ const Seller = () => {
       setHasOrderReloaded(true); // Mark as reloaded to prevent further calls
     }
   }, [isTypeOrderload, hasOrderReloaded]);
+
+  useEffect(() => {
+    if (isTypePositionload) {
+      fetchData(); // Call API if position changes
+    }
+  }, [isTypePositionload]); // Re-run only when position data changes
   
   
 

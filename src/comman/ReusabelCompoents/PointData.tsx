@@ -60,13 +60,15 @@ const PointData: React.FC = () => {
     });
   }, [webhookcontrol]);
 
+ 
+
   const getSymbolLabel = (tk: string) => {
     const match = options.find((option) => option.value.toString() === tk);
     return match ? match.label : 'Unknown';
   };
 
   const handleRowClick = (row: RowData, option:any) => {
-    // console.log("selected row : ",option)
+    console.log("selected row : ",option)
     setSelectedRow(row);
     // setwatchlistselectrow(option)
     dispatch(setTradingWatchlistPersist(option));
@@ -74,8 +76,19 @@ const PointData: React.FC = () => {
   };
 
   
+  useEffect(() => {
+    if (selectedRow) {
+      const updatedRow = Object.values(dataMap).find(
+        (row) => row.symbol === selectedRow.symbol
+      );
+      if (updatedRow) {
+        setSelectedRow(updatedRow);
+      }
+    }
+  }, [dataMap]);
+  
 
-  console.log("dataMap : ",dataMap)
+  console.log(selectedRow,"dataMap : ",dataMap)
 
   return (
     <Box>
@@ -140,6 +153,7 @@ const PointData: React.FC = () => {
         </Table>
       </TableContainer>
 
+      
       {/* Footer Section for Detailed Data */}
       {selectedRow && (
         <Box sx={{mt:0.5,mb:0.5}} p={2} border={1} borderColor="grey.300" borderRadius={2}>
