@@ -19,7 +19,7 @@ const MarketScoredDatas: React.FC<any> = ({myoption}:any) => {
   const isType = webhookcontrol.find(
     (item: any) => item?.type === 'index'
   )?.data;
-  console.log("valsing : ", isType)
+  // console.log("valsing : ", isType)
   const webookindexdata = webhookcontrol.map((res: any, index) =>res)
 
 

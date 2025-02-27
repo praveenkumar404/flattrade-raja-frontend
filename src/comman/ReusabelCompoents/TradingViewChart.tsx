@@ -65,7 +65,7 @@ const TradingViewChart = () => {
     return Number(storedData.reduce((max, item) => (item.high > max ? item.high : max), 0));
   }, [storedData]);
 
-  console.log("Higer Chert value from high : ",highestHighValue)
+  // console.log("Higer Chert value from high : ",highestHighValue)
 
   const [options, setOptions] = useState<any>({
     data: storedData,

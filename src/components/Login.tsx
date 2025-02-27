@@ -18,7 +18,7 @@ const Login: React.FC = () => {
     const getToken = async () => {
         try {
           const data = await fetchUserToken();
-          console.log("responseee_info",data)
+          // console.log("responseee_info",data)
           dispatch(setRequestToken(data?.requestToken));
           if (data && !appKey) {
             console.error('App key is not defined');

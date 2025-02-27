@@ -68,7 +68,7 @@ const PointData: React.FC = () => {
   };
 
   const handleRowClick = (row: RowData, option:any) => {
-    console.log("selected row : ",option)
+    // console.log("selected row : ",option)
     setSelectedRow(row);
     // setwatchlistselectrow(option)
     dispatch(setTradingWatchlistPersist(option));
@@ -88,7 +88,7 @@ const PointData: React.FC = () => {
   }, [dataMap]);
   
 
-  console.log(selectedRow,"dataMap : ",dataMap)
+  // console.log(selectedRow,"dataMap : ",dataMap)
 
   return (
     <Box>
