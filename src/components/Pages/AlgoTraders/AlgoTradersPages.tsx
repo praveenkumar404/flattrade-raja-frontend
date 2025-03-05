@@ -275,6 +275,7 @@ const [errors, setErrors] = useState({
   amount: "",
   expiry: "",
   quantity: "",
+  open:""
 });
 
 
@@ -290,6 +291,10 @@ const [SelectedOptionsList, setSelectedOptionsList] = useState<any>([])
 // Validation function
 const validateFields = () => {
   const newErrors: any = {};
+
+  if (!formValues.open || isNaN(Number(formValues.open))) {
+    newErrors.open = "Open is required and must be a valid  number.";
+  }
 
   if (!formValues.basePrice || isNaN(Number(formValues.basePrice))) {
     newErrors.basePrice = "Base Price is required and must be a valid number.";
@@ -417,8 +422,9 @@ const [btnchoice,setbtnchoice] = useState({
   };
 
   const payload = {
-    resistance1: Number(formValues?.resistance1),
+    open: Number(formValues?.open),
     resistance2: Number(formValues?.resistance2),
+    resistance1: Number(formValues?.resistance1),
     basePrice: Number(formValues?.basePrice),
     support1: Number(formValues?.support1),
     support2: Number(formValues?.support2),
@@ -527,6 +533,45 @@ console.log("CalC payload : " , payload);
     noValidate
     autoComplete="off"
   >
+
+    {/* Amount */}
+    <Box sx={{display:'flex',flexWrap:'wrap', columnGap:'15px',justifyContent:'center',alignItems:'center'}}>
+      <Box sx={formlabelstyle}>Open</Box>
+    <TextField
+      // label="Amount"
+      value={formValues.open}
+      size='small'
+      onChange={(e) => {
+        const value = e.target.value;
+        if (validateNumericInput(value)) {
+          dispatch(
+            setFormValues({
+              open: value, // Update only the changed field
+            })
+          )
+          setErrors((prevState) => ({
+            ...prevState,
+            open: "",
+          }));
+        } else {
+          setErrors((prevState) => ({
+            ...prevState,
+            open: "Open must be a valid number.",
+          }));
+        }
+      }}
+      error={!!errors.open}
+      helperText={errors.open}
+      sx={{ m: 2,
+        "& .MuiFormHelperText-root": {
+          color: errors.amount ? "red" : "green", // Customize color based on error state
+          fontWeight: "bold", // Optional: Add bold style
+        },
+        "& .MuiInputBase-root.Mui-error": {
+          borderColor: "red", // Customize the error border color
+        }, }}
+    />
+    </Box>
 
     {/* Base Price */}
     <Box sx={{display:'flex',flexWrap:'wrap', columnGap:'15px',justifyContent:'center',alignItems:'center'}}>

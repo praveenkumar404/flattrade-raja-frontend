@@ -143,7 +143,7 @@ const Seller = () => {
         // setPositions(validData); // Ensure `setPositions` is a state setter
 
         // Compare with the previous state
-      if (JSON.stringify(validData) !== JSON.stringify(previousPositions)) {
+      if (JSON.stringify(validData) !== JSON.stringify(previousPositions) || performance?.navigation?.type === 1) {
         setPositions(validData); // Update the positions state
         setPreviousPositions(validData); // Store the previous response
       }
@@ -173,7 +173,7 @@ const Seller = () => {
       fetchData();
       setHasOrderReloaded(true); // Mark as reloaded to prevent further calls
     }
-  }, [isTypeOrderload, hasOrderReloaded]);
+  }, [isTypeOrderload, hasOrderReloaded, positions]);
 
   useEffect(() => {
     if (isTypePositionload) {
@@ -233,10 +233,12 @@ const Seller = () => {
         lp: isTypePositionload?.lp !== undefined ? isTypePositionload.lp : prev.lp,
         realizedPL: isTypePositionload?.realizedPL !== undefined ? isTypePositionload.realizedPL : prev.realizedPL,
       }));
+
+      dispatch(setPositionsPersist(positions)); // Save to Redux store
     }
   }, [isTypePositionload]);
 
-
+  
   return (
     <ThemeProvider theme={theme}>
         <ToastNotification

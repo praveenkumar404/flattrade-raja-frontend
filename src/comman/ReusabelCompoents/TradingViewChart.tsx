@@ -11,10 +11,31 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { fetchchartapi } from "../../api/Service/CommanServiceapi";
 import { setTradingWatchlistPersist } from "../../redux/TradingWatchlistSlice";
+import UseColorScheme from "./UseColorScheme";
 
 const TradingViewChart = () => {
 
   const dispatch = useDispatch<any>();
+  const colorScheme = UseColorScheme();
+
+    const backgroundLayoutWave = colorScheme === 'dark'
+    ? '#192232' //#112e4d
+    : colorScheme === 'light'
+    ? '#fff'
+    : '#fff';
+
+    const backgroundChartLayoutWave = colorScheme === 'dark'
+    ? 'ag-financial-dark'
+    : colorScheme === 'light'
+    ? 'ag-financial'
+    : 'ag-financial';
+
+    const ColorChartLayoutWave = colorScheme === 'dark'
+    ? '#fff' //#112e4d
+    : colorScheme === 'light'
+    ? '#192232'
+    : '#192232';
+    
   const { selectedDropdownValues } = useSelector((state: RootState) => state.auth);
   const watchlistselectrow = useSelector((state: RootState) => state?.tradingWatchlist?.TradingWatchlistPersist);
 
@@ -65,7 +86,7 @@ const TradingViewChart = () => {
     return Number(storedData.reduce((max, item) => (item.high > max ? item.high : max), 0));
   }, [storedData]);
 
-  // console.log("Higer Chert value from high : ",highestHighValue)
+  console.log("Higer Chert value from high : ",highestHighValue)
 
   const [options, setOptions] = useState<any>({
     data: storedData,
@@ -74,7 +95,7 @@ const TradingViewChart = () => {
     rangeButtons: false,
     height: 700,
     chartType: 'candlestick',
-    theme: 'ag-financial',
+    theme: backgroundChartLayoutWave,
     footnote: {
       text: "1 Minute",
     },
@@ -91,14 +112,14 @@ const TradingViewChart = () => {
         item: {
           up: {
             fill: "#ff0000",
-            stroke: "#000",
+            stroke: "#ff0000",
             wick: {
               strokeWidth: 2,
             },
           },
           down: {
             fill: "#089981",
-            stroke: "#000",
+            stroke: "#089981",
             wick: {
               strokeWidth: 2,
             },
@@ -128,198 +149,331 @@ const TradingViewChart = () => {
       },
     ],
     initialState: {
-      annotations: [
-        {
-          type: "parallel-channel",
-          start: {
-            x: { __type: "date", value: new Date("2023-10-23").getTime() },
-            y: Number(highestHighValue - 148.0),
-          },
-          end: {
-            x: { __type: "date", value: new Date("2024-12-12").getTime() },
-            y: Number(highestHighValue - 207.0),
-          },
-          height: 14,
-        },
-        {
-          type: "horizontal-line",
-          value: Number(highestHighValue - 131.0),
-          stroke: "#089981",
-          axisLabel: {
-            fill: "#089981",
-          },
-        },
-        {
-          type: "horizontal-line",
-          value: Number(highestHighValue - 125.0),
-          stroke: "#a5a9ac",
-          axisLabel: {
-            fill: "#089981",
-          },
-          text: {
-            label: "Support Level",
-            position: "center",
-            alignment: "right",
-            color: "#089981",
-          },
-        },
-        {
-          type: "horizontal-line",
-          value: Number(highestHighValue - 140.8),
-          stroke: "#a5a9ac",
-          axisLabel: {
-            fill: "#F23645",
-          },
-        },
-        {
-          type: "horizontal-line",
-          value: Number(highestHighValue - 120.8),
-          stroke: "#a5a9ac",
-          axisLabel: {
-            fill: "#a5a9ac",
-          },
-          text: {
-            label: "Resistance",
-            position: "center",
-            alignment: "left",
-            color: "#a5a9ac",
-          },
-        },
-        {
-          type: "horizontal-line",
-          text: {
-            label: "Short-term Support",
-            position: "top",
-            alignment: "center",
-            fontSize: 10,
-            color: "#a5a9ac",
-          },
-          value: Number(highestHighValue - 131.03092783505156),
-          axisLabel: {
-            fill: "#a5a9ac",
-          },
-          stroke: "#a5a9ac",
-          lineStyle: "dotted",
-        },
-        {
-          type: "text",
-          text: "Distribution",
-          x: {
-            __type: "date",
-            value: "Thu Dec 30 2025 00:00:00 GMT+0000 (Greenwich Mean Time)",
-          },
-          y: Number(highestHighValue - 167.0103092783505),
-        },
-        {
-          type: "comment",
-          text: "Accumulation",
-          x: {
-            __type: "date",
-            value: "Thu Dec 30 2025 00:00:00 GMT+0000 (Greenwich Mean Time)",
-          },
-          y: Number(highestHighValue - 131.7479612248038),
-        },
-        {
-          type: "callout",
-          color: "#040404",
-          fill: "#6baaf3",
-          fillOpacity: 0.6,
-          stroke: "#2395ff",
-          strokeOpacity: 1,
-          strokeWidth: 2,
-          text: "Markup",
-          start: {
-            x: {
-              __type: "date",
-              value: "Thu Dec 30 2025 00:00:00 GMT+0000 (Greenwich Mean Time)",
-            },
-            y: Number(highestHighValue - 173.2989690721649),
-          },
-          end: {
-            x: {
-              __type: "date",
-              value: "Thu Dec 30 2025 01:00:00 GMT+0100 (British Summer Time)",
-            },
-            y: Number(highestHighValue - 167.11340206185565),
-          },
-        },
-        {
-          type: "line",
-          start: {
-            x: {
-              __type: "date",
-              value: "Thu Dec 30 2025 01:00:00 GMT+0100 (British Summer Time)",
-            },
-            y: Number(highestHighValue - 120.72164948453609),
-          },
-          end: {
-            x: {
-              __type: "date",
-              value: "Thu Dec 30 2025 01:00:00 GMT+0100 (British Summer Time)",
-            },
-            y: Number(highestHighValue - 138.96907216494844),
-          },
-          extendEnd: true,
-          strokeWidth: 2,
-          lineStyle: "dashed",
-        },
-      ],
+      annotations: [],
     },
   });
 
-  const fetchchartapifunction = async () => {
-    const Obj = {
-      indexToken: `${watchlistselectrow?.value}`,
-      "interval": selectedInterval.toString()
-    };
+// ====================================================================================================================================
+  
+//   const fetchchartapifunction = async () => {
+//     const Obj = {
+//       indexToken: `${watchlistselectrow?.value}`,
+//       "interval": selectedInterval.toString()
+//     };
 
-    try {
-      const response = await fetchchartapi(Obj);
-      const transformedData = Array.isArray(response?.data?.data)
-        ? response?.data?.data?.map((item: any) => ({
-            ...item,
-            date: new Date(item.date),
-            volume: 100,
-          }))
-        : [];
+//     try {
+//       const response = await fetchchartapi(Obj);
+//       const transformedData = Array.isArray(response?.data?.data)
+//         ? response?.data?.data?.map((item: any) => ({
+//             ...item,
+//             date: new Date(item.date),
+//             volume: 100,
+//           }))
+//         : [];
 
-      if (JSON.stringify(transformedData) !== JSON.stringify(storedData)) {
-        setStoredData(transformedData);
-      }
-    } catch (error) {
-      console.error("Error fetching chart data:", error);
-      if (storedData.length > 0) {
-        setStoredData([]);
-      }
-    }
-  };
+//       if (JSON.stringify(transformedData) !== JSON.stringify(storedData)) {
+//         setStoredData(transformedData);
+//       }
+//     } catch (error) {
+//       console.error("Error fetching chart data:", error);
+//       if (storedData.length > 0) {
+//         setStoredData([]);
+//       }
+//     }
+//   };
 
-  // useEffect(() => {
-  //   fetchchartapifunction();
-  // }, []);
+//   useEffect(() => {
+//     const intervalId = setInterval(() => {
+//       fetchchartapifunction();
+//     }, selectedInterval * 60000); // Convert minutes to milliseconds
 
-  // // Set up the interval to fetch data
-  // useEffect(() => {
-  //   const intervalId = setInterval(() => {
-  //     fetchchartapifunction();
-  //   }, selectedInterval * 60000); // Convert minutes to milliseconds
+//     // Clear the interval when the component unmounts or when the selected interval changes
+//     return () => clearInterval(intervalId);
+//   }, [selectedInterval]);
 
-  //   // Clear the interval when the component unmounts or when the selected interval changes
-  //   return () => clearInterval(intervalId);
-  // }, [selectedInterval]);
+//   useEffect(() => {
+//     setOptions((prev: any) => ({
+//       ...prev,
+//       data: storedData,
+//     }));
+//   }, [storedData]);
+
+//   // console.log("chart store : ", storedData);
+
+//   ===================================================================================================================================
 
   useEffect(() => {
-    setOptions((prev: any) => ({
-      ...prev,
-      data: storedData,
-    }));
-  }, [storedData]);
 
-  console.log("chart store : ", storedData);
+    const mydash = (dashValue: number) => { // Corrected parameter type
+      return {
+        type: "horizontal-line",
+        text: {
+          // label: "Dashh",
+          position: "top",
+          alignment: "center",
+          fontSize: 10,
+          color: "#a5a9ac",
+        },
+        value: Number(highestHighValue - dashValue), // Use dashValue
+        axisLabel: {
+          fill: "#a5a9ac",
+        },
+        stroke: "#a5a9ac",
+        lineStyle: "dotted",
+      };
+    };
+
+    if (storedData && storedData.length > 0) {
+      setOptions((prev: any) => ({
+        ...prev,
+        theme: backgroundChartLayoutWave,
+        initialState: {
+          annotations: [
+            {
+              type: "parallel-channel",
+              start: {
+                x: { __type: "date", value: new Date("2023-10-23").getTime() },
+                y: Number(highestHighValue - 148.0),
+              },
+              end: {
+                x: { __type: "date", value: new Date("2024-12-12").getTime() },
+                y: Number(highestHighValue - 207.0),
+              },
+              height: 14,
+            },
+            mydash(10),
+            {
+              type: "horizontal-line",
+              value: Number(highestHighValue - 20.8),
+              stroke: "#089981",
+              axisLabel: {
+                fill: "#089981",
+              },
+              text: {
+                label: "Resistance 1",
+                position: "center",
+                alignment: "left",
+                color: "#089981",
+              },
+            },
+            mydash(30),
+            mydash(80),
+            {
+              type: "horizontal-line",
+              value: Number(highestHighValue - 90.8),
+              stroke: "#089981",
+              axisLabel: {
+                fill: "#089981",
+              },
+              text: {
+                label: "Resistance 2",
+                position: "center",
+                alignment: "left",
+                color: "#089981",
+              },
+            },
+            mydash(100),
+            mydash(155),
+            {
+              type: "horizontal-line",
+              value: Number(highestHighValue - 165.8),
+              stroke: "#52007A",
+              axisLabel: {
+                fill: "#52007A",
+              },
+              text: {
+                label: "Base price",
+                position: "center",
+                alignment: "right",
+                color: "#52007A",
+              },
+            },
+            mydash(175),
+            mydash(240),
+            {
+              type: "horizontal-line",
+              value: Number(highestHighValue - 250.03092783505156),
+              stroke: "#ff0000",
+              axisLabel: {
+                fill: "#ff0000",
+              },
+              text: {
+                label: "Support 1",
+                position: "center",
+                alignment: "left",
+                color: "#ff0000",
+              },
+            },
+            mydash(260),
+            mydash(310),
+            {
+              type: "horizontal-line",
+              value: Number(highestHighValue - 320.8),
+              stroke: "#ff0000",
+              axisLabel: {
+                fill: "#ff0000",
+              },
+              text: {
+                label: "Support 2",
+                position: "center",
+                alignment: "left",
+                color: "#ff0000",
+              },
+            },
+            mydash(330),
+            {
+              type: "text",
+              text: "Distribution",
+              x: {
+                __type: "date",
+                value: "Thu Dec 30 2025 00:00:00 GMT+0000 (Greenwich Mean Time)",
+              },
+              y: Number(highestHighValue - 217.0103092783505),
+            },
+            {
+              type: "comment",
+              text: "Accumulation",
+              x: {
+                __type: "date",
+                value: "Thu Dec 30 2025 00:00:00 GMT+0000 (Greenwich Mean Time)",
+              },
+              y: Number(highestHighValue - 231.7479612248038),
+            },
+            {
+              type: "callout",
+              color: "#040404",
+              fill: "#6baaf3",
+              fillOpacity: 0.6,
+              stroke: "#2395ff",
+              strokeOpacity: 1,
+              strokeWidth: 2,
+              text: "Markup",
+              start: {
+                x: {
+                  __type: "date",
+                  value: "Thu Dec 30 2025 00:00:00 GMT+0000 (Greenwich Mean Time)",
+                },
+                y: Number(highestHighValue - 243.2989690721649),
+              },
+              end: {
+                x: {
+                  __type: "date",
+                  value: "Thu Dec 30 2025 01:00:00 GMT+0100 (British Summer Time)",
+                },
+                y: Number(highestHighValue - 267.11340206185565),
+              },
+            },
+            {
+              type: "line",
+              start: {
+                x: {
+                  __type: "date",
+                  value: "Thu Dec 30 2025 01:00:00 GMT+0100 (British Summer Time)",
+                },
+                y: Number(highestHighValue - 120.72164948453609),
+              },
+              end: {
+                x: {
+                  __type: "date",
+                  value: "Thu Dec 30 2025 01:00:00 GMT+0100 (British Summer Time)",
+                },
+                y: Number(highestHighValue - 138.96907216494844),
+              },
+              extendEnd: true,
+              strokeWidth: 2,
+              lineStyle: "dashed",
+            },
+          ],
+        },
+
+        // tooltip: {
+        //   renderer: (params: any) => {
+        //     if (!params.datum) {
+        //       return '';
+        //     }
+    
+        //     const { datum } = params;
+        //     const date = new Date(datum.date).toLocaleString();
+        //     const open = datum.open.toFixed(2);
+        //     const high = datum.high.toFixed(2);
+        //     const low = datum.low.toFixed(2);
+        //     const close = datum.close.toFixed(2);
+        //     const volume = datum.volume;
+    
+        //     return(
+        //       <div style={{}}>
+        //         <div><strong>Date:</strong> ${date}</div>
+        //         <div><strong>Open:</strong> ${open}</div>
+        //         <div><strong>High:</strong> ${high}</div>
+        //         <div><strong>Low:</strong> ${low}</div>
+        //         <div><strong>Close:</strong> ${close}</div>
+        //         <div><strong>Volume:</strong> ${volume}</div>
+        //       </div>
+        //     );
+        //   },
+        // }
+      }));
+    }
+  }, [storedData, highestHighValue, backgroundLayoutWave, backgroundChartLayoutWave]);
+
+  const chartRef = useRef<HTMLDivElement>(null);
+  const [tooltipData, setTooltipData] = useState<any>(null);
+  const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const chartContainer = chartRef.current;
+
+    const handleMouseMove = (event: MouseEvent) => {
+      if (!chartContainer || !options.axes) return;
+
+      const rect = chartContainer.getBoundingClientRect();
+      const mouseX = event.clientX - rect.left;
+      const mouseY = event.clientY - rect.top;
+
+      const xAxis = options.axes.find((axis: any) => axis.position === "bottom");
+      if (!xAxis) return;
+
+      const dateRange = xAxis.niceDomain;
+      if (!dateRange || !dateRange[0] || !dateRange[1]) return;
+
+      const chartWidth = rect.width;
+      const timeRange = dateRange[1].getTime() - dateRange[0].getTime();
+      const mouseDate = new Date(dateRange[0].getTime() + (mouseX / chartWidth) * timeRange);
+
+      let closestDataPoint = null;
+      let minDistance = Infinity;
+
+      storedData.forEach((dataPoint) => {
+        const distance = Math.abs(dataPoint.date.getTime() - mouseDate.getTime());
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestDataPoint = dataPoint;
+        }
+      });
+
+      if (closestDataPoint) {
+        setTooltipData(closestDataPoint);
+        setTooltipPosition({ x: event.clientX, y: event.clientY });
+      } else {
+        setTooltipData(null);
+      }
+    };
+
+    if (chartContainer) {
+      chartContainer.addEventListener("mousemove", handleMouseMove);
+    }
+
+    return () => {
+      if (chartContainer) {
+        chartContainer.removeEventListener("mousemove", handleMouseMove);
+      }
+    };
+  }, [options, storedData]);
+
 
   return (
-    <div style={{ width: '65%', backgroundColor: '#fff' }}>
-      <div style={{ display: "flex", gap: "1rem", alignItems: "center", padding: '5px' }}>
+    <div style={{ width: '65%', backgroundColor: backgroundLayoutWave }}>
+      <div style={{ display: "flex", gap: "1rem", alignItems: "center", padding: '5px' ,paddingTop:'10px'}}>
 
       <FormControl size="small" sx={{ minWidth: 120, "& .MuiSelect-root": { height: 30 } }}>
           <InputLabel id="index-label" sx={{ fontSize: '12px' }}>Index</InputLabel>
@@ -375,6 +529,29 @@ const TradingViewChart = () => {
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', rowGap: '10px', columnGap: '30px' }}>
         <Box>
           <AgFinancialCharts style={{ height: 700 }} options={options as any} />
+        </Box>
+
+        <Box>
+        {tooltipData && (
+        <div
+          style={{
+            position: "absolute",
+            left: tooltipPosition.x + 10,
+            top: tooltipPosition.y + 10,
+            background: "white",
+            padding: "10px",
+            border: "1px solid #ccc",
+            zIndex: 3000,
+          }}
+        >
+          <div><strong>Date:</strong> {new Date(tooltipData.date).toLocaleString()}</div>
+          <div><strong>Open:</strong> {tooltipData.open.toFixed(2)}</div>
+          <div><strong>High:</strong> {tooltipData.high.toFixed(2)}</div>
+          <div><strong>Low:</strong> {tooltipData.low.toFixed(2)}</div>
+          <div><strong>Close:</strong> {tooltipData.close.toFixed(2)}</div>
+          <div><strong>Volume:</strong> {tooltipData.volume}</div>
+        </div>
+      )}
         </Box>
       </Box>
     </div>

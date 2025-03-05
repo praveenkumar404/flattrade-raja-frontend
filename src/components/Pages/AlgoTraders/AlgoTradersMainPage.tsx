@@ -98,7 +98,7 @@ const AlgoTradersMainPage: React.FC = () => {
           <Box>
             <Box
               sx={{
-                color: '#fff',
+                color: marketMessage?.status === '003' ? '#000' : '#fff',
                 bgcolor:
                   marketMessage?.status === '001'
                     ? '#ff0000'

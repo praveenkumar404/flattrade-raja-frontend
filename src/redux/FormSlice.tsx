@@ -11,6 +11,7 @@ interface FormValues {
   amount?: any;
   expiry?: any;
   quantity?: any;
+  open:any;
 }
 
 interface FormState {
@@ -31,6 +32,7 @@ const initialState: FormState = formState ? JSON.parse(formState) : {
     amount: "",
     expiry: "",
     quantity: "",
+    open: ""
   },
 };
 
@@ -59,6 +61,7 @@ const formValues = createSlice({
           amount: "",
           expiry: "",
           quantity: "",
+          open: ""
         };
         localStorage.removeItem('formState');
       },      
