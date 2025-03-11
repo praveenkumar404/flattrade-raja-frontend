@@ -15,7 +15,7 @@ import UseColorScheme from "./UseColorScheme";
 
 const TradingViewChart = () => {
 
-  const dispatch = useDispatch<any>();
+  const dispatch = useDispatch();
   const colorScheme = UseColorScheme();
 
     const backgroundLayoutWave = colorScheme === 'dark'
@@ -127,13 +127,36 @@ const TradingViewChart = () => {
         },
       },
     ],
+    // axes: [
+    //   {
+    //     type: "ordinal-time",
+    //     position: "bottom",
+    //     label: {
+    //       format: "%H:%M",
+    //     },
+    //   },
+    //   {
+    //     type: "number",
+    //     position: "right",
+    //     label: {
+    //       formatter: ({ value }: any) => Number(value).toLocaleString(),
+    //     },
+    //     crosshair: {
+    //       label: {
+    //         format: ",f",
+    //       },
+    //     },
+    //   },
+    // ],
+
     axes: [
       {
-        type: "ordinal-time",
+        type: "time", // Change from "ordinal-time" to "time"
         position: "bottom",
         label: {
-          format: "%H:%M",
+          format: "%H:%M:%S", // Format to show hours, minutes, and seconds
         },
+        nice: true, // Automatically adjusts the time range
       },
       {
         type: "number",
@@ -148,12 +171,13 @@ const TradingViewChart = () => {
         },
       },
     ],
+    
     initialState: {
       annotations: [],
     },
   });
 
-// ====================================================================================================================================
+// // ====================================================================================================================================
   
 //   const fetchchartapifunction = async () => {
 //     const Obj = {
@@ -200,7 +224,7 @@ const TradingViewChart = () => {
 
 //   // console.log("chart store : ", storedData);
 
-//   ===================================================================================================================================
+// //   ===================================================================================================================================
 
   useEffect(() => {
 
@@ -385,6 +409,20 @@ const TradingViewChart = () => {
             },
           ],
         },
+
+
+        axes: prev.axes.map((axis: any) =>
+          axis.type === "time"
+            ? {
+                ...axis,
+                domain: [
+                  new Date(storedData[0]?.date || new Date()),
+                  new Date(storedData[storedData.length - 1]?.date || new Date()),
+                ],
+              }
+            : axis
+        ),
+        
 
         // tooltip: {
         //   renderer: (params: any) => {

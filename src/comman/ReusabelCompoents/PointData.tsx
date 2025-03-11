@@ -40,25 +40,54 @@ const PointData: React.FC = () => {
   const [selectedRow, setSelectedRow] = useState<RowData | null>(null);
   const dispatch = useDispatch<any>();
 
+  // useEffect(() => {
+  //   // Process incoming webhook data
+  //   webhookcontrol.forEach((item: any) => {
+  //     if (item.type === 'index' && item.data?.tk) {
+  //       const { tk, lp, pc } = item.data;
+  //       setDataMap((prev) => {
+  //         const previousData = prev[tk] || {};
+  //         return {
+  //           ...prev,
+  //           [tk]: {
+  //             symbol: getSymbolLabel(tk),
+  //             last: lp && lp !== '0' ? lp : previousData.last || 0,
+  //             change: pc && pc !== '0' ? pc : previousData.change || 0,
+  //           },
+  //         };
+  //       });
+  //     }
+  //   });
+  // }, [webhookcontrol]);
+
+
+
   useEffect(() => {
-    // Process incoming webhook data
-    webhookcontrol.forEach((item: any) => {
-      if (item.type === 'index' && item.data?.tk) {
-        const { tk, lp, pc } = item.data;
-        setDataMap((prev) => {
+    setDataMap((prev) => {
+      let updated = false;
+      const newDataMap = { ...prev };
+  
+      webhookcontrol.forEach((item: any) => {
+        if (item.type === 'index' && item.data?.tk) {
+          const { tk, lp, pc } = item.data;
           const previousData = prev[tk] || {};
-          return {
-            ...prev,
-            [tk]: {
+  
+          if (previousData.last !== lp || previousData.change !== pc) {
+            updated = true;
+            newDataMap[tk] = {
               symbol: getSymbolLabel(tk),
               last: lp && lp !== '0' ? lp : previousData.last || 0,
               change: pc && pc !== '0' ? pc : previousData.change || 0,
-            },
-          };
-        });
-      }
+            };
+          }
+        }
+      });
+  
+      return updated ? newDataMap : prev;
     });
   }, [webhookcontrol]);
+
+  
 
  
 
@@ -76,16 +105,30 @@ const PointData: React.FC = () => {
   };
 
   
+  // useEffect(() => {
+  //   if (selectedRow) {
+  //     const updatedRow = Object.values(dataMap).find(
+  //       (row) => row.symbol === selectedRow.symbol
+  //     );
+  //     if (updatedRow) {
+  //       setSelectedRow(updatedRow);
+  //     }
+  //   }
+  // }, [dataMap]);
+
+
   useEffect(() => {
     if (selectedRow) {
       const updatedRow = Object.values(dataMap).find(
         (row) => row.symbol === selectedRow.symbol
       );
-      if (updatedRow) {
+  
+      if (updatedRow && (updatedRow.last !== selectedRow.last || updatedRow.change !== selectedRow.change)) {
         setSelectedRow(updatedRow);
       }
     }
-  }, [dataMap]);
+  }, [dataMap]); 
+  
   
 
   // console.log(selectedRow,"dataMap : ",dataMap)

@@ -25,7 +25,8 @@ import { useWebSocketMessages } from "../../../Webhooktypeprocess";
 import ToastNotification from "../../../comman/ReusabelCompoents/ToastNotification";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { setPositionsPersist } from "../../../redux/SellerSlice";
+import { fetchPositionsThunk, setPositionsPersist } from "../../../redux/SellerSlice";
+import { UseMyAppDispatch, UseMyAppSelector } from "../../../redux/UseMyAppDispatch";
 
 // Define custom styles for TableContainer
 const ResponsiveTableContainer = styled(TableContainer)(({ theme }) => ({
@@ -91,10 +92,43 @@ const Seller = () => {
   });
 
 
-  const dispatch = useDispatch();
-  const persistedPositions = useSelector(
-    (state: RootState) => state.seller.positionsPersist
-  );
+
+  const dispatch = UseMyAppDispatch();
+  // const persistedPositions = useSelector(
+  //   (state: RootState) => state.seller.positionsPersist
+  // );
+  const { positionsPersist, loading, error } = UseMyAppSelector((state) => state.seller);
+
+
+  // Fetch positions automatically when component mounts
+  // useEffect(() => {
+  //   dispatch(fetchPositionsThunk());
+  // }, [dispatch]);
+
+
+  useEffect(() => {
+    // Function to re-fetch positions when window gains focus
+    const handleFocus = () => {
+      dispatch(fetchPositionsThunk());
+    };
+
+    // Function to re-fetch when network reconnects
+    const handleOnline = () => {
+      dispatch(fetchPositionsThunk());
+    };
+
+    // Listen to events
+    window.addEventListener('focus', handleFocus);
+    window.addEventListener('online', handleOnline);
+
+    // Initial fetch on mount
+    dispatch(fetchPositionsThunk());
+
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+      window.removeEventListener('online', handleOnline);
+    };
+  }, [dispatch]);
 
 
 
@@ -128,58 +162,59 @@ const Seller = () => {
 
   console.log("isTypePositionload : ", isTypePositionload)
 
-  const fetchData = async () => {
-    try {
-      const response = await fetchPosition(); // Replace with your actual API call function
-      if (response?.data) {
-        const validData = response.data.filter(
-          (item: any) =>
-            item.contractType &&
-            item.contractToken &&
-            item.tsym &&
-            item.lotSize
-        );
+  // const fetchData = async () => {
+  //   try {
+  //     const response = await fetchPosition(); // Replace with your actual API call function
+  //     if (response?.data) {
+  //       const validData = response.data.filter(
+  //         (item: any) =>
+  //           item.contractType &&
+  //           item.contractToken &&
+  //           item.tsym &&
+  //           item.lotSize
+  //       );
         
-        // setPositions(validData); // Ensure `setPositions` is a state setter
+  //       console.log("responsediii : ",response)
+  //       // setPositions(validData); // Ensure `setPositions` is a state setter
 
-        // Compare with the previous state
-      if (JSON.stringify(validData) !== JSON.stringify(previousPositions) || performance?.navigation?.type === 1) {
-        setPositions(validData); // Update the positions state
-        setPreviousPositions(validData); // Store the previous response
-      }
-      //   setPositions([...validData,{
-      //     "id": 16,
-      //     "documentId": "xzb1jlccnqxl8lx2qevptdth",
-      //     "index": "NIFTY",
-      //     "indexToken": "26000",
-      //     "contractType": "44.8",
-      //     "contractToken": "24",
-      //     "tsym": "86",
-      //     "lotSize": "23",
-      //     "createdAt": "2024-12-05T07:15:42.295Z",
-      //     "updatedAt": "2025-02-04T03:57:13.193Z",
-      //     "publishedAt": "2025-01-20T16:26:40.803Z",
-      //     "price": 50,
-      //     "quantity": 1
-      // }]);
-      }
-    } catch (error) {
-      console.error("Error fetching position data:", error);
-    }
-  };
+  //       // Compare with the previous state
+  //     if (JSON.stringify(validData) !== JSON.stringify(previousPositions) || performance?.navigation?.type === 1) {
+  //       setPositions(validData); // Update the positions state
+  //       setPreviousPositions(validData); // Store the previous response
+  //     }
+  //     //   setPositions([...validData,{
+  //     //     "id": 16,
+  //     //     "documentId": "xzb1jlccnqxl8lx2qevptdth",
+  //     //     "index": "NIFTY",
+  //     //     "indexToken": "26000",
+  //     //     "contractType": "44.8",
+  //     //     "contractToken": "24",
+  //     //     "tsym": "86",
+  //     //     "lotSize": "23",
+  //     //     "createdAt": "2024-12-05T07:15:42.295Z",
+  //     //     "updatedAt": "2025-02-04T03:57:13.193Z",
+  //     //     "publishedAt": "2025-01-20T16:26:40.803Z",
+  //     //     "price": 50,
+  //     //     "quantity": 1
+  //     // }]);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching position data:", error);
+  //   }
+  // };
 
-  useEffect(() => {
-    if ((isTypeOrderload && !hasOrderReloaded) || performance?.navigation?.type === 1) {
-      fetchData();
-      setHasOrderReloaded(true); // Mark as reloaded to prevent further calls
-    }
-  }, [isTypeOrderload, hasOrderReloaded, positions]);
+  // useEffect(() => {
+  //   if ((isTypeOrderload && !hasOrderReloaded) || performance?.navigation?.type === 1) {
+  //     fetchData();
+  //     setHasOrderReloaded(true); // Mark as reloaded to prevent further calls
+  //   }
+  // }, [isTypeOrderload, hasOrderReloaded, positions]);
 
-  useEffect(() => {
-    if (isTypePositionload) {
-      fetchData(); // Call API if position changes
-    }
-  }, [isTypePositionload]); // Re-run only when position data changes
+  // useEffect(() => {
+  //   if (isTypePositionload) {
+  //     fetchData(); // Call API if position changes
+  //   }
+  // }, [isTypePositionload]); // Re-run only when position data changes
   
   
 
@@ -218,15 +253,6 @@ const Seller = () => {
 
   dispatch(setPositionsPersist(positions)); // Save to Redux store
 
-  // useEffect(() => {
-  //   if (isTypePositionload?.lp !== undefined || isTypePositionload?.realizedPL !== undefined) {
-  //     setPreviousData((prev) => ({
-  //       lp: isTypePositionload?.lp !== undefined ? isTypePositionload.lp : prev.lp,
-  //       realizedPL: isTypePositionload?.realizedPL !== undefined ? isTypePositionload.realizedPL : prev.realizedPL,
-  //     }));
-  //   }
-  // }, [isTypePositionload]);
-
   useEffect(() => {
     if (isTypePositionload?.lp !== undefined || isTypePositionload?.realizedPL !== undefined) {
       setPreviousData((prev) => ({
@@ -258,7 +284,7 @@ const Seller = () => {
             </Typography>
         <ResponsiveTableContainer>
           
-            {persistedPositions.length > 0 ? (
+            {positionsPersist.length > 0 ? (
             <Table>
               <TableHead>
                 <TableRow>
@@ -273,7 +299,7 @@ const Seller = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {persistedPositions?.slice() // Create a shallow copy to avoid modifying the source data
+                {positionsPersist?.slice() // Create a shallow copy to avoid modifying the source data
                 ?.sort((a: any, b: any) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()) // Sort by updatedAt in descending order
                 ?.map((item) => {
                   const islotsizePositive = parseFloat(item?.lotSize?.toString() || "0") > 0;
@@ -294,19 +320,6 @@ const Seller = () => {
                       <TableCell style={{ color: istsymPositive ? "green" : "red", fontWeight: 500, fontSize:'8px' }}>
                         {item?.tsym}
                       </TableCell>
-                      {/* <TableCell style={{ fontWeight: 500, fontSize:'8px' }}>
-                        {isPositionMatch ? isTypePositionload?.lp : "N/A"}
-                      </TableCell>
-                      <TableCell style={{ fontWeight: 500, color: isTypePositionload?.realizedPL < 0 ? "red" : "green", fontSize:'8px' }}>
-                        {isPositionMatch ? isTypePositionload?.realizedPL : "N/A"}
-                      </TableCell> */}
-
-                      {/* <TableCell style={{ fontWeight: 500, fontSize: '8px' }}>
-                            {isPositionMatch ? (isTypePositionload?.lp !== undefined ? isTypePositionload?.lp : previousData.lp) : "N/A"}
-                          </TableCell>
-                          <TableCell style={{ fontWeight: 500, color: (isTypePositionload?.realizedPL !== undefined ? isTypePositionload?.realizedPL : previousData.realizedPL) < 0 ? "red" : "green", fontSize: '8px' }}>
-                            {isPositionMatch ? (isTypePositionload?.realizedPL !== undefined ? isTypePositionload?.realizedPL : previousData.realizedPL) : "N/A"}
-                          </TableCell> */}
 
                       <TableCell style={{ fontWeight: 500, fontSize: '8px' }}>
                             {isPositionMatch ? (isTypePositionload?.lp !== undefined ? isTypePositionload?.lp : previousData.lp) : previousData.lp}
