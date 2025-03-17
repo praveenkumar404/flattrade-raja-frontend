@@ -198,6 +198,7 @@ const AlgoTradersPages: React.FC = () => {
         placeholder="Select Flattrate"
         isMultiSelect={false}
         onSelect={handleSelect}
+        reloadonchange={true}
       />
         </Box>
         {selectedOptionSPreaddata?.filter((itemfilter:any)=>itemfilter?.id == selectedDropdownValues?.map((item: any) => item?.id))?.map((selecteditem:any)=>{
@@ -215,6 +216,7 @@ const AlgoTradersPages: React.FC = () => {
         placeholder="Select Flattrate"
         isMultiSelect={false}
         onSelect={handleSelect}
+        reloadonchange={true}
       />
         </Box>
         {selectedOptionSPreaddata?.filter((itemfilter: any) =>

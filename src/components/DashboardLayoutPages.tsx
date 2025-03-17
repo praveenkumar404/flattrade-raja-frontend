@@ -31,6 +31,7 @@ import Seller from './Pages/Seller/Seller';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import SellIcon from '@mui/icons-material/Sell';
 import AlgoTradersMainPage from './Pages/AlgoTraders/AlgoTradersMainPage';
+import AmountAlogotrading from './Pages/AlgoTraders/AmountAlogotrading';
 
 const NAVIGATION: Navigation = [
   {
@@ -43,8 +44,13 @@ const NAVIGATION: Navigation = [
     icon: <DashboardIcon />,
   },
   {
+    segment: 'amountalgotrading',
+    title: 'Amount Algotrading',
+    icon: <AccountTreeIcon/>,
+  },
+  {
     segment: 'algotrading',
-    title: 'Algotrading Inputs',
+    title: 'Index Algotrading',
     icon: <AccountTreeIcon/>,
   },
   {
@@ -296,6 +302,7 @@ export default function DashboardLayoutPages() {
           <Routes>
             <Route path="/dashboard" element={<Dashboard/>} />
             <Route path="/orders" element={<OrderPages />} />
+            <Route path="/amountalgotrading" element={<AmountAlogotrading />} />
             <Route path="/algotrading" element={<AlgoTradersPages />} />
             <Route path="/algotradingmainpage" element={<AlgoTradersMainPage/>} />
             <Route path="/profile" element={<Profilepage />} />

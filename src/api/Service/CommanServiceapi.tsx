@@ -43,3 +43,20 @@ export const fetchpostplaceholder = async (obj:any) => {
       throw error;
     }
   };
+
+
+
+export const amountpostTradeData = async (data: object) => {
+  try {
+    const response = await axios.post(`${process.env.REACT_APP_API_URL}/variables/startAmountBasedTrading`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.REACT_APP_USER_TOKEN}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("API Error:", error);
+    throw error;
+  }
+};

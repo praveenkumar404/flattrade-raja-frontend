@@ -223,6 +223,7 @@ const Dashboard = () => {
                             placeholder="Select Index"
                             isMultiSelect={false}
                             onSelect={handleSelect}
+                            reloadonchange={true}
                         />
                     </Box>
 

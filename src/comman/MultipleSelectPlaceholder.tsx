@@ -31,6 +31,7 @@ interface MultipleSelectWithSearchProps {
   placeholder?: string;
   onSelect: (selectedOptions: Option[]) => void;
   isMultiSelect: boolean; // New prop to allow single or multi selection
+  reloadonchange:boolean;
 }
 
 
@@ -84,6 +85,7 @@ export default function MultipleSelectWithSearch({
   placeholder = 'Select',
   onSelect,
   isMultiSelect,
+  reloadonchange
 }: MultipleSelectWithSearchProps) {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -134,7 +136,9 @@ export default function MultipleSelectWithSearch({
     dispatch(setSelectedDropdownValues(selectedOptions));
 
     setTimeout(()=>{
-      window?.location?.reload()
+      if(reloadonchange){
+        window?.location?.reload()
+      };
     },200)
   };
 
