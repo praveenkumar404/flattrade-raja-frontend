@@ -40,11 +40,24 @@ const NotificationComponent: React.FC<any> = () => {
 
 
   // Play sound when a new notification is added
-  const playChime = () => {
-    if (audioRef.current) {
-      audioRef.current.play();
+  // const playChime = () => {
+  //   if (audioRef.current) {
+  //     audioRef.current.play();
+  //   }
+  // };
+
+
+  // Play sound when a new notification is added
+const playChime = () => {
+  if (audioRef.current) {
+    const playPromise = audioRef.current.play();
+    
+    if (playPromise !== undefined) {
+      playPromise.catch(error => console.warn("Autoplay prevented: User interaction required.", error));
     }
-  };
+  }
+};
+
 
   // // Add new notifications when messages are received
   // useEffect(() => {
@@ -180,6 +193,19 @@ const NotificationComponent: React.FC<any> = () => {
 
         {/* List of Notifications */}
 <List sx={{ width: '350px' }}>
+
+  {/* Clear All Button */}
+  <ListItem>
+        <Button
+          fullWidth
+          color="error"
+          variant="contained"
+          onClick={handleClearAll}
+        >
+          Clear All
+        </Button>
+      </ListItem>
+
   {notifications.length > 0 ? (
     <>
       {[...notifications] // Create a shallow copy to avoid modifying the original array
@@ -206,17 +232,7 @@ const NotificationComponent: React.FC<any> = () => {
             </ListItemSecondaryAction>
           </ListItem>
         ))}
-      {/* Clear All Button */}
-      <ListItem>
-        <Button
-          fullWidth
-          color="error"
-          variant="contained"
-          onClick={handleClearAll}
-        >
-          Clear All
-        </Button>
-      </ListItem>
+      
     </>
   ) : (
     <ListItem>

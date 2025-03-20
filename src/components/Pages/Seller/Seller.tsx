@@ -210,6 +210,7 @@ const Seller = () => {
       try {
         if(selectedItem.contractType && isTypeindexload?.lp && selectedItem.index && selectedItem.indexToken){
         await fetchpostplaceholder(placeholderpayload);
+        fetchData();
         }else{handleShowToast(`Error : Not loading Progress run application 9:00 - 3.30`,'error',true)}
       } catch (error) {
         console.error("Error in fetchpostplaceholder:", error);
