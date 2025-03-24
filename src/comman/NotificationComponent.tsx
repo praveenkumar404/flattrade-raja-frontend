@@ -187,24 +187,24 @@ const playChime = () => {
           horizontal: 'right',
         }}
       >
+       <Box sx={{display:'flex', justifyContent:'space-between', alignItems:'center', paddingX:'10px'}}>
         <Typography variant="h6" sx={{ p: 2 }}>
           Notifications
         </Typography>
-
-        {/* List of Notifications */}
-<List sx={{ width: '350px' }}>
-
-  {/* Clear All Button */}
-  <ListItem>
+        {notifications.length > 0 && (
         <Button
-          fullWidth
           color="error"
           variant="contained"
           onClick={handleClearAll}
+          sx={{fontSize:'12px', textTransform:'capitalize', fontWeight:'bold'}}
         >
           Clear All
         </Button>
-      </ListItem>
+        )}
+        </Box>
+
+        {/* List of Notifications */}
+<List sx={{ width: '350px' }}>
 
   {notifications.length > 0 ? (
     <>

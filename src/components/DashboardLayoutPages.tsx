@@ -34,6 +34,27 @@ import AlgoTradersMainPage from './Pages/AlgoTraders/AlgoTradersMainPage';
 import AmountAlogotrading from './Pages/AlgoTraders/AmountAlogotrading';
 
 const NAVIGATION: Navigation = [
+  
+  {
+    kind: 'header',
+    title: 'Algotradings',
+  },
+  {
+    segment: 'amountalgotrading',
+    title: 'Amount Algotrading',
+    icon: <img src={`https://png.pngtree.com/png-clipart/20240610/original/pngtree-3d-saving-money-png-image_15294883.png`} style={{height:'30px', width:'30px'}}/>,
+  },
+  {
+    segment: 'algotrading',
+    title: 'Index Algotrading',
+    icon: <img src={`https://static.vecteezy.com/system/resources/thumbnails/008/509/323/small/3d-document-file-icon-illustration-png.png`} style={{height:'30px', width:'30px'}}/>,
+  },
+  {
+    segment: 'algotradingmainpage',
+    title: 'Algotrading Outputs',
+    icon: <img src={`https://www.freeiconspng.com/uploads/review-icon-29.png`} style={{height:'30px', width:'30px'}}/>,
+  },
+
   {
     kind: 'header',
     title: 'Main items',
@@ -41,32 +62,17 @@ const NAVIGATION: Navigation = [
   {
     segment: 'dashboard',
     title: 'Dashboard',
-    icon: <DashboardIcon />,
-  },
-  {
-    segment: 'amountalgotrading',
-    title: 'Amount Algotrading',
-    icon: <AccountTreeIcon/>,
-  },
-  {
-    segment: 'algotrading',
-    title: 'Index Algotrading',
-    icon: <AccountTreeIcon/>,
-  },
-  {
-    segment: 'algotradingmainpage',
-    title: 'Algotrading Outputs',
-    icon: <AccountTreeIcon/>,
+    icon: <img src={`https://cdn3d.iconscout.com/3d/premium/thumb/dynamic-sell-trading-dashboard-3d-icon-download-in-png-blend-fbx-gltf-file-formats--financial-investment-pack-science-technology-icons-9833371.png?f=webp`} style={{height:'30px', width:'30px'}}/>,
   },
   {
     segment: 'orders',
     title: 'Orders',
-    icon: <ShoppingCartIcon />,
+    icon: <img src={`https://cdn3d.iconscout.com/3d/premium/thumb/buy-and-sell-3d-icon-download-in-png-blend-fbx-gltf-file-formats--analytics-logo-chart-analysis-stock-investment-pack-business-icons-9237041.png?f=webp`} style={{height:'30px', width:'30px'}}/>,
   },
   {
     segment: 'seller',
     title: 'Seller',
-    icon: <SellIcon />,
+    icon: <img src={`https://png.pngtree.com/png-vector/20231018/ourmid/pngtree-business-portfolio-3d-character-illustration-png-image_10204177.png`} style={{height:'30px', width:'30px'}}/>,
   },
   {
     kind: 'divider',
@@ -95,7 +101,7 @@ const NAVIGATION: Navigation = [
   {
     segment: 'insights',
     title: 'Insights',
-    icon: <LayersIcon />,
+    icon: <img src={`https://static.vecteezy.com/system/resources/thumbnails/056/489/704/small/trading-candle-stick-graph-chart-isolated-on-transparent-background-png.png`} style={{height:'30px', width:'30px'}}/>,
   },
 ];
 
@@ -273,6 +279,7 @@ export default function DashboardLayoutPages() {
       navigation={NAVIGATION}
       onNavigate={({ segment }: { segment: string }) => handleNavigation(segment)}
       theme={customTheme}
+      defaultColorScheme="dark"
       branding={{
         logo: <img src={require('../assets/images/myapp_icon.jpg')} alt="Flattrade logo" style={{width:'30px',height:'30px'}}/>,
         title: 'FLATTRADE APP',
