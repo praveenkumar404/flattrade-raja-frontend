@@ -102,16 +102,29 @@ const playChime = () => {
       (msg) => msg?.type === 'action' || msg?.type === 'order'
     );
   
-    const newNotifications = filteredMessages.map((msg) => ({
-      id: currentDayNotifications.length > 0
-        ? currentDayNotifications[currentDayNotifications.length - 1].id + 1
-        : 1,
-      // message: msg?.message?.dmsg ? msg?.message?.dmsg : msg?.message,
-      message: msg?.message || msg?.message?.dmsg,
-      type: msg?.type,
-      currentdate: currentDate,
-      currenttime: new Date().toLocaleTimeString(),
-    }));
+    // const newNotifications = filteredMessages.map((msg) => ({
+    //   id: currentDayNotifications.length > 0
+    //     ? currentDayNotifications[currentDayNotifications.length - 1].id + 1
+    //     : 1,
+    //   // message: msg?.message?.dmsg ? msg?.message?.dmsg : msg?.message,
+    //   message: msg?.message || msg?.message?.dmsg,
+    //   type: msg?.type,
+    //   currentdate: currentDate,
+    //   currenttime: new Date().toLocaleTimeString(),
+    // }));
+
+    const newNotifications = filteredMessages
+  .filter((msg) => msg?.type !== "am") // Exclude type "am"
+  .map((msg) => ({
+    id: currentDayNotifications.length > 0
+      ? currentDayNotifications[currentDayNotifications.length - 1].id + 1
+      : 1,
+    message: msg?.message?.dmsg || msg?.message,
+    type: msg?.type,
+    currentdate: currentDate,
+    currenttime: new Date().toLocaleTimeString(),
+  }));
+
   
     const updatedNotifications = [...currentDayNotifications, ...newNotifications];
   
